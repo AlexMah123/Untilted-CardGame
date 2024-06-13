@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,12 +29,12 @@ public class UIManager : MonoBehaviour
 #if UNITY_EDITOR
         if (!GameplayGroup)
         {
-            Debug.LogError("GameplayGroup is not assigned/does not exist");
+            throw new System.AccessViolationException("GameplayGroup is not assigned/does not exist");
         }
 
         if (!SettingsGroup)
         {
-            Debug.LogError("SettingsGroup is not assigned/does not exist");
+            throw new System.AccessViolationException("SettingsGroup is not assigned/does not exist");
         }
 #endif
 

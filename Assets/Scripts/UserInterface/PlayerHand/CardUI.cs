@@ -1,24 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
-public class CardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
+public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    [Header("Card Configs")]
     public Vector3 hoveredOffset;
+    public float hoveredEnlargedScale = 1.5f;
 
-    private Vector2 OriginalCardScale;
-    private float startingCardHeight;
+    private Vector2 originalCardScale;
+    private int originalSiblingIndex;
 
+    //Components
     private RectTransform rectTransform;
+
+
+    //events
+    public event Action OnCardEndDrag;
 
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
 
         //cache the scale and starting height of cards.
-        OriginalCardScale = gameObject.transform.localScale;
-        startingCardHeight = rectTransform.rect.position.y;
+        originalCardScale = transform.localScale;
+        originalSiblingIndex = transform.GetSiblingIndex();
+
     }
 
     #region Interface
@@ -26,24 +36,36 @@ public class CardUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPo
     {
         //move then scale up
         rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x, rectTransform.anchoredPosition3D.y + hoveredOffset.y, rectTransform.anchoredPosition3D.z);
-        gameObject.transform.localScale = OriginalCardScale * 1.5f;
+        transform.localScale = originalCardScale * hoveredEnlargedScale;
+        transform.localEulerAngles = Vector3.zero;
+
+        transform.SetAsLastSibling();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         //scale down then move
-        gameObject.transform.localScale = OriginalCardScale;
+        gameObject.transform.localScale = originalCardScale;
         rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x, rectTransform.anchoredPosition3D.y - hoveredOffset.y, rectTransform.anchoredPosition3D.z);
+
+        transform.SetSiblingIndex(originalSiblingIndex);
+
+        OnCardEndDrag?.Invoke();
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log(gameObject.name + "Being clicked on");
+        
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log(gameObject.name + "Being released on");
+        transform.position = Input.mousePosition;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        OnCardEndDrag?.Invoke();
     }
     #endregion
 }

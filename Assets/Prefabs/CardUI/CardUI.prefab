@@ -89,3 +89,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoveredOffset: {x: 0, y: 50, z: 0}
+  hoveredEnlargedScale: 2
