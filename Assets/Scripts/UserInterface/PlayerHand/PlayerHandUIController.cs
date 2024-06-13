@@ -27,7 +27,7 @@ public class PlayerHandUIController : MonoBehaviour
             throw new AccessViolationException("Assign CardUI Prefab");
         }
 
-        startingCardHeight = GetComponent<RectTransform>().rect.height / -2;
+        startingCardHeight = GetComponent<RectTransform>().rect.height / -3;
         cardUIExtent = (cardUIPrefab.GetComponent<Image>().preferredWidth / 2) - gapBetweenCards;        
     }
 
