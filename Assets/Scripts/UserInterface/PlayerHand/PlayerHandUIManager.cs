@@ -5,48 +5,91 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHandUIController : MonoBehaviour
+public class PlayerHandUIManager : MonoBehaviour
 {
+    public static PlayerHandUIManager Instance;
+
     public List<CardUI> CardUIContainer = new List<CardUI>();
 
     [Header("Card Controller Configs")]
     public float angleOfCards = 0f;
     public Vector3 cardOffset = Vector3.zero;
+    public int cardAmount;
 
     [Header("Card Allignment Configs")]
     public GameObject cardUIPrefab;
     public float gapBetweenCards = 10f;
 
+    //cached values
     private float startingCardHeight;
     private float cardUIExtent;
 
+    private void OnEnable()
+    {
+        TurnSystemManager.Instance.OnChangedTurn += HandleOnPlayerChangedTurn;
+    }
+
+    private void OnDisable()
+    {
+        TurnSystemManager.Instance.OnChangedTurn -= HandleOnPlayerChangedTurn;
+    }
+
     private void Awake()
     {
-        if(!cardUIPrefab)
+        //singleton
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+
+        if (!cardUIPrefab)
         {
             throw new AccessViolationException("Assign CardUI Prefab");
         }
 
+        //caching values
         startingCardHeight = GetComponent<RectTransform>().rect.height / -3;
-        cardUIExtent = (cardUIPrefab.GetComponent<Image>().preferredWidth / 2) - gapBetweenCards;        
+        cardUIExtent = (cardUIPrefab.GetComponent<Image>().preferredWidth / 2) - gapBetweenCards;
     }
 
-    private void Start()
+
+    #region public methods
+
+    public void RequestCardChoices(IPlayer player)
+    {
+        //every request, clear the cards in hand
+        ClearCardsInHand();
+
+        //create based on choices available
+        foreach(var choice in player.StatComponent.ChoicesAvailable)
+        {
+            GameObject cardUIGO = Instantiate(cardUIPrefab, transform);
+            CardUI cardUI = cardUIGO.GetComponent<CardUI>();
+            cardUIGO.SetActive(false);
+
+            if (choice.Value == false)
+            {
+                cardUI.bIsSealed = false;
+            }
+
+            CardUIContainer.Add(cardUI);
+        }
+
+        BindOnCardEndDragDelegate(GetCardsInHand());
+        AdjustHand();
+    }
+
+
+    public void AdjustHand()
     {
         ResetCardsOffset();
-        Invoke(nameof(AdjustHand), 0.1f);
-    }
 
-    private void Update()
-    {
-        
-    }
-
-    public void AdjustHand() 
-    {
-        ResetCardsOffset();
-
-        int totalCardCount = GetCardsInHand().Count;
+        var cardsInHand = GetCardsInHand();
+        int totalCardCount = cardsInHand.Count;
         int halfOfTotalCards = totalCardCount / 2;
         bool isEvenNum = totalCardCount % 2 == 0;
 
@@ -55,12 +98,14 @@ public class PlayerHandUIController : MonoBehaviour
         float startAngle = angleOfCards / 2f;
 
         //alignment calculation
-        float startPositionX = isEvenNum ? (Screen.width / 2f) - ((halfOfTotalCards) * cardUIExtent) + (cardUIExtent/2) : (Screen.width / 2f) - (halfOfTotalCards * cardUIExtent);
+        float startPositionX = isEvenNum ? (Screen.width / 2f) - ((halfOfTotalCards) * cardUIExtent) + (cardUIExtent / 2) : (Screen.width / 2f) - (halfOfTotalCards * cardUIExtent);
 
         int runningCount = 0;
         float xPosition;
-        foreach (var card in CardUIContainer)
+        foreach (var card in cardsInHand)
         {
+            card.gameObject.SetActive(true);
+
             var cardRectTransform = card.GetComponent<RectTransform>();
 
             if (runningCount == halfOfTotalCards)
@@ -68,8 +113,8 @@ public class PlayerHandUIController : MonoBehaviour
                 //since half of the hand count be decimal, increment to round it off.
                 runningCount++;
 
-                xPosition = startPositionX + ((runningCount - 1) * cardUIExtent);  
-                
+                xPosition = startPositionX + ((runningCount - 1) * cardUIExtent);
+
                 //if it is odd, we do not have to rotate
                 if (isEvenNum)
                 {
@@ -112,28 +157,36 @@ public class PlayerHandUIController : MonoBehaviour
             runningCount++;
         }
     }
+    #endregion
 
     #region Internal Functions
-    private List<CardUI> GetCardsInHand()
+    private void ClearCardsInHand()
     {
+        // get the current cards in hand
+        var cardsInHand = GetCardsInHand();
+
         //unbind before reseting
-        UnbindOnCardEndDragDelegate(CardUIContainer);
+        UnbindOnCardEndDragDelegate(cardsInHand);
 
         //resets then gets all child of CardUI
+        foreach(var card in cardsInHand)
+        {
+            Destroy(card.gameObject);
+        }
+
         CardUIContainer.Clear();
-        gameObject.GetComponentsInChildren(CardUIContainer);
+    }
 
-        //bind all cards in list
-        BindOnCardEndDragDelegate(CardUIContainer);
-
+    private List<CardUI> GetCardsInHand()
+    {
         return CardUIContainer;
     }
 
     private void ResetCardsOffset()
     {
         //get the new set of cards to list
-        GetCardsInHand();
-        foreach (var card in CardUIContainer)
+        var cardsInHand = GetCardsInHand();
+        foreach (var card in cardsInHand)
         {
             var cardRectTransform = card.GetComponent<RectTransform>();
             Vector3 originalCardPosition = new(cardRectTransform.anchoredPosition3D.x, startingCardHeight, cardRectTransform.anchoredPosition3D.z);
@@ -146,7 +199,7 @@ public class PlayerHandUIController : MonoBehaviour
 
     public void BindOnCardEndDragDelegate(List<CardUI> cardUIList)
     {
-        foreach(var card in cardUIList)
+        foreach (var card in cardUIList)
         {
             card.OnCardEndDrag += AdjustHand;
         }
@@ -158,6 +211,19 @@ public class PlayerHandUIController : MonoBehaviour
         {
             card.OnCardEndDrag -= AdjustHand;
         }
+    }
+    #endregion
+
+    #region Bind Delegate
+    private void HandleOnPlayerChangedTurn(TurnSystemManager manager, Turn currentTurn, Turn newTurn)
+    {
+        Debug.Log($"Changing Player Turn - From: {currentTurn}, To: {newTurn}");
+        if(currentTurn != null)
+        {
+            currentTurn.OnPlayerStartTurn -= RequestCardChoices;
+        }
+
+        newTurn.OnPlayerStartTurn += RequestCardChoices;
     }
     #endregion
 }

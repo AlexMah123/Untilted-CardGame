@@ -1,13 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Turn
 {
+    protected TurnSystemManager controller;
+    public event Action<IPlayer> OnPlayerStartTurn;
+
     #region Ran on every phase
-    public void OnStartTurn(IPlayer currentPlayer)
+    public void OnStartTurn(TurnSystemManager turnController, IPlayer currentPlayer)
     {
+        controller = turnController;
+
         OnStart(currentPlayer);
+        OnPlayerStartTurn?.Invoke(currentPlayer);
     }
 
     public void OnUpdateTurn(IPlayer currentPlayer)

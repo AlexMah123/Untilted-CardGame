@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "Upgrade", menuName = "UpgradeDefiniton")]
+[CreateAssetMenu(fileName = "Upgrade", menuName = "Upgrades/UpgradeDefiniton")]
 public class UpgradeDefinitionSO : ScriptableObject
 {
     public Image upgradeImage;
