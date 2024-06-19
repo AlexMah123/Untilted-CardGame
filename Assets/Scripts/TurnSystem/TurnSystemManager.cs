@@ -7,15 +7,19 @@ public class TurnSystemManager : MonoBehaviour
 {
     public static TurnSystemManager Instance;
 
-    public Player humanPlayer;
-    public Player aiPlayer;
+    private Player HumanPlayer { get => GameManager.Instance.humanPlayer; }
+    private Player AiPlayer { get => GameManager.Instance.humanPlayer; }
 
+    //Current values of the game.
     public IPlayer currentPlayer;
     public Turn currentTurn;
 
+    //declaration of possible turns
     PlayerTurn playerTurn = new PlayerTurn();
 
-    public event Action<TurnSystemManager, Turn, Turn> OnChangedTurn;
+    //declaration of events
+    public event Action<TurnSystemManager, Turn, Turn> OnChangedTurnEvent;
+
 
     private void Awake()
     {
@@ -32,17 +36,17 @@ public class TurnSystemManager : MonoBehaviour
 
     void Start()
     {
-        currentPlayer = humanPlayer;
-        ChangePhase(playerTurn);
+        currentPlayer = HumanPlayer;
+        ChangeTurn(playerTurn);
 
         //TEMP TESTING
-        //Invoke(nameof(ChangePhaseTest), 5f);
+        //Invoke(nameof(ChangeTurnTest), 5f);
     }
 
     //TEMP
-    private void ChangePhaseTest()
+    private void ChangeTurnTest()
     {
-        ChangePhase(playerTurn);
+        ChangeTurn(playerTurn);
     }
 
 
@@ -54,18 +58,19 @@ public class TurnSystemManager : MonoBehaviour
         }
     }
 
-    public void ChangePhase(Turn newTurn)
+    public void ChangeTurn(Turn newTurn)
     {
         if(currentTurn != null)
         {
             currentTurn.OnEndTurn(currentPlayer);
         }
 
-        //swap player?
-        OnChangedTurn?.Invoke(this, currentTurn, newTurn);
+        //#TODO: Should Swap Player?
+
+        //broadcast event, primarily binded to PlayerHandUIManager
+        OnChangedTurnEvent?.Invoke(this, currentTurn, newTurn);
         currentTurn = newTurn;
 
         currentTurn.OnStartTurn(this, currentPlayer);
     }
-
 }

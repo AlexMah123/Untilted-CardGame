@@ -26,12 +26,16 @@ public class PlayerHandUIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        TurnSystemManager.Instance.OnChangedTurn += HandleOnPlayerChangedTurn;
+        TurnSystemManager.Instance.OnChangedTurnEvent += HandleOnChangedTurn;
+        GameManager.Instance.OnClearCardHandEvent += HandleOnClearCardHand;
+
     }
 
     private void OnDisable()
     {
-        TurnSystemManager.Instance.OnChangedTurn -= HandleOnPlayerChangedTurn;
+        TurnSystemManager.Instance.OnChangedTurnEvent -= HandleOnChangedTurn;
+        GameManager.Instance.OnClearCardHandEvent -= HandleOnClearCardHand;
+
     }
 
     private void Awake()
@@ -59,32 +63,82 @@ public class PlayerHandUIManager : MonoBehaviour
 
     #region public methods
 
-    public void RequestCardChoices(IPlayer player)
+    public void HandleOnPlayerStartTurn(IPlayer player)
+    {
+        RequestCardChoices(player);
+    }
+
+    public void HandleOnClearCardHand()
+    {
+        ClearCardsInHand();
+    }
+
+    public void HandleOnCardEndDrag()
+    {
+        AdjustHand();
+    }
+
+    public void HandleOnChangedTurn(TurnSystemManager manager, Turn currentTurn, Turn newTurn)
+    {
+        Debug.Log($"Changing Player Turn - From: {currentTurn}, To: {newTurn}");
+        if (currentTurn != null)
+        {
+            currentTurn.OnPlayerStartTurnEvent -= HandleOnPlayerStartTurn;
+        }
+
+        newTurn.OnPlayerStartTurnEvent += HandleOnPlayerStartTurn;
+    }
+
+    #endregion
+
+    #region Internal Functions
+    private void ClearCardsInHand()
+    {
+        // get the current cards in hand
+        var cardsInHand = GetCardsInHand();
+
+        //unbind before reseting
+        UnbindOnCardEndDragDelegate(cardsInHand);
+
+        //resets then gets all child of CardUI
+        foreach (var card in cardsInHand)
+        {
+            Destroy(card.gameObject);
+        }
+
+        CardUIContainer.Clear();
+    }
+
+    private void RequestCardChoices(IPlayer player)
     {
         //every request, clear the cards in hand
         ClearCardsInHand();
 
         //create based on choices available
-        foreach(var choice in player.StatComponent.ChoicesAvailable)
+        foreach (var choice in player.ChoiceComponent.ChoicesAvailable)
         {
             GameObject cardUIGO = Instantiate(cardUIPrefab, transform);
             CardUI cardUI = cardUIGO.GetComponent<CardUI>();
-            cardUIGO.SetActive(false);
 
+            //assign the card choice
+            cardUI.gameChoice = choice.Key;
+
+            //set isSealed if player choice is sealed
             if (choice.Value == false)
             {
-                cardUI.bIsSealed = false;
+                cardUI.IsSealed = false;
             }
 
+            //add to list, set to inactive and wait for adjusthand
             CardUIContainer.Add(cardUI);
+            cardUIGO.SetActive(false);
         }
 
         BindOnCardEndDragDelegate(GetCardsInHand());
         AdjustHand();
     }
 
-
-    public void AdjustHand()
+    private void AdjustHand()
     {
         ResetCardsOffset();
 
@@ -157,25 +211,6 @@ public class PlayerHandUIManager : MonoBehaviour
             runningCount++;
         }
     }
-    #endregion
-
-    #region Internal Functions
-    private void ClearCardsInHand()
-    {
-        // get the current cards in hand
-        var cardsInHand = GetCardsInHand();
-
-        //unbind before reseting
-        UnbindOnCardEndDragDelegate(cardsInHand);
-
-        //resets then gets all child of CardUI
-        foreach(var card in cardsInHand)
-        {
-            Destroy(card.gameObject);
-        }
-
-        CardUIContainer.Clear();
-    }
 
     private List<CardUI> GetCardsInHand()
     {
@@ -197,11 +232,15 @@ public class PlayerHandUIManager : MonoBehaviour
         }
     }
 
+
+    #endregion
+
+    #region Bind Delegate
     public void BindOnCardEndDragDelegate(List<CardUI> cardUIList)
     {
         foreach (var card in cardUIList)
         {
-            card.OnCardEndDrag += AdjustHand;
+            card.OnCardEndDragEvent += HandleOnCardEndDrag;
         }
     }
 
@@ -209,21 +248,8 @@ public class PlayerHandUIManager : MonoBehaviour
     {
         foreach (var card in cardUIList)
         {
-            card.OnCardEndDrag -= AdjustHand;
+            card.OnCardEndDragEvent -= HandleOnCardEndDrag;
         }
-    }
-    #endregion
-
-    #region Bind Delegate
-    private void HandleOnPlayerChangedTurn(TurnSystemManager manager, Turn currentTurn, Turn newTurn)
-    {
-        Debug.Log($"Changing Player Turn - From: {currentTurn}, To: {newTurn}");
-        if(currentTurn != null)
-        {
-            currentTurn.OnPlayerStartTurn -= RequestCardChoices;
-        }
-
-        newTurn.OnPlayerStartTurn += RequestCardChoices;
     }
     #endregion
 }

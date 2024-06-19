@@ -8,11 +8,6 @@ public class HumanPlayer : Player
     {
         base.Awake();
 
-        //StatComponent.SealChoice(GameChoice.ROCK);
-    }
-
-    public override void GetChoice()
-    {
-
+        //ChoiceComponent.SealChoice(GameChoice.ROCK);
     }
 }

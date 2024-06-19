@@ -7,12 +7,10 @@ public class AIPlayer : Player
     protected override void Awake()
     {
         base.Awake();
-
-
     }
 
-    public override void GetChoice()
+    public override GameChoice GetChoice()
     {
-        
+        return GameChoice.PAPER;
     }
 }
