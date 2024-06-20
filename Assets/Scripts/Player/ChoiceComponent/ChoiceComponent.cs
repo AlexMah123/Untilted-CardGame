@@ -5,7 +5,6 @@ using UnityEngine;
 
 public enum GameChoice
 {
-    NONE,
     ROCK,
     PAPER,
     SCISSOR

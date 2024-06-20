@@ -22,8 +22,9 @@ public class GameManager : MonoBehaviour
 
     //declaration of events
     public event Action OnClearCardHandEvent;
+    public event Action OnStartNewTurnEvent;
   
-    private bool IsConfirmCardEventBinded = false;
+    private bool isConfirmCardEventBinded = false;
     
     private void OnEnable()
     {
@@ -34,7 +35,7 @@ public class GameManager : MonoBehaviour
     }
     private void OnDisable()
     {
-        if(IsConfirmCardEventBinded)
+        if(isConfirmCardEventBinded)
         {
             UnbindConfirmCardChoiceEvent();
         }
@@ -57,21 +58,62 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //To avoid racing condition
-        if (!IsConfirmCardEventBinded)
+        if (!isConfirmCardEventBinded)
         {
             BindConfirmCardChoiceEvent();
         }
     }
 
-    public GameResult GetGameResult(GameChoice humanPlayerChoice, GameChoice aiPlayerChoice)
+    public void CreatePlayers()
+    {
+        //#TODO: Have a function to reload the levels and create players?.
+    }
+
+    public void HandleConfirmCardChoice(CardUI cardUI)
+    {
+        humanPlayer.currentChoice = cardUI.gameChoice;
+
+        //trigger resolution of the round
+        PlayRound();
+    }
+
+    public void PlayRound()
+    {
+        aiPlayer.currentChoice = aiPlayer.GetChoice();
+
+        //if player is an ai player, update its Ai Module
+        if(aiPlayer.GetComponent<AIPlayer>())
+        {
+            aiPlayer.GetComponent<AIPlayer>().aiModuleConfig.UpdateAIModule(humanPlayer.currentChoice);
+        }
+
+        Debug.Log($"Human Player has selected {humanPlayer.currentChoice}");
+        Debug.Log($"AI Player has selected {aiPlayer.currentChoice}");
+
+        //#TODO: add some sort of delay between rounds for animation?
+        GetGameResult(humanPlayer.currentChoice, aiPlayer.currentChoice);
+
+        //After results, reset the turns
+        //broadcast event, primarily binded to PlayerHandUIManager
+        OnClearCardHandEvent?.Invoke();
+
+        //broadcast event, primarily binded to TurnSystemManager
+        OnStartNewTurnEvent?.Invoke();
+
+        //TESTING
+        Invoke(nameof(ClearEditorLog), 2f);
+    }
+
+    #region Internal Functions
+    private GameResult GetGameResult(GameChoice humanPlayerChoice, GameChoice aiPlayerChoice)
     {
         var result = GameResult.NONE;
 
-        if(humanPlayerChoice == aiPlayerChoice)
+        if (humanPlayerChoice == aiPlayerChoice)
         {
             result = GameResult.DRAW;
         }
-        else if(humanPlayerChoice == GameChoice.ROCK && aiPlayerChoice == GameChoice.SCISSOR||
+        else if (humanPlayerChoice == GameChoice.ROCK && aiPlayerChoice == GameChoice.SCISSOR ||
                 humanPlayerChoice == GameChoice.PAPER && aiPlayerChoice == GameChoice.ROCK ||
                 humanPlayerChoice == GameChoice.SCISSOR && aiPlayerChoice == GameChoice.PAPER)
         {
@@ -82,18 +124,16 @@ public class GameManager : MonoBehaviour
             result = GameResult.LOSE;
         }
 
+        Debug.Log($"Human Player has {result}");
+
         return result;
     }
 
-    public void HandleConfirmCardChoice(CardUI cardUI)
+    private void ClearEditorLog()
     {
-        //#TODO: GetGameResult, and change the turn
-        humanPlayer.currentChoice = cardUI.gameChoice;
-        Debug.Log($"{humanPlayer.currentChoice} was selected");
-
-        //broadcast event, primarily binded to PlayerHandUIManager
-        OnClearCardHandEvent?.Invoke();
+        UtilsLibrary.ClearLogConsole();
     }
+    #endregion
 
     #region Bind CardConfirmation event
     private void BindConfirmCardChoiceEvent()
@@ -101,7 +141,7 @@ public class GameManager : MonoBehaviour
         if (CardConfirmation.Instance != null)
         {
             CardConfirmation.Instance.OnConfirmCardChoiceEvent += HandleConfirmCardChoice;
-            IsConfirmCardEventBinded = true;
+            isConfirmCardEventBinded = true;
         }
     }
 
@@ -110,7 +150,7 @@ public class GameManager : MonoBehaviour
         if (CardConfirmation.Instance != null)
         {
             CardConfirmation.Instance.OnConfirmCardChoiceEvent -= HandleConfirmCardChoice;
-            IsConfirmCardEventBinded = false;
+            isConfirmCardEventBinded = false;
         }
             
     }

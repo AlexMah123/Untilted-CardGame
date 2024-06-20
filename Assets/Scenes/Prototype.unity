@@ -282,7 +282,7 @@ Transform:
   m_GameObject: {fileID: 226543717}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 858.9482, y: 421.26312, z: -479.2417}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2186,8 +2186,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1344209822}
-  - component: {fileID: 1344209821}
   - component: {fileID: 1344209820}
+  - component: {fileID: 1344209821}
   - component: {fileID: 1344209823}
   m_Layer: 0
   m_Name: AIPlayer
@@ -2209,6 +2209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentChoice: 1
+  aiModuleConfig: {fileID: 11400000, guid: e312332acb26c6e4abf984696d51c82a, type: 2}
 --- !u!114 &1344209821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2230,8 +2231,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344209819}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -418.54523, y: -227.86618, z: 156.20865}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2728,8 +2729,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1824892702}
-  - component: {fileID: 1824892701}
   - component: {fileID: 1824892700}
+  - component: {fileID: 1824892701}
   - component: {fileID: 1824892703}
   m_Layer: 0
   m_Name: HumanPlayer
@@ -2772,8 +2773,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824892699}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -418.54523, y: -227.86618, z: 156.20865}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

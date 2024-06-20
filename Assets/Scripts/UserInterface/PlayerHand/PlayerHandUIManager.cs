@@ -23,19 +23,27 @@ public class PlayerHandUIManager : MonoBehaviour
     //cached values
     private float startingCardHeight;
     private float cardUIExtent;
+    private bool isOnClearHandEventBinded = false;
 
     private void OnEnable()
     {
         TurnSystemManager.Instance.OnChangedTurnEvent += HandleOnChangedTurn;
-        GameManager.Instance.OnClearCardHandEvent += HandleOnClearCardHand;
 
+        if(GameManager.Instance != null)
+        {
+            BindClearCardHandEvent();
+        }
     }
 
     private void OnDisable()
     {
         TurnSystemManager.Instance.OnChangedTurnEvent -= HandleOnChangedTurn;
-        GameManager.Instance.OnClearCardHandEvent -= HandleOnClearCardHand;
 
+        if(isOnClearHandEventBinded)
+        {
+            UnbindClearCardHandEvent();
+
+        }
     }
 
     private void Awake()
@@ -52,7 +60,7 @@ public class PlayerHandUIManager : MonoBehaviour
 
         if (!cardUIPrefab)
         {
-            throw new AccessViolationException("Assign CardUI Prefab");
+            throw new MissingComponentException("CardUI Prefab is not assigned");
         }
 
         //caching values
@@ -60,6 +68,15 @@ public class PlayerHandUIManager : MonoBehaviour
         cardUIExtent = (cardUIPrefab.GetComponent<Image>().preferredWidth / 2) - gapBetweenCards;
     }
 
+
+    private void Start()
+    {
+        //To avoid racing condition
+        if (!isOnClearHandEventBinded)
+        {
+            BindClearCardHandEvent();
+        }
+    }
 
     #region public methods
 
@@ -80,7 +97,8 @@ public class PlayerHandUIManager : MonoBehaviour
 
     public void HandleOnChangedTurn(TurnSystemManager manager, Turn currentTurn, Turn newTurn)
     {
-        Debug.Log($"Changing Player Turn - From: {currentTurn}, To: {newTurn}");
+        //Debug.Log($"Changing Player Turn - From: {currentTurn}, To: {newTurn}");
+
         if (currentTurn != null)
         {
             currentTurn.OnPlayerStartTurnEvent -= HandleOnPlayerStartTurn;
@@ -250,6 +268,25 @@ public class PlayerHandUIManager : MonoBehaviour
         {
             card.OnCardEndDragEvent -= HandleOnCardEndDrag;
         }
+    }
+
+    private void BindClearCardHandEvent()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnClearCardHandEvent += HandleOnClearCardHand;
+            isOnClearHandEventBinded = true;
+        }
+    }
+
+    private void UnbindClearCardHandEvent()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnClearCardHandEvent -= HandleOnClearCardHand;
+            isOnClearHandEventBinded = false;
+        }
+
     }
     #endregion
 }

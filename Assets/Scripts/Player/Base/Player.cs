@@ -23,7 +23,7 @@ public class Player : MonoBehaviour, IPlayer
         statComponent = GetComponent<StatComponent>();
         choiceComponent = GetComponent<ChoiceComponent>();
 
-        Debug.Log($"{this.GetType().Name} - Health: {statComponent.stats.health}, Damage: {statComponent.stats.damage}, CardSlots: {statComponent.stats.cardSlots}");
+        //Debug.Log($"{this.GetType().Name} - Health: {statComponent.stats.health}, Damage: {statComponent.stats.damage}, CardSlots: {statComponent.stats.cardSlots}");
     }
 
     protected virtual void Start()

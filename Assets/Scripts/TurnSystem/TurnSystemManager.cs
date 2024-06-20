@@ -19,6 +19,23 @@ public class TurnSystemManager : MonoBehaviour
 
     //declaration of events
     public event Action<TurnSystemManager, Turn, Turn> OnChangedTurnEvent;
+    private bool isStartNewTurnEventBinded = false;
+
+    private void OnEnable()
+    {
+        if (GameManager.Instance != null)
+        {
+            BindStartNewTurnEvent();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if(isStartNewTurnEventBinded)
+        {
+            UnbindStartNewTurnEvent();
+        }
+    }
 
 
     private void Awake()
@@ -36,26 +53,27 @@ public class TurnSystemManager : MonoBehaviour
 
     void Start()
     {
+        //To avoid racing condition
+        if (!isStartNewTurnEventBinded)
+        {
+            BindStartNewTurnEvent();
+        }
+
         currentPlayer = HumanPlayer;
         ChangeTurn(playerTurn);
-
-        //TEMP TESTING
-        //Invoke(nameof(ChangeTurnTest), 5f);
     }
-
-    //TEMP
-    private void ChangeTurnTest()
-    {
-        ChangeTurn(playerTurn);
-    }
-
 
     void Update()
     {
-        if(currentTurn != null)
+        if (currentTurn != null)
         {
             currentTurn.OnUpdateTurn(currentPlayer);
         }
+    }
+
+    public void HandleStartNewTurn()
+    {
+        ChangeTurn(playerTurn);
     }
 
     public void ChangeTurn(Turn newTurn)
@@ -73,4 +91,25 @@ public class TurnSystemManager : MonoBehaviour
 
         currentTurn.OnStartTurn(this, currentPlayer);
     }
+
+    #region Bind StartNewTurnEvent
+
+    private void BindStartNewTurnEvent()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnStartNewTurnEvent += HandleStartNewTurn;
+            isStartNewTurnEventBinded = true;
+        }
+    }
+
+    private void UnbindStartNewTurnEvent()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnStartNewTurnEvent -= HandleStartNewTurn;
+            isStartNewTurnEventBinded = false;
+        }
+    }
+    #endregion
 }
