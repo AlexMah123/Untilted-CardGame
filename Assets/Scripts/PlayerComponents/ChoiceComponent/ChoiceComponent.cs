@@ -14,15 +14,20 @@ public class ChoiceComponent : MonoBehaviour
 {
     public event Action OnSealChoiceEvent;
 
-    public Dictionary<GameChoice, bool> ChoicesAvailable = new Dictionary<GameChoice, bool> {
+    public Dictionary<GameChoice, bool> choicesAvailable = new Dictionary<GameChoice, bool> {
         { GameChoice.ROCK, true },
         { GameChoice.PAPER, true },
         { GameChoice.SCISSOR, true },
     };
 
+    public bool IsChoiceAvailable(GameChoice choice)
+    {
+        return choicesAvailable[choice];
+    }
+
     public void SealChoice(GameChoice choice)
     {
-        ChoicesAvailable[choice] = false;
+        choicesAvailable[choice] = false;
 
         //#TODO: broadcast event to PlayerHandUIManager to update
         OnSealChoiceEvent?.Invoke();
@@ -30,9 +35,9 @@ public class ChoiceComponent : MonoBehaviour
 
     public void ResetChoicesAvailable()
     {
-        foreach(var key in ChoicesAvailable.Keys)
+        foreach(var key in choicesAvailable.Keys)
         {
-            ChoicesAvailable[key] = true;
+            choicesAvailable[key] = true;
         }
     }
 }

@@ -2189,6 +2189,7 @@ GameObject:
   - component: {fileID: 1344209820}
   - component: {fileID: 1344209821}
   - component: {fileID: 1344209823}
+  - component: {fileID: 1344209824}
   m_Layer: 0
   m_Name: AIPlayer
   m_TagString: Untagged
@@ -2250,6 +2251,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a15c3baf7200342866f53c103b3eaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1344209824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344209819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c3d11184ed0ee046b3d85ec75603e29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLimitOfLoadout: 2
+  upgradeSlots: []
 --- !u!1 &1389534267
 GameObject:
   m_ObjectHideFlags: 0
@@ -2732,6 +2747,7 @@ GameObject:
   - component: {fileID: 1824892700}
   - component: {fileID: 1824892701}
   - component: {fileID: 1824892703}
+  - component: {fileID: 1824892704}
   m_Layer: 0
   m_Name: HumanPlayer
   m_TagString: Untagged
@@ -2792,6 +2808,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a15c3baf7200342866f53c103b3eaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1824892704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1824892699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c3d11184ed0ee046b3d85ec75603e29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLimitOfLoadout: 2
+  upgradeSlots: []
 --- !u!1 &1863573502
 GameObject:
   m_ObjectHideFlags: 0

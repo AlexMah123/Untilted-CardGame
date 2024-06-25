@@ -10,6 +10,14 @@ public abstract class AIDecision : ScriptableObject
     [Range(0, 1)]
     public float aiAccuracy = 1.0f;
 
+    //injected references
+    protected ChoiceComponent choiceComponent;
+
+    public void InitializeAIConfig(ChoiceComponent component)
+    {
+        choiceComponent = component;
+    }
+
     public abstract GameChoice MakeDecision();
 
     //override only whenever neccesary

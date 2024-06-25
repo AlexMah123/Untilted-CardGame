@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DecisionSO", menuName = "Enemy/Decision/BayesianModelSO")]
+[CreateAssetMenu(menuName = "Enemy/Decision/BayesianModelSO")]
 public class BayesianModel : AIDecision
 {
     private Dictionary<GameChoice, int> opponentMoveCount = new Dictionary<GameChoice, int>
@@ -31,23 +31,32 @@ public class BayesianModel : AIDecision
         float paperProbability = (float)opponentMoveCount[GameChoice.PAPER] / totalMoves;
         float scissorsProbability = (float)opponentMoveCount[GameChoice.SCISSOR] / totalMoves;
 
-        if(rockProbability >= paperProbability && rockProbability >= scissorsProbability)
+        //defaulted
+        GameChoice predictedMoveByOpponent = GameChoice.ROCK;
+
+        if (rockProbability >= paperProbability && rockProbability >= scissorsProbability)
         {
-            //player most probability throw rock
-            aiDecision = GameChoice.PAPER;
+            predictedMoveByOpponent = GameChoice.ROCK;
         }
         else if(paperProbability >= rockProbability && paperProbability >= scissorsProbability)
         {
-            //player most probability throw paper
-            aiDecision = GameChoice.SCISSOR;
+            predictedMoveByOpponent = GameChoice.PAPER;
         }
         else
         {
-            //player most probability throw scissors
-            aiDecision = GameChoice.ROCK;
+            predictedMoveByOpponent = GameChoice.SCISSOR;
         }
 
-        return aiDecision;
+        aiDecision = AIDecisionLibrary.GetCounterChoice(predictedMoveByOpponent);
+        if (choiceComponent.IsChoiceAvailable(aiDecision))
+        {
+            return aiDecision;
+        }
+        else
+        {
+            return GetNextBestChoice();
+        }
+
     }
 
     public override void UpdateAIModule(GameChoice opponentChoice)
@@ -56,5 +65,25 @@ public class BayesianModel : AIDecision
         {
             opponentMoveCount[opponentChoice]++;
         }
+    }
+
+    private GameChoice GetNextBestChoice()
+    {
+        // Get a list of choices sorted by the opponents most thrown move
+        List<GameChoice> sortedOpponentMostThrownMove = new List<GameChoice>(opponentMoveCount.Keys);
+        sortedOpponentMostThrownMove.Sort((choice1, choice2) => opponentMoveCount[choice2].CompareTo(opponentMoveCount[choice1]));
+
+        // Return the next available choice
+        foreach (var choice in sortedOpponentMostThrownMove)
+        {
+            GameChoice counterChoice = AIDecisionLibrary.GetCounterChoice(choice);
+            if (choiceComponent.IsChoiceAvailable(choice))
+            {
+                return counterChoice;
+            }
+        }
+
+        //Fallback to a random choice if no choices are available (this should never happen)
+        return RandomChoice();
     }
 }

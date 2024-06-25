@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DecisionSO", menuName = "Enemy/Decision/MarkovModelSO")]
+[CreateAssetMenu(menuName = "Enemy/Decision/MarkovModelSO")]
 public class MarkovModel : AIDecision
 {
     //transition matrix
@@ -20,7 +20,7 @@ public class MarkovModel : AIDecision
     {
         //defaulted values
         GameChoice aiDecision = GameChoice.ROCK;
-        GameChoice predictedMove = GameChoice.ROCK;
+        GameChoice predictedMoveByOpponent = GameChoice.ROCK;
 
         //if its the first time playing, return a random move
         if (!transitionMatrix.ContainsKey(opponentLastChoice)) return RandomChoice(); ;
@@ -37,28 +37,21 @@ public class MarkovModel : AIDecision
         {
             if(move.Value > opponentMostThrownMove)
             {
-                predictedMove = move.Key;
+                predictedMoveByOpponent = move.Key;
                 opponentMostThrownMove = move.Value;
             }
         }
 
-        switch(predictedMove)
+        aiDecision = AIDecisionLibrary.GetCounterChoice(predictedMoveByOpponent);
+
+        if (choiceComponent.IsChoiceAvailable(aiDecision))
         {
-            case GameChoice.ROCK:
-                aiDecision = GameChoice.PAPER;
-                break;
-
-            case GameChoice.PAPER:
-                aiDecision = GameChoice.SCISSOR;
-                break;
-
-            case GameChoice.SCISSOR:
-                aiDecision = GameChoice.ROCK;
-                break;
+            return aiDecision;
         }
-
-
-        return aiDecision;
+        else
+        {
+            return GetNextBestChoice();
+        }
     }
 
     public override void UpdateAIModule(GameChoice opponentChoice)
@@ -68,5 +61,26 @@ public class MarkovModel : AIDecision
             transitionMatrix[opponentLastChoice][opponentChoice]++;
         }
         opponentLastChoice = opponentChoice;
+    }
+
+
+    private GameChoice GetNextBestChoice()
+    {
+        // Get a list of choices sorted by the opponents most thrown move from their last choice
+        List<GameChoice> sortedOpponentMostThrownMove = new List<GameChoice>(transitionMatrix[opponentLastChoice].Keys);
+        sortedOpponentMostThrownMove.Sort((choice1, choice2) => transitionMatrix[opponentLastChoice][choice2].CompareTo(transitionMatrix[opponentLastChoice][choice1]));
+
+        // Return the next available choice
+        foreach (var choice in sortedOpponentMostThrownMove)
+        {
+            GameChoice counterChoice = AIDecisionLibrary.GetCounterChoice(choice);
+            if (choiceComponent.IsChoiceAvailable(counterChoice))
+            {
+                return counterChoice;
+            }
+        }
+
+        //Fallback to a random choice if no choices are available (this should never happen)
+        return RandomChoice();
     }
 }

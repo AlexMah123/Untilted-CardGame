@@ -20,7 +20,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     public Color DisabledColor;
 
     //state of card
-    public bool IsSealed = true;
+    public bool isSealed = true;
 
     //cached variables
     private Vector2 originalCardScale;
@@ -47,25 +47,29 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     private void Start()
     {
-        cardImage.color = IsSealed ? PlayableColor : DisabledColor;
+        cardImage.color = isSealed ? DisabledColor : PlayableColor;
     }
 
-    #region Interface
+    public void InitialiseCard(GameChoice cardChoice, bool isChoiceAvailable)
+    {
+        gameChoice = cardChoice;
+        isSealed = !isChoiceAvailable;
+    }
+
+    #region Pointer Interface
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //if player is already dragging
+        //if player is already dragging a card, dont hover
         if (eventData.pointerDrag != null) return;
 
         SetCardUIHovered();
-
         //#TODO: Move other cards away so its clearer?
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        //if player is already dragging
+        //if player is already dragging a card, dont hover
         if (eventData.pointerDrag != null) return;
-
 
         ResetCardUIState();
         OnCardEndDragEvent?.Invoke();
@@ -74,13 +78,18 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        //dont assign event data.pointerdrag if card is sealed. Automatically does not run OnDrag, OnEndDrag
+        if (isSealed)
+        {
+            eventData.pointerDrag = null;
+            return;
+        }
+
         cardImage.raycastTarget = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (!IsSealed) return;
-
         //follow the mouse cursor
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
         transform.localEulerAngles = Vector3.zero;
@@ -88,13 +97,12 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        //reset the raycast so it can be selected again.
         cardImage.raycastTarget = true;
-
-        if (!IsSealed) return;
 
         //#TODO: Move cards slower, lerp so its nicer?
 
-        //reset the state, broadcast that you ended the drag event
+        //reset the state, broadcast that you ended the drag event, primarily binded to PlayerHandUIManager
         ResetCardUIState();
         OnCardEndDragEvent?.Invoke();
     }

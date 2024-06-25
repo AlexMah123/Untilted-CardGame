@@ -10,6 +10,9 @@ public class AIPlayer : Player
     {
         base.Awake();
 
+        aiModuleConfig.InitializeAIConfig(ChoiceComponent);
+        //ChoiceComponent.SealChoice(GameChoice.ROCK);
+        //ChoiceComponent.SealChoice(GameChoice.PAPER);
     }
 
     public override GameChoice GetChoice()

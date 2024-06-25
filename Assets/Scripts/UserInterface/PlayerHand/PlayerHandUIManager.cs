@@ -133,19 +133,13 @@ public class PlayerHandUIManager : MonoBehaviour
         ClearCardsInHand();
 
         //create based on choices available
-        foreach (var choice in player.ChoiceComponent.ChoicesAvailable)
+        foreach (var choice in player.ChoiceComponent.choicesAvailable)
         {
             GameObject cardUIGO = Instantiate(cardUIPrefab, transform);
             CardUI cardUI = cardUIGO.GetComponent<CardUI>();
 
-            //assign the card choice
-            cardUI.gameChoice = choice.Key;
-
-            //set isSealed if player choice is sealed
-            if (choice.Value == false)
-            {
-                cardUI.IsSealed = false;
-            }
+            //Initiailise the UI's values
+            cardUI.InitialiseCard(choice.Key, choice.Value);
 
             //add to list, set to inactive and wait for adjusthand
             CardUIContainer.Add(cardUI);
