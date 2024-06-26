@@ -7,6 +7,6 @@ public class Death : UpgradeDefinitionSO
 {
     public override void ApplyPassiveEffect(IPlayer player)
     {
-        
+
     }
 }

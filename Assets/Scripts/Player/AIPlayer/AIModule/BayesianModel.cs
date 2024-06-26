@@ -47,7 +47,7 @@ public class BayesianModel : AIDecision
             predictedMoveByOpponent = GameChoice.SCISSOR;
         }
 
-        aiDecision = AIDecisionLibrary.GetCounterChoice(predictedMoveByOpponent);
+        aiDecision = PlayerDecisionLibrary.GetCounterChoice(predictedMoveByOpponent);
         if (choiceComponent.IsChoiceAvailable(aiDecision))
         {
             return aiDecision;
@@ -76,7 +76,7 @@ public class BayesianModel : AIDecision
         // Return the next available choice
         foreach (var choice in sortedOpponentMostThrownMove)
         {
-            GameChoice counterChoice = AIDecisionLibrary.GetCounterChoice(choice);
+            GameChoice counterChoice = PlayerDecisionLibrary.GetCounterChoice(choice);
             if (choiceComponent.IsChoiceAvailable(choice))
             {
                 return counterChoice;

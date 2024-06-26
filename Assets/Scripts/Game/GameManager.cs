@@ -90,18 +90,19 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Human Player has selected {humanPlayer.currentChoice}");
         Debug.Log($"AI Player has selected {aiPlayer.currentChoice}");
 
-        //#TODO: add some sort of delay between rounds for animation?
         GetGameResult(humanPlayer.currentChoice, aiPlayer.currentChoice);
 
         //After results, reset the turns
         //broadcast event, primarily binded to PlayerHandUIManager
         OnClearCardHandEvent?.Invoke();
 
+
+        //#TODO: add some sort of delay between rounds for animation?
         //broadcast event, primarily binded to TurnSystemManager
         OnStartNewTurnEvent?.Invoke();
 
         //TESTING
-        Invoke(nameof(ClearEditorLog), 2f);
+        Invoke(nameof(ClearEditorLog), 3f);
     }
 
     #region Internal Functions

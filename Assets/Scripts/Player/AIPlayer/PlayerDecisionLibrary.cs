@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class AIDecisionLibrary 
+public static class PlayerDecisionLibrary 
 {
-
-
     #region Helper
     public static T GetRandomEnum<T>()
     {
@@ -25,6 +23,16 @@ public static class AIDecisionLibrary
             //shouldnt happen
             default:                        return GameChoice.ROCK;
         }
+    }
+
+    public static List<GameChoice> GetPlayerAvailableChoices(IPlayer targetedPlayer)
+    {
+        return targetedPlayer.ChoiceComponent.FetchAllChoicesAvailable();
+    }
+
+    public static GameChoice GetPredictedChoice(IPlayer targetedPlayer)
+    {
+        return targetedPlayer.GetChoice();
     }
 
     #endregion

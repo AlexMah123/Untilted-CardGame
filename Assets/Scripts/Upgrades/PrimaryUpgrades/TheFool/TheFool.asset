@@ -16,3 +16,4 @@ MonoBehaviour:
   upgradeName: The Fool
   upgradeDefinition: 
   isActivatable: 0
+  upgradeType: 7

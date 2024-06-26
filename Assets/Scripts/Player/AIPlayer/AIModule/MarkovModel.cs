@@ -14,7 +14,7 @@ public class MarkovModel : AIDecision
     };
 
     //assumed last move by opponent
-    private GameChoice opponentLastChoice = GameChoice.ROCK;
+    private GameChoice opponentLastChoice = GameChoice.PAPER;
 
     public override GameChoice MakeDecision()
     {
@@ -42,7 +42,7 @@ public class MarkovModel : AIDecision
             }
         }
 
-        aiDecision = AIDecisionLibrary.GetCounterChoice(predictedMoveByOpponent);
+        aiDecision = PlayerDecisionLibrary.GetCounterChoice(predictedMoveByOpponent);
 
         if (choiceComponent.IsChoiceAvailable(aiDecision))
         {
@@ -73,7 +73,7 @@ public class MarkovModel : AIDecision
         // Return the next available choice
         foreach (var choice in sortedOpponentMostThrownMove)
         {
-            GameChoice counterChoice = AIDecisionLibrary.GetCounterChoice(choice);
+            GameChoice counterChoice = PlayerDecisionLibrary.GetCounterChoice(choice);
             if (choiceComponent.IsChoiceAvailable(counterChoice))
             {
                 return counterChoice;

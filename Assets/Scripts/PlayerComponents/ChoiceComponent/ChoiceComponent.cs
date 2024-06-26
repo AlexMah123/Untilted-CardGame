@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum GameChoice
@@ -39,5 +40,12 @@ public class ChoiceComponent : MonoBehaviour
         {
             choicesAvailable[key] = true;
         }
+    }
+
+    public List<GameChoice> FetchAllChoicesAvailable()
+    {
+        //query through the dictionary to get all game choices that are true, and return the key.
+        List<GameChoice> queriedChoices = choicesAvailable.Where(x => x.Value == true).Select(x => x.Key).ToList();
+        return queriedChoices;
     }
 }

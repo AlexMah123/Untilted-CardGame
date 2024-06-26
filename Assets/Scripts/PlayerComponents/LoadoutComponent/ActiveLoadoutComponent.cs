@@ -19,6 +19,7 @@ public class ActiveLoadoutComponent : MonoBehaviour
         }
     }
 
+    [ContextMenu("ActiveLoadout/Apply Passive Effect")]
     public void ApplyPassiveEffects()
     {
         foreach(var upgrade in upgradeSlots)
@@ -27,6 +28,7 @@ public class ActiveLoadoutComponent : MonoBehaviour
         }
     }
 
+    [ContextMenu("ActiveLoadout/Apply OnWin Effect")]
     public void ApplyOnWinEffects()
     {
         foreach (var upgrade in upgradeSlots)
@@ -36,6 +38,7 @@ public class ActiveLoadoutComponent : MonoBehaviour
     }
 
 
+    [ContextMenu("ActiveLoadout/Apply OnLose Effect")]
     public void ApplyOnLoseEffect()
     {
         foreach (var upgrade in upgradeSlots)
@@ -44,6 +47,7 @@ public class ActiveLoadoutComponent : MonoBehaviour
         }
     }
 
+    [ContextMenu("ActiveLoadout/Apply OnDraw Effect")]
     public void ApplyOnDrawEffect()
     {
         foreach (var upgrade in upgradeSlots)
@@ -63,7 +67,7 @@ public class ActiveLoadoutComponent : MonoBehaviour
     }
 
     #region Debug
-    [ContextMenu("Debug Attached Player")]
+    [ContextMenu("Debug/Debug Attached Player")]
     public void DebugAttachedPlayer()
     {
         Debug.Log($"{attachedPlayer.GetType()}");

@@ -29,6 +29,8 @@ public class Player : MonoBehaviour, IPlayer
         activeLoadoutComponent = GetComponent<ActiveLoadoutComponent>();
         activeLoadoutComponent.attachedPlayer = this;
 
+
+        currentChoice = GameChoice.ROCK;
         //Debug.Log($"{this.GetType().Name} - Health: {statComponent.stats.health}, Damage: {statComponent.stats.damage}, CardSlots: {statComponent.stats.cardSlots}");
     }
 

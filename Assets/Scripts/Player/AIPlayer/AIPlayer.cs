@@ -13,6 +13,7 @@ public class AIPlayer : Player
         aiModuleConfig.InitializeAIConfig(ChoiceComponent);
         //ChoiceComponent.SealChoice(GameChoice.ROCK);
         //ChoiceComponent.SealChoice(GameChoice.PAPER);
+
     }
 
     public override GameChoice GetChoice()
@@ -22,7 +23,6 @@ public class AIPlayer : Player
             throw new MissingComponentException("AI Module is not assigned");
         }
 
-        //#TODO: Add a way to check if the decision is possible before making decision
         return aiModuleConfig.MakeDecision();
     }
 }
