@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
         //#TODO: Have a function to reload the levels and create players?.
     }
 
-    public void HandleConfirmCardChoice(CardUI cardUI)
+    public void HandleConfirmCardChoice(ChoiceCardUI cardUI)
     {
         humanPlayer.currentChoice = cardUI.gameChoice;
 
@@ -101,8 +101,11 @@ public class GameManager : MonoBehaviour
         //broadcast event, primarily binded to TurnSystemManager
         OnStartNewTurnEvent?.Invoke();
 
+#if UNITY_EDITOR
         //TESTING
         Invoke(nameof(ClearEditorLog), 3f);
+#endif
+        
     }
 
     #region Internal Functions
@@ -130,10 +133,13 @@ public class GameManager : MonoBehaviour
         return result;
     }
 
+#if UNITY_EDITOR
     private void ClearEditorLog()
     {
         UtilsLibrary.ClearLogConsole();
     }
+#endif
+
     #endregion
 
     #region Bind CardConfirmation event

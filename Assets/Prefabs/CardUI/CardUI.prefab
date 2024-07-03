@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7084182591955085186}
   - component: {fileID: 2894337446451464476}
   - component: {fileID: 8790829373188093239}
-  - component: {fileID: 5413974689236577306}
+  - component: {fileID: 4980601937900164467}
   m_Layer: 5
   m_Name: CardUI
   m_TagString: Untagged
@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 118.30664, y: -165.5}
-  m_SizeDelta: {x: 236.61328, y: 331}
+  m_SizeDelta: {x: 197.25, y: 339.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2894337446451464476
 CanvasRenderer:
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8642579ee2ccb3a448cb77042194d1aa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e71bec2ea4dfbf348ac67a92d1fd03c2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5413974689236577306
+--- !u!114 &4980601937900164467
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,11 +85,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2130793156531348567}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc223fc3d60574b44821254d3e04d58a, type: 3}
+  m_Script: {fileID: 11500000, guid: bc6c7cc21f19d2446a4c75cf6b779cf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   hoveredOffset: {x: 0, y: 50, z: 0}
-  hoveredEnlargedScale: 2
+  hoveredEnlargedScale: 1.5
+  gameChoice: 0
   PlayableColor: {r: 1, g: 1, b: 1, a: 1}
-  DisabledColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
-  bIsPlayable: 1
+  DisabledColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  isSealed: 0
+  isMoveable: 1

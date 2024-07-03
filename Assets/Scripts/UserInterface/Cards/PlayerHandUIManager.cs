@@ -5,67 +5,88 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(ChoiceCardUIFactory))]
 public class PlayerHandUIManager : MonoBehaviour
 {
-    public static PlayerHandUIManager Instance;
-
     public List<CardUI> CardUIContainer = new List<CardUI>();
 
     [Header("Card Controller Configs")]
+    public Player attachedPlayer;
+
+    [Tooltip("How much each card rotates")] 
     public float angleOfCards = 0f;
+
+    [Tooltip("How much to offset from the starting point")] 
     public Vector3 cardOffset = Vector3.zero;
-    public int cardAmount;
 
     [Header("Card Allignment Configs")]
     public GameObject cardUIPrefab;
+
+    [Tooltip("Offset in between each card")]
     public float gapBetweenCards = 10f;
 
     //cached values
+    private RectTransform rectTransform;
     private float startingCardHeight;
     private float cardUIExtent;
+
+    //event binding falgs
     private bool isOnClearHandEventBinded = false;
+    private bool isOnChangeTurnEventBinded = false;
+    private bool isOnSealChoiceEventBinded = false;
+
+    //factory
+    private ChoiceCardUIFactory choiceCardFactory;
 
     private void OnEnable()
     {
-        TurnSystemManager.Instance.OnChangedTurnEvent += HandleOnChangedTurn;
+        if(TurnSystemManager.Instance != null)
+        {
+            BindChangeTurnEvent();
+        }
 
         if(GameManager.Instance != null)
         {
             BindClearCardHandEvent();
         }
+
+        if(attachedPlayer != null)
+        {
+            BindSealChoiceEvent();
+        }
     }
 
     private void OnDisable()
     {
-        TurnSystemManager.Instance.OnChangedTurnEvent -= HandleOnChangedTurn;
+        if (isOnChangeTurnEventBinded)
+        {
+            UnbindChangeTurnEvent();
+        }
 
         if(isOnClearHandEventBinded)
         {
             UnbindClearCardHandEvent();
+        }
 
+        if(isOnSealChoiceEventBinded)
+        {
+            UnbindSealChoiceEvent();
         }
     }
 
     private void Awake()
     {
-        //singleton
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-
         if (!cardUIPrefab)
         {
             throw new MissingComponentException("CardUI Prefab is not assigned");
         }
 
         //caching values
-        startingCardHeight = GetComponent<RectTransform>().rect.height / -3;
-        cardUIExtent = (cardUIPrefab.GetComponent<Image>().preferredWidth / 2) - gapBetweenCards;
+        rectTransform = GetComponent<RectTransform>();
+        startingCardHeight = rectTransform.rect.height / -2;
+        cardUIExtent = (cardUIPrefab.GetComponent<RectTransform>().rect.width / 2) + gapBetweenCards;
+
+        choiceCardFactory = GetComponent<ChoiceCardUIFactory>();
     }
 
 
@@ -76,13 +97,23 @@ public class PlayerHandUIManager : MonoBehaviour
         {
             BindClearCardHandEvent();
         }
+
+        if(!isOnChangeTurnEventBinded)
+        {
+            BindChangeTurnEvent();
+        }
+
+        if(!isOnSealChoiceEventBinded)
+        {
+            BindSealChoiceEvent();
+        }
     }
 
     #region public methods
 
-    public void HandleOnPlayerStartTurn(IPlayer player)
+    public void HandleOnPlayerStartTurn(Player player)
     {
-        RequestCardChoices(player);
+        RequestCardChoices(attachedPlayer);
     }
 
     public void HandleOnClearCardHand()
@@ -97,14 +128,17 @@ public class PlayerHandUIManager : MonoBehaviour
 
     public void HandleOnChangedTurn(TurnSystemManager manager, Turn currentTurn, Turn newTurn)
     {
-        //Debug.Log($"Changing Player Turn - From: {currentTurn}, To: {newTurn}");
-
         if (currentTurn != null)
         {
             currentTurn.OnPlayerStartTurnEvent -= HandleOnPlayerStartTurn;
         }
 
         newTurn.OnPlayerStartTurnEvent += HandleOnPlayerStartTurn;
+    }
+
+    public void HandleOnSealChoice()
+    {
+        RequestCardChoices(attachedPlayer);
     }
 
     #endregion
@@ -127,7 +161,7 @@ public class PlayerHandUIManager : MonoBehaviour
         CardUIContainer.Clear();
     }
 
-    private void RequestCardChoices(IPlayer player)
+    private void RequestCardChoices(Player player)
     {
         //every request, clear the cards in hand
         ClearCardsInHand();
@@ -135,18 +169,25 @@ public class PlayerHandUIManager : MonoBehaviour
         //create based on choices available
         foreach (var choice in player.ChoiceComponent.choicesAvailable)
         {
-            GameObject cardUIGO = Instantiate(cardUIPrefab, transform);
-            CardUI cardUI = cardUIGO.GetComponent<CardUI>();
+            GameObject cardUIGO = choiceCardFactory.CreateCard(choice.Key, transform);
+            ChoiceCardUI cardUI = cardUIGO.GetComponent<ChoiceCardUI>();
 
             //Initiailise the UI's values
-            cardUI.InitialiseCard(choice.Key, choice.Value);
+            if(player.GetComponent<AIPlayer>())
+            {
+                cardUI.InitialiseCard(choice.Key, choice.Value, isInteractable: false);
+            }
+            else
+            {
+                cardUI.InitialiseCard(choice.Key, choice.Value, isInteractable: true);
+            }
 
             //add to list, set to inactive and wait for adjusthand
             CardUIContainer.Add(cardUI);
             cardUIGO.SetActive(false);
         }
 
-        BindOnCardEndDragDelegate(GetCardsInHand());
+        BindOnCardEndDragEvent(GetCardsInHand());
         AdjustHand();
     }
 
@@ -164,7 +205,7 @@ public class PlayerHandUIManager : MonoBehaviour
         float startAngle = angleOfCards / 2f;
 
         //alignment calculation
-        float startPositionX = isEvenNum ? (Screen.width / 2f) - ((halfOfTotalCards) * cardUIExtent) + (cardUIExtent / 2) : (Screen.width / 2f) - (halfOfTotalCards * cardUIExtent);
+        float startPositionX = isEvenNum ? (rectTransform.rect.width / 2f) - ((halfOfTotalCards) * cardUIExtent) + (cardUIExtent / 2) : (rectTransform.rect.width / 2f) - (halfOfTotalCards * cardUIExtent);
 
         int runningCount = 0;
         float xPosition;
@@ -247,8 +288,8 @@ public class PlayerHandUIManager : MonoBehaviour
 
     #endregion
 
-    #region Bind Delegate
-    public void BindOnCardEndDragDelegate(List<CardUI> cardUIList)
+    #region Bind CardEndDrag Delegate
+    public void BindOnCardEndDragEvent(List<CardUI> cardUIList)
     {
         foreach (var card in cardUIList)
         {
@@ -263,6 +304,10 @@ public class PlayerHandUIManager : MonoBehaviour
             card.OnCardEndDragEvent -= HandleOnCardEndDrag;
         }
     }
+
+    #endregion
+
+    #region Bind ClearCardHand Delegate
 
     private void BindClearCardHandEvent()
     {
@@ -282,5 +327,49 @@ public class PlayerHandUIManager : MonoBehaviour
         }
 
     }
+
+    #endregion
+
+    #region Bind ChangeTurn Delegate
+
+    private void BindChangeTurnEvent()
+    {
+        if (TurnSystemManager.Instance != null)
+        {
+            TurnSystemManager.Instance.OnChangedTurnEvent += HandleOnChangedTurn;
+            isOnChangeTurnEventBinded = true;
+        }
+
+    }
+
+    private void UnbindChangeTurnEvent()
+    {
+        if (TurnSystemManager.Instance != null)
+        {
+            TurnSystemManager.Instance.OnChangedTurnEvent -= HandleOnChangedTurn;
+            isOnChangeTurnEventBinded = false;
+        }
+    }
+    #endregion
+
+    #region Bind SealChoice Delegate
+    private void BindSealChoiceEvent()
+    {
+        if(attachedPlayer && attachedPlayer.ChoiceComponent)
+        {
+            attachedPlayer.ChoiceComponent.OnSealChoiceEvent += HandleOnSealChoice;
+            isOnSealChoiceEventBinded = true;
+        }
+    }
+
+    private void UnbindSealChoiceEvent()
+    {
+        if (attachedPlayer && attachedPlayer.ChoiceComponent)
+        {
+            attachedPlayer.ChoiceComponent.OnSealChoiceEvent += HandleOnSealChoice;
+            isOnSealChoiceEventBinded = false;
+        }
+    }
+
     #endregion
 }

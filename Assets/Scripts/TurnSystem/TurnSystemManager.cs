@@ -11,7 +11,7 @@ public class TurnSystemManager : MonoBehaviour
     private Player AiPlayer { get => GameManager.Instance.humanPlayer; }
 
     //Current values of the game.
-    public IPlayer currentPlayer;
+    public Player currentPlayer;
     public Turn currentTurn;
 
     //declaration of possible turns
