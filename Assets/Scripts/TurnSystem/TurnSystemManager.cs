@@ -11,6 +11,7 @@ public class TurnSystemManager : MonoBehaviour
     private Player AiPlayer { get => GameManager.Instance.humanPlayer; }
 
     //Current values of the game.
+    [HideInInspector]
     public Player currentPlayer;
     public Turn currentTurn;
 

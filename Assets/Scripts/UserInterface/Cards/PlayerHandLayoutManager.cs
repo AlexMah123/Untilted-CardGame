@@ -6,29 +6,23 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(ChoiceCardUIFactory))]
-public class PlayerHandUIManager : MonoBehaviour
+public class PlayerHandLayoutManager : MonoBehaviour
 {
     public List<CardUI> CardUIContainer = new List<CardUI>();
+
+    [Header("Card Allignment Configs")]
+    public GameObject cardUIPrefab;
+    [Tooltip("How much each card rotates")] public float totalAngleOfHand = 0f;
+    [Tooltip("How much to offset from the middle point")] public float cardOffsetYDuringRotation;
+    [Tooltip("Offset in between each card")] public float gapBetweenCards = 10f;
 
     [Header("Card Controller Configs")]
     public Player attachedPlayer;
 
-    [Tooltip("How much each card rotates")] 
-    public float angleOfCards = 0f;
-
-    [Tooltip("How much to offset from the starting point")] 
-    public Vector3 cardOffset = Vector3.zero;
-
-    [Header("Card Allignment Configs")]
-    public GameObject cardUIPrefab;
-
-    [Tooltip("Offset in between each card")]
-    public float gapBetweenCards = 10f;
-
     //cached values
     private RectTransform rectTransform;
     private float startingCardHeight;
-    private float cardUIExtent;
+    private float cardUIPrefabExtent;
 
     //event binding falgs
     private bool isOnClearHandEventBinded = false;
@@ -83,8 +77,8 @@ public class PlayerHandUIManager : MonoBehaviour
 
         //caching values
         rectTransform = GetComponent<RectTransform>();
-        startingCardHeight = rectTransform.rect.height / -2;
-        cardUIExtent = (cardUIPrefab.GetComponent<RectTransform>().rect.width / 2) + gapBetweenCards;
+        startingCardHeight = rectTransform.rect.height / -2; //based on pivot points
+        cardUIPrefabExtent = (cardUIPrefab.GetComponent<RectTransform>().rect.width / 2) + gapBetweenCards;
 
         choiceCardFactory = GetComponent<ChoiceCardUIFactory>();
     }
@@ -200,68 +194,44 @@ public class PlayerHandUIManager : MonoBehaviour
         int halfOfTotalCards = totalCardCount / 2;
         bool isEvenNum = totalCardCount % 2 == 0;
 
-        //angle calculation
-        float anglePerCard = angleOfCards / totalCardCount;
-        float startAngle = angleOfCards / 2f;
+        //card angle calculation
+        float anglePerCard = totalAngleOfHand / totalCardCount;
+        float startAngleOfHand = totalAngleOfHand / 2f;
 
         //alignment calculation
-        float startPositionX = isEvenNum ? (rectTransform.rect.width / 2f) - ((halfOfTotalCards) * cardUIExtent) + (cardUIExtent / 2) : (rectTransform.rect.width / 2f) - (halfOfTotalCards * cardUIExtent);
+        float startPositionX = isEvenNum 
+            ? (rectTransform.rect.width / 2f) - ((halfOfTotalCards) * cardUIPrefabExtent) + (cardUIPrefabExtent / 2) 
+            : (rectTransform.rect.width / 2f) - (halfOfTotalCards * cardUIPrefabExtent);
 
         int runningCount = 0;
         float xPosition;
         foreach (var card in cardsInHand)
         {
-            card.gameObject.SetActive(true);
-
             var cardRectTransform = card.GetComponent<RectTransform>();
 
-            if (runningCount == halfOfTotalCards)
+            float currentAngle = startAngleOfHand - (anglePerCard * runningCount);
+
+            //we have to increment by 1 to skip the center.
+            if(runningCount > halfOfTotalCards)
             {
-                //since half of the hand count be decimal, increment to round it off.
-                runningCount++;
-
-                xPosition = startPositionX + ((runningCount - 1) * cardUIExtent);
-
-                //if it is odd, we do not have to rotate
-                if (isEvenNum)
-                {
-                    card.transform.Rotate(0f, 0f, startAngle - (anglePerCard * runningCount));
-                    cardRectTransform.anchoredPosition3D = new Vector3(xPosition, startingCardHeight + (cardOffset.y * (runningCount - halfOfTotalCards)), cardRectTransform.anchoredPosition3D.z);
-                }
-                else
-                {
-                    card.transform.localEulerAngles = Vector3.zero;
-                    cardRectTransform.anchoredPosition3D = new Vector3(xPosition, startingCardHeight + (cardOffset.y / 2), cardRectTransform.anchoredPosition3D.z);
-                }
+                currentAngle = startAngleOfHand - (anglePerCard * (runningCount + 1));
             }
-            else
-            {
-                card.transform.Rotate(0f, 0f, startAngle - (anglePerCard * runningCount));
 
-                //left side of hand
-                if (runningCount < halfOfTotalCards)
-                {
-                    cardRectTransform.anchoredPosition3D = new Vector3(startPositionX + (runningCount * cardUIExtent), startingCardHeight + (cardOffset.y * (halfOfTotalCards - runningCount)), cardRectTransform.anchoredPosition3D.z);
-                }
-                else
-                {
-                    xPosition = startPositionX + ((runningCount - 1) * cardUIExtent);
+            // Calculate x position relative to the size of the card
+            xPosition = startPositionX + (runningCount * cardUIPrefabExtent);
 
-                    //right side of hand
-                    //if it is odd, the center card will not be offsetted, hence minusing 1 manually by 1 (skipping it)
-                    if (isEvenNum)
-                    {
-                        cardRectTransform.anchoredPosition3D = new Vector3(xPosition, startingCardHeight + (cardOffset.y * (runningCount - halfOfTotalCards)), cardRectTransform.anchoredPosition3D.z);
-                    }
-                    else
-                    {
-                        cardRectTransform.anchoredPosition3D = new Vector3(xPosition, startingCardHeight + (cardOffset.y * (runningCount - halfOfTotalCards - 1)), cardRectTransform.anchoredPosition3D.z);
-                    }
+            // Calculate y position and rotation, add offset based on which ever half you are on (left half, right half)
+            float yPosition = startingCardHeight + (cardOffsetYDuringRotation * Mathf.Abs(halfOfTotalCards - runningCount));
 
-                }
-            }
+            //if you are odd, or you are at the half way point, then do not rotate (0f)
+            float rotationAngle = (isEvenNum || runningCount != halfOfTotalCards) ? currentAngle : 0f;
+
+            // Apply rotation and position
+            cardRectTransform.localEulerAngles = new Vector3(0f, 0f, rotationAngle);
+            cardRectTransform.anchoredPosition3D = new Vector3(xPosition, yPosition, cardRectTransform.anchoredPosition3D.z);
 
             runningCount++;
+            card.gameObject.SetActive(true);
         }
     }
 
