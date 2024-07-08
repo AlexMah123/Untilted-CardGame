@@ -7,10 +7,10 @@ using UnityEngine;
 public abstract class Turn
 {
     protected TurnSystemManager controller;
-    public event Action<IPlayer> OnPlayerStartTurnEvent;
+    public event Action<Player> OnPlayerStartTurnEvent;
 
     #region Ran on every phase
-    public void OnStartTurn(TurnSystemManager turnController, IPlayer currentPlayer)
+    public void OnStartTurn(TurnSystemManager turnController, Player currentPlayer)
     {
         controller = turnController;
 
@@ -20,12 +20,12 @@ public abstract class Turn
         OnPlayerStartTurnEvent?.Invoke(currentPlayer);
     }
 
-    public void OnUpdateTurn(IPlayer currentPlayer)
+    public void OnUpdateTurn(Player currentPlayer)
     {
         OnUpdate(currentPlayer);
     }
 
-    public void OnEndTurn(IPlayer currentPlayer)
+    public void OnEndTurn(Player currentPlayer)
     {
         OnEnd(currentPlayer);
     }
@@ -33,9 +33,9 @@ public abstract class Turn
 
 
     //Overrides for inherited classes
-    protected abstract void OnStart(IPlayer currentPlayer);
+    protected abstract void OnStart(Player currentPlayer);
 
-    protected abstract void OnUpdate(IPlayer currentPlayer);
+    protected abstract void OnUpdate(Player currentPlayer);
 
-    protected abstract void OnEnd(IPlayer currentPlayer);
+    protected abstract void OnEnd(Player currentPlayer);
 }

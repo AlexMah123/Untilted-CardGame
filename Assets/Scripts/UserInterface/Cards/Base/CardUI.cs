@@ -11,25 +11,18 @@ using UnityEngine.UI;
 public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [Header("Card Configs")]
-    public GameChoice gameChoice;
     public Vector3 hoveredOffset;
     public float hoveredEnlargedScale = 1.5f;
 
-    //temp
-    public Color PlayableColor;
-    public Color DisabledColor;
-
-    //state of card
-    public bool isSealed = true;
-
     //cached variables
-    private Vector2 originalCardScale;
-    private int originalSiblingIndex;
+    protected Vector2 originalCardScale;
+    protected int originalSiblingIndex;
+    protected Transform originalParent;
 
     //Components
-    private RectTransform rectTransform;
-    private Image cardImage;
-    private Canvas canvas;
+    protected RectTransform rectTransform;
+    protected Image cardImage;
+    protected Canvas canvas;
 
     //events
     public event Action OnCardEndDragEvent;
@@ -45,16 +38,6 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         originalSiblingIndex = transform.GetSiblingIndex();
     }
 
-    private void Start()
-    {
-        cardImage.color = isSealed ? DisabledColor : PlayableColor;
-    }
-
-    public void InitialiseCard(GameChoice cardChoice, bool isChoiceAvailable)
-    {
-        gameChoice = cardChoice;
-        isSealed = !isChoiceAvailable;
-    }
 
     #region Pointer Interface
     public void OnPointerEnter(PointerEventData eventData)
@@ -76,29 +59,29 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     }
 
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public virtual void OnBeginDrag(PointerEventData eventData)
     {
-        //dont assign event data.pointerdrag if card is sealed. Automatically does not run OnDrag, OnEndDrag
-        if (isSealed)
-        {
-            eventData.pointerDrag = null;
-            return;
-        }
-
         cardImage.raycastTarget = false;
+
+        //caching the parent (hand display) and setting it to the canvas
+        originalParent = transform.parent;
+        transform.SetParent(transform.root);
     }
 
-    public void OnDrag(PointerEventData eventData)
+    public virtual void OnDrag(PointerEventData eventData)
     {
         //follow the mouse cursor
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
         transform.localEulerAngles = Vector3.zero;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public virtual void OnEndDrag(PointerEventData eventData)
     {
         //reset the raycast so it can be selected again.
         cardImage.raycastTarget = true;
+
+        //setting the parent back to the hand display
+        transform.SetParent(originalParent);
 
         //#TODO: Move cards slower, lerp so its nicer?
 

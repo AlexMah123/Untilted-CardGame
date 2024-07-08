@@ -8,7 +8,7 @@ public class CardConfirmation : MonoBehaviour, IDropHandler
 {
     public static CardConfirmation Instance;
 
-    public event Action<CardUI> OnConfirmCardChoiceEvent;
+    public event Action<ChoiceCardUI> OnConfirmCardChoiceEvent;
 
     private void Awake()
     {
@@ -27,7 +27,7 @@ public class CardConfirmation : MonoBehaviour, IDropHandler
         //if its not null and it is a CardUI type
         if (eventData.pointerDrag != null)
         {
-            CardUI confirmedCardUI = eventData.pointerDrag.GetComponent<CardUI>();
+            ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
 
             //broadcast event, primarily binded to TurnSystemManager
             OnConfirmCardChoiceEvent?.Invoke(confirmedCardUI);

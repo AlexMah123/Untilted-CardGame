@@ -30,16 +30,21 @@ public class ChoiceComponent : MonoBehaviour
     {
         choicesAvailable[choice] = false;
 
-        //#TODO: broadcast event to PlayerHandUIManager to update
+        //broadcast event to PlayerHandUIManager to update
         OnSealChoiceEvent?.Invoke();
     }
 
+    [ContextMenu("ChoiceComponent/ResetChoices")]
     public void ResetChoicesAvailable()
     {
-        foreach(var key in choicesAvailable.Keys)
+        var choicesKVP = choicesAvailable.ToList();
+        foreach (var choice in choicesKVP)
         {
-            choicesAvailable[key] = true;
+            choicesAvailable[choice.Key] = true;
         }
+
+        //broadcast event to PlayerHandUIManager to update
+        OnSealChoiceEvent?.Invoke();
     }
 
     public List<GameChoice> FetchAllChoicesAvailable()
@@ -48,4 +53,24 @@ public class ChoiceComponent : MonoBehaviour
         List<GameChoice> queriedChoices = choicesAvailable.Where(x => x.Value == true).Select(x => x.Key).ToList();
         return queriedChoices;
     }
+
+#if UNITY_EDITOR
+    [ContextMenu("ChoiceComponent/SealRock")]
+    public void SealRock()
+    {
+        SealChoice(GameChoice.ROCK);
+    }
+
+    [ContextMenu("ChoiceComponent/SealPaper")]
+    public void SealPaper()
+    {
+        SealChoice(GameChoice.PAPER);
+    }
+
+    [ContextMenu("ChoiceComponent/SealScissor")]
+    public void SealScissor()
+    {
+        SealChoice(GameChoice.SCISSOR);
+    }
+#endif
 }

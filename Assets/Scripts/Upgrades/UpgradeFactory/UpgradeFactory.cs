@@ -19,12 +19,12 @@ public enum UPGRADE_TYPE
     THE_WHEEL_OF_FORTUNE,
 }
 
-public class UpgradeDistributor : MonoBehaviour
+public class UpgradeFactory : MonoBehaviour
 {
-    public static UpgradeDistributor Instance;
+    public static UpgradeFactory Instance;
 
     [Header("Upgrade List")]
-    public List<UpgradeDefinitionSO> totalPossibleUpgrade = new();
+    public UpgradeListSO totalPossibleUpgrade;
 
     private void Awake()
     {
@@ -38,9 +38,9 @@ public class UpgradeDistributor : MonoBehaviour
         }
     }
 
-    public static UpgradeDefinitionSO FetchUpgradeDefinitionSO(UPGRADE_TYPE upgradeEnum)
+    public static UpgradeDefinitionSO CreateUpgradeDefinitionSO(UPGRADE_TYPE upgradeEnum)
     {
-        UpgradeDefinitionSO queriedSO = Instance.totalPossibleUpgrade.FirstOrDefault(x => x.upgradeType == upgradeEnum);
+        UpgradeDefinitionSO queriedSO = Instance.totalPossibleUpgrade.upgradeList.FirstOrDefault(x => x.upgradeType == upgradeEnum);
 
         if (!queriedSO) throw new MissingReferenceException("Tried to get a reference to a non existing upgradeSO");
 
