@@ -7,40 +7,67 @@ using UnityEngine;
 
 public class LoadoutLayoutManager : MonoBehaviour
 {
-    public Transform centerPoint; // The center point of the arc
-    public float radius = 5f; // Radius of the arc
-    public float angleBetweenCards = 10f; // Angle between each card
-    [Tooltip("The axis is rotated, so negative: up, positive: down")] public float heightOffsetFromBG = 1;
+    [Header("Prefab")]
+    public GameObject cardObjPrefab;
 
-    void Start()
+    [Header("Layout Config")]
+    public Transform centerPoint;
+    public float radiusFromCenter = 5f; 
+    public float angleBetweenCards = 10f; // temp
+    [Range(1, 9)] public int displayAmount;
+
+    [Header("Layout Offset Config")]
+    [Tooltip("This value is relative to World Position")] public Vector3 offsetPosition;
+
+    [HideInInspector]
+    public List<GameObject> cardSlots = new();
+
+    private void Start()
+    {
+        InitialiseLayout();
+        ArrangeCardsInArc();
+    }
+
+    private void Update()
     {
         ArrangeCardsInArc();
     }
 
-    void ArrangeCardsInArc()
+    private void InitialiseLayout()
     {
-        int childCount = centerPoint.childCount;
+        cardSlots.Clear();
+
+        for(int i = 0; i < displayAmount; i++)
+        {
+            GameObject card = Instantiate(cardObjPrefab, centerPoint);
+            cardSlots.Add(card);
+        }
+    }
+
+    private void ArrangeCardsInArc()
+    {
+        int cardCount = cardSlots.Count;
 
         // Calculate the starting angle
-        float totalAngle = (childCount - 1) * angleBetweenCards;
+        float totalAngle = (cardCount - 1) * angleBetweenCards;
         float startAngle = -totalAngle / 2;
 
-        for (int i = 0; i < childCount; i++)
+        for (int i = 0; i < cardCount; i++)
         {
-            Transform card = centerPoint.GetChild(i);
             float angle = startAngle + i * angleBetweenCards;
             float radian = angle * Mathf.Deg2Rad;
 
             // Calculate the card's position
-            float x = centerPoint.position.x + Mathf.Cos(radian) * radius;
-            float y = centerPoint.position.y + Mathf.Sin(radian) * radius;
+            float x = centerPoint.position.x + Mathf.Cos(radian) * radiusFromCenter;
+            float y = centerPoint.position.y + Mathf.Sin(radian) * radiusFromCenter;
 
-            //height should be negate
-            card.localPosition = new Vector3(x, y, card.localPosition.z + heightOffsetFromBG);
+            //adjust position
+            cardSlots[i].gameObject.transform.localPosition = new Vector3(x, y, 0);
+            cardSlots[i].gameObject.transform.position += new Vector3(offsetPosition.x, offsetPosition.y, offsetPosition.z);
 
-            // Optionally, rotate the card to face the center
-            card.localRotation = Quaternion.Euler(0, 0, angle + 90);
-            card.GetComponent<SpriteRenderer>().sortingOrder = i;
+            //rotate cards outwards
+            cardSlots[i].gameObject.transform.localRotation = Quaternion.Euler(0, 0, angle + 90);
+            cardSlots[i].GetComponent<SpriteRenderer>().sortingOrder = i;
         }
     }
 }

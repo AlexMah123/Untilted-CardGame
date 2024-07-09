@@ -19,9 +19,9 @@ public enum UPGRADE_TYPE
     THE_WHEEL_OF_FORTUNE,
 }
 
-public class UpgradeFactory : MonoBehaviour
+public class UpgradeSOFactory : MonoBehaviour
 {
-    public static UpgradeFactory Instance;
+    public static UpgradeSOFactory Instance;
 
     [Header("Upgrade List")]
     public UpgradeListSO totalPossibleUpgrade;

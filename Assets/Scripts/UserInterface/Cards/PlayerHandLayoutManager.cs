@@ -13,7 +13,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
     [Header("Card Allignment Configs")]
     public GameObject cardUIPrefab;
     [Tooltip("How much each card rotates")] public float totalAngleOfHand = 0f;
-    [Tooltip("How much to offset from the middle point")] public float cardOffsetYDuringRotation;
+    [Tooltip("How much to offset the cards on the side (left & right)")] public float cardOffsetYDuringRotation;
     [Tooltip("Offset in between each card")] public float gapBetweenCards = 10f;
 
     [Header("Card Controller Configs")]
@@ -24,7 +24,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
     private float startingCardHeight;
     private float cardUIPrefabExtent;
 
-    //event binding falgs
+    //event binding flags
     private bool isOnClearHandEventBinded = false;
     private bool isOnChangeTurnEventBinded = false;
     private bool isOnSealChoiceEventBinded = false;

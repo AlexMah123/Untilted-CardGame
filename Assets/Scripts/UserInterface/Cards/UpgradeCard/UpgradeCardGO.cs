@@ -5,11 +5,6 @@ using UnityEngine.EventSystems;
 
 public class UpgradeCardGO : MonoBehaviour
 {
-    private void Start()
-    {
-
-    }
-
     private void OnMouseEnter()
     {
         Debug.Log("Mouse Enter");
@@ -17,25 +12,25 @@ public class UpgradeCardGO : MonoBehaviour
 
     private void OnMouseExit()
     {
-        Debug.Log("Mouse Exit");
+        //Debug.Log("Mouse Exit");
 
     }
 
     private void OnMouseDown()
     {
-        Debug.Log("Mouse Down");
+        //Debug.Log("Mouse Down");
 
     }
 
     private void OnMouseDrag()
     {
-        Debug.Log("Mouse Drag");
+        //Debug.Log("Mouse Drag");
 
     }
 
     private void OnMouseUp()
     {
-        Debug.Log("Mouse Up");
+        //Debug.Log("Mouse Up");
 
     }
 

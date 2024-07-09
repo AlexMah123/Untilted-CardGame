@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ChoiceCardUI : CardUI
 {
+    [Header("Choice Card Configs")]
+    public Image sealedEffectImage;
     public GameChoice gameChoice;
 
-    //temp
     public Color PlayableColor;
     public Color DisabledColor;
 
@@ -17,11 +19,15 @@ public class ChoiceCardUI : CardUI
 
     public bool IsSealed
     {
-        get { return isSealed; }
+        get => isSealed;
         set
         {
             isSealed = value;
             cardImage.color = IsSealed ? DisabledColor : PlayableColor;
+
+            //only change the state if its not the same as the bool
+            if (sealedEffectImage.gameObject.activeSelf != isSealed)
+                sealedEffectImage.gameObject.SetActive(isSealed);
         }
     }
 
