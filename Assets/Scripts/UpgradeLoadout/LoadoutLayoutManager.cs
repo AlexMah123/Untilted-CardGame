@@ -5,13 +5,13 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
+[RequireComponent(typeof(LoadoutCardFactory))]
 public class LoadoutLayoutManager : MonoBehaviour
 {
-    [Header("Prefab")]
-    public GameObject cardObjPrefab;
+    public static LoadoutLayoutManager Instance;
 
     [Header("Layout Config")]
-    public Transform centerPoint;
+    public Transform spawnContainer;
     public float radiusFromCenter = 5f; 
     public float angleBetweenCards = 10f; // temp
     [Range(1, 9)] public int displayAmount;
@@ -19,8 +19,25 @@ public class LoadoutLayoutManager : MonoBehaviour
     [Header("Layout Offset Config")]
     [Tooltip("This value is relative to World Position")] public Vector3 offsetPosition;
 
-    [HideInInspector]
-    public List<GameObject> cardSlots = new();
+    //private
+    private List<UpgradeCard> cardSlots = new();
+
+    //factory
+    private LoadoutCardFactory upgradeCardFactory;
+
+    private void Awake()
+    {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+
+        upgradeCardFactory = GetComponent<LoadoutCardFactory>();
+    }
 
     private void Start()
     {
@@ -39,8 +56,10 @@ public class LoadoutLayoutManager : MonoBehaviour
 
         for(int i = 0; i < displayAmount; i++)
         {
-            GameObject card = Instantiate(cardObjPrefab, centerPoint);
-            cardSlots.Add(card);
+            LoadoutCardCreationInfo creationInfo = new(spawnContainer);
+            GameObject card = upgradeCardFactory.CreateUpgradeCard(creationInfo);
+            UpgradeCard upgradeCard = card.GetComponent<UpgradeCard>();
+            cardSlots.Add(upgradeCard);
         }
     }
 
@@ -58,8 +77,8 @@ public class LoadoutLayoutManager : MonoBehaviour
             float radian = angle * Mathf.Deg2Rad;
 
             // Calculate the card's position
-            float x = centerPoint.position.x + Mathf.Cos(radian) * radiusFromCenter;
-            float y = centerPoint.position.y + Mathf.Sin(radian) * radiusFromCenter;
+            float x = spawnContainer.position.x + Mathf.Cos(radian) * radiusFromCenter;
+            float y = spawnContainer.position.y + Mathf.Sin(radian) * radiusFromCenter;
 
             //adjust position
             cardSlots[i].gameObject.transform.localPosition = new Vector3(x, y, 0);
@@ -69,5 +88,15 @@ public class LoadoutLayoutManager : MonoBehaviour
             cardSlots[i].gameObject.transform.localRotation = Quaternion.Euler(0, 0, angle + 90);
             cardSlots[i].GetComponent<SpriteRenderer>().sortingOrder = i;
         }
+    }
+
+    private List<UpgradeCard> GetCardSlots()
+    {
+        return cardSlots;
+    }
+
+    private void UpdateCardSlots()
+    {
+
     }
 }

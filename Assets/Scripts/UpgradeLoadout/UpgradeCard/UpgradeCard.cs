@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UpgradeCardGO : MonoBehaviour
+public class UpgradeCard : MonoBehaviour
 {
+    public int numInSlot = 0;
+
     private void OnMouseEnter()
     {
         Debug.Log("Mouse Enter");
