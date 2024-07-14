@@ -20,10 +20,13 @@ public class LoadoutLayoutManager : MonoBehaviour
     [Tooltip("This value is relative to World Position")] public Vector3 offsetPosition;
 
     //private
-    private List<UpgradeCard> cardSlots = new();
+    private List<LoadoutCardGO> cardSlots = new();
 
     //factory
     private LoadoutCardFactory upgradeCardFactory;
+
+    //event
+    public event Action OnLoadoutSelectedEvent;
 
     private void Awake()
     {
@@ -45,11 +48,25 @@ public class LoadoutLayoutManager : MonoBehaviour
         ArrangeCardsInArc();
     }
 
-    private void Update()
+    #region public methods
+    public void HandleOnCardEndInteract()
     {
         ArrangeCardsInArc();
     }
 
+    public void HandleOnCardSelected()
+    {
+        //#TODO: supose to be binded to addselected...
+        OnLoadoutSelectedEvent?.Invoke();
+        LoadoutManager.Instance.AddSelectedUpgradeToActive();
+
+        UpdateCardSlots();
+        UpdateActiveCardSlots();
+    }
+
+    #endregion
+
+    #region internal methods
     private void InitialiseLayout()
     {
         cardSlots.Clear();
@@ -58,9 +75,12 @@ public class LoadoutLayoutManager : MonoBehaviour
         {
             LoadoutCardCreationInfo creationInfo = new(spawnContainer);
             GameObject card = upgradeCardFactory.CreateUpgradeCard(creationInfo);
-            UpgradeCard upgradeCard = card.GetComponent<UpgradeCard>();
+            LoadoutCardGO upgradeCard = card.GetComponent<LoadoutCardGO>();
             cardSlots.Add(upgradeCard);
         }
+
+        BindOnCardEndInteractEvent(GetCardSlots());
+        BindOnCardSelectedEvent(GetCardSlots());
     }
 
     private void ArrangeCardsInArc()
@@ -90,13 +110,57 @@ public class LoadoutLayoutManager : MonoBehaviour
         }
     }
 
-    private List<UpgradeCard> GetCardSlots()
+    private List<LoadoutCardGO> GetCardSlots()
     {
         return cardSlots;
     }
 
     private void UpdateCardSlots()
     {
-
+        //#TODO: have the card slots be updatable.
+        Debug.Log("Updating Card Slots");
     }
+
+    private void UpdateActiveCardSlots()
+    {
+        //#TODO: have the active card slots be updatable.
+        Debug.Log("Updating Active Card Slots");
+    }
+    #endregion
+
+    #region Bind LoadoutCard Event
+    public void BindOnCardEndInteractEvent(List<LoadoutCardGO> cardSlots)
+    {
+        foreach (var card in cardSlots)
+        {
+            card.OnCardEndInteractEvent += HandleOnCardEndInteract;
+        }
+    }
+
+    public void UnbindOnCardEndInteractEvent(List<LoadoutCardGO> cardSlots)
+    {
+        foreach (var card in cardSlots)
+        {
+            card.OnCardEndInteractEvent -= HandleOnCardEndInteract;
+        }
+    }
+
+    public void BindOnCardSelectedEvent(List<LoadoutCardGO> cardSlots)
+    {
+        foreach (var card in cardSlots)
+        {
+            card.OnCardSelectedEvent += HandleOnCardSelected;
+        }
+    }
+
+    public void UnbindOnCardSelectedEvent(List<LoadoutCardGO> cardSlots)
+    {
+        foreach (var card in cardSlots)
+        {
+            card.OnCardSelectedEvent -= HandleOnCardSelected;
+        }
+    }
+
+
+    #endregion
 }

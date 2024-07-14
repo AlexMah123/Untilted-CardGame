@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8790829373188093239}
   - component: {fileID: 4980601937900164467}
   m_Layer: 5
-  m_Name: CardUI
+  m_Name: ChoiceCardUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

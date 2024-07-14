@@ -110,7 +110,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
         ClearCardsInHand();
     }
 
-    public void HandleOnCardEndDrag()
+    public void HandleOnCardEndInteract()
     {
         AdjustHand();
     }
@@ -139,7 +139,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
         var cardsInHand = GetCardsInHand();
 
         //unbind before reseting
-        UnbindOnCardEndDragDelegate(cardsInHand);
+        UnbindOnCardEndInteractDelegate(cardsInHand);
 
         //resets then gets all child of CardUI
         foreach (var card in cardsInHand)
@@ -177,7 +177,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
             cardUIGO.SetActive(false);
         }
 
-        BindOnCardEndDragEvent(GetCardsInHand());
+        BindOnCardEndInteractEvent(GetCardsInHand());
         AdjustHand();
     }
 
@@ -255,19 +255,19 @@ public class PlayerHandLayoutManager : MonoBehaviour
     #endregion
 
     #region Bind CardEndDrag Delegate
-    public void BindOnCardEndDragEvent(List<CardUI> cardUIList)
+    public void BindOnCardEndInteractEvent(List<CardUI> cardUIList)
     {
         foreach (var card in cardUIList)
         {
-            card.OnCardEndDragEvent += HandleOnCardEndDrag;
+            card.OnCardEndInteractEvent += HandleOnCardEndInteract;
         }
     }
 
-    public void UnbindOnCardEndDragDelegate(List<CardUI> cardUIList)
+    public void UnbindOnCardEndInteractDelegate(List<CardUI> cardUIList)
     {
         foreach (var card in cardUIList)
         {
-            card.OnCardEndDragEvent -= HandleOnCardEndDrag;
+            card.OnCardEndInteractEvent -= HandleOnCardEndInteract;
         }
     }
 

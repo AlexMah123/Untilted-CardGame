@@ -8,5 +8,22 @@ public class LoadoutManager : MonoBehaviour
 
     public List<UpgradeDefinitionSO> totalUpgradesUnlocked = new();
 
+    private void Awake()
+    {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+        
+    }
 
+    public void AddSelectedUpgradeToActive()
+    {
+        //#TODO: need the cards be added to active
+        Debug.Log($"Added card to active");
+    }
 }

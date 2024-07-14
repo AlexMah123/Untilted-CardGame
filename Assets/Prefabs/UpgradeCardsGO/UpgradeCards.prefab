@@ -98,6 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94e7001eaf39702468457d31bebf99be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hoveredOffset: {x: -0.5, y: 0, z: 0}
+  hoveredEnlargedScale: 1.5
 --- !u!65 &3044233327883384513
 BoxCollider:
   m_ObjectHideFlags: 0
