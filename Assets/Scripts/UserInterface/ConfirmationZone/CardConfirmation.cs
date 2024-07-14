@@ -27,9 +27,11 @@ public class CardConfirmation : MonoBehaviour, IDropHandler
         //if its not null and it is a CardUI type
         if (eventData.pointerDrag != null)
         {
+            Debug.Log(eventData.pointerDrag.name);
+
             ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
 
-            //broadcast event, primarily binded to TurnSystemManager
+            //broadcast event, primarily binded to GameManager
             OnConfirmCardChoiceEvent?.Invoke(confirmedCardUI);
         }
     }

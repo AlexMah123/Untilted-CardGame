@@ -8,11 +8,13 @@ using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
-public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Card Configs")]
     public Vector3 hoveredOffset;
     public float hoveredEnlargedScale = 1.5f;
+    public bool shouldEnlargeOnHover = true;
+    public bool shouldReorderToTop = true;
 
     //cached variables
     protected Vector2 originalCardScale;
@@ -25,7 +27,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     protected Canvas canvas;
 
     //events
-    public event Action OnCardEndDragEvent;
+    public event Action OnCardEndInteractEvent;
 
     private void Awake()
     {
@@ -45,7 +47,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         //if player is already dragging a card, dont hover
         if (eventData.pointerDrag != null) return;
 
-        SetCardUIHovered();
+        SetCardHovered();
         //#TODO: Move other cards away so its clearer?
     }
 
@@ -54,60 +56,46 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         //if player is already dragging a card, dont hover
         if (eventData.pointerDrag != null) return;
 
-        ResetCardUIState();
-        OnCardEndDragEvent?.Invoke();
-    }
-
-
-    public virtual void OnBeginDrag(PointerEventData eventData)
-    {
-        cardImage.raycastTarget = false;
-
-        //caching the parent (hand display) and setting it to the canvas
-        originalParent = transform.parent;
-        transform.SetParent(transform.root);
-    }
-
-    public virtual void OnDrag(PointerEventData eventData)
-    {
-        //follow the mouse cursor
-        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
-        transform.localEulerAngles = Vector3.zero;
-    }
-
-    public virtual void OnEndDrag(PointerEventData eventData)
-    {
-        //reset the raycast so it can be selected again.
-        cardImage.raycastTarget = true;
-
-        //setting the parent back to the hand display
-        transform.SetParent(originalParent);
-
-        //#TODO: Move cards slower, lerp so its nicer?
-
-        //reset the state, broadcast that you ended the drag event, primarily binded to PlayerHandUIManager
-        ResetCardUIState();
-        OnCardEndDragEvent?.Invoke();
+        ResetCardState();
     }
     #endregion
 
-    private void SetCardUIHovered()
+    protected void SetCardHovered()
     {
         //move the offset then scale up
 
-        rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x, rectTransform.anchoredPosition3D.y + hoveredOffset.y, rectTransform.anchoredPosition3D.z);
-        transform.localScale = originalCardScale * hoveredEnlargedScale;
+        rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x + hoveredOffset.x, rectTransform.anchoredPosition3D.y + hoveredOffset.y, rectTransform.anchoredPosition3D.z + hoveredOffset.z);
+        
+        if(shouldEnlargeOnHover)
+        {
+            transform.localScale = originalCardScale * hoveredEnlargedScale;
+        }
+
         transform.localEulerAngles = Vector3.zero;
 
-        transform.SetAsLastSibling();
+
+        if(shouldReorderToTop)
+        {
+            transform.SetAsLastSibling();
+        }
     }
 
-    private void ResetCardUIState()
+    protected void ResetCardState()
     {
         //scale down then move down the offset
-        gameObject.transform.localScale = originalCardScale;
-        rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x, rectTransform.anchoredPosition3D.y - hoveredOffset.y, rectTransform.anchoredPosition3D.z);
+        if (shouldEnlargeOnHover)
+        {
+            gameObject.transform.localScale = originalCardScale;
+        }
 
-        transform.SetSiblingIndex(originalSiblingIndex);
+        rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x - hoveredOffset.x, rectTransform.anchoredPosition3D.y - hoveredOffset.y, rectTransform.anchoredPosition3D.z - hoveredOffset.z);
+
+        if (shouldReorderToTop)
+        {
+            transform.SetSiblingIndex(originalSiblingIndex);
+        }
+
+        //primarily binded to PlayerHandUIManager
+        OnCardEndInteractEvent?.Invoke();
     }
 }

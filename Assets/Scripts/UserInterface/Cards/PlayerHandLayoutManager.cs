@@ -11,20 +11,20 @@ public class PlayerHandLayoutManager : MonoBehaviour
     public List<CardUI> CardUIContainer = new List<CardUI>();
 
     [Header("Card Allignment Configs")]
-    public GameObject cardUIPrefab;
+    public Transform spawnContainer;
     [Tooltip("How much each card rotates")] public float totalAngleOfHand = 0f;
-    [Tooltip("How much to offset from the middle point")] public float cardOffsetYDuringRotation;
+    [Tooltip("How much to offset the cards on the side (left & right)")] public float cardOffsetYDuringRotation;
     [Tooltip("Offset in between each card")] public float gapBetweenCards = 10f;
 
     [Header("Card Controller Configs")]
     public Player attachedPlayer;
 
     //cached values
-    private RectTransform rectTransform;
+    private RectTransform spawnRectTransform;
     private float startingCardHeight;
     private float cardUIPrefabExtent;
 
-    //event binding falgs
+    //event binding flags
     private bool isOnClearHandEventBinded = false;
     private bool isOnChangeTurnEventBinded = false;
     private bool isOnSealChoiceEventBinded = false;
@@ -70,17 +70,12 @@ public class PlayerHandLayoutManager : MonoBehaviour
 
     private void Awake()
     {
-        if (!cardUIPrefab)
-        {
-            throw new MissingComponentException("CardUI Prefab is not assigned");
-        }
+        choiceCardFactory = GetComponent<ChoiceCardUIFactory>();
 
         //caching values
-        rectTransform = GetComponent<RectTransform>();
-        startingCardHeight = rectTransform.rect.height / -2; //based on pivot points
-        cardUIPrefabExtent = (cardUIPrefab.GetComponent<RectTransform>().rect.width / 2) + gapBetweenCards;
-
-        choiceCardFactory = GetComponent<ChoiceCardUIFactory>();
+        spawnRectTransform = spawnContainer.GetComponent<RectTransform>();
+        startingCardHeight = spawnRectTransform.rect.height / -2; //based on pivot points
+        cardUIPrefabExtent = (choiceCardFactory.choiceCardUIPrefab.GetComponent<RectTransform>().rect.width / 2) + gapBetweenCards;
     }
 
 
@@ -115,7 +110,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
         ClearCardsInHand();
     }
 
-    public void HandleOnCardEndDrag()
+    public void HandleOnCardEndInteract()
     {
         AdjustHand();
     }
@@ -144,7 +139,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
         var cardsInHand = GetCardsInHand();
 
         //unbind before reseting
-        UnbindOnCardEndDragDelegate(cardsInHand);
+        UnbindOnCardEndInteractDelegate(cardsInHand);
 
         //resets then gets all child of CardUI
         foreach (var card in cardsInHand)
@@ -163,7 +158,8 @@ public class PlayerHandLayoutManager : MonoBehaviour
         //create based on choices available
         foreach (var choice in player.ChoiceComponent.choicesAvailable)
         {
-            GameObject cardUIGO = choiceCardFactory.CreateCard(choice.Key, transform);
+            ChoiceCardCreationInfo creationInfo = new(choice.Key, spawnContainer);
+            GameObject cardUIGO = choiceCardFactory.CreateCard(creationInfo);
             ChoiceCardUI cardUI = cardUIGO.GetComponent<ChoiceCardUI>();
 
             //Initiailise the UI's values
@@ -181,7 +177,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
             cardUIGO.SetActive(false);
         }
 
-        BindOnCardEndDragEvent(GetCardsInHand());
+        BindOnCardEndInteractEvent(GetCardsInHand());
         AdjustHand();
     }
 
@@ -200,8 +196,8 @@ public class PlayerHandLayoutManager : MonoBehaviour
 
         //alignment calculation
         float startPositionX = isEvenNum 
-            ? (rectTransform.rect.width / 2f) - ((halfOfTotalCards) * cardUIPrefabExtent) + (cardUIPrefabExtent / 2) 
-            : (rectTransform.rect.width / 2f) - (halfOfTotalCards * cardUIPrefabExtent);
+            ? (spawnRectTransform.rect.width / 2f) - ((halfOfTotalCards) * cardUIPrefabExtent) + (cardUIPrefabExtent / 2) 
+            : (spawnRectTransform.rect.width / 2f) - (halfOfTotalCards * cardUIPrefabExtent);
 
         int runningCount = 0;
         float xPosition;
@@ -259,19 +255,19 @@ public class PlayerHandLayoutManager : MonoBehaviour
     #endregion
 
     #region Bind CardEndDrag Delegate
-    public void BindOnCardEndDragEvent(List<CardUI> cardUIList)
+    public void BindOnCardEndInteractEvent(List<CardUI> cardUIList)
     {
         foreach (var card in cardUIList)
         {
-            card.OnCardEndDragEvent += HandleOnCardEndDrag;
+            card.OnCardEndInteractEvent += HandleOnCardEndInteract;
         }
     }
 
-    public void UnbindOnCardEndDragDelegate(List<CardUI> cardUIList)
+    public void UnbindOnCardEndInteractDelegate(List<CardUI> cardUIList)
     {
         foreach (var card in cardUIList)
         {
-            card.OnCardEndDragEvent -= HandleOnCardEndDrag;
+            card.OnCardEndInteractEvent -= HandleOnCardEndInteract;
         }
     }
 

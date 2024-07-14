@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class ChoiceCardUI : CardUI
+public class ChoiceCardUI : CardUI, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    [Header("Choice Card Configs")]
+    public Image sealedEffectImage;
     public GameChoice gameChoice;
 
-    //temp
     public Color PlayableColor;
     public Color DisabledColor;
 
@@ -17,11 +19,15 @@ public class ChoiceCardUI : CardUI
 
     public bool IsSealed
     {
-        get { return isSealed; }
+        get => isSealed;
         set
         {
             isSealed = value;
             cardImage.color = IsSealed ? DisabledColor : PlayableColor;
+
+            //only change the state if its not the same as the bool
+            if (sealedEffectImage.gameObject.activeSelf != isSealed)
+                sealedEffectImage.gameObject.SetActive(isSealed);
         }
     }
 
@@ -32,7 +38,7 @@ public class ChoiceCardUI : CardUI
         isMoveable = isInteractable;
     }
 
-    public override void OnBeginDrag(PointerEventData eventData)
+    public void OnBeginDrag(PointerEventData eventData)
     {
         //dont assign event data.pointerdrag if card is sealed. Automatically does not run OnDrag, OnEndDrag
         if (IsSealed || !isMoveable)
@@ -41,6 +47,31 @@ public class ChoiceCardUI : CardUI
             return;
         }
 
-        base.OnBeginDrag(eventData);
+        cardImage.raycastTarget = false;
+
+        //caching the parent (hand display) and setting it to the canvas
+        originalParent = transform.parent;
+        transform.SetParent(transform.root);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        //follow the mouse cursor
+        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        transform.localEulerAngles = Vector3.zero;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        //reset the raycast so it can be selected again.
+        cardImage.raycastTarget = true;
+
+        //setting the parent back to the hand display
+        transform.SetParent(originalParent);
+
+        //#TODO: Move cards slower, lerp so its nicer?
+
+        //reset the state, broadcast that you ended the drag event, primarily binded to PlayerHandUIManager
+        ResetCardState();
     }
 }
