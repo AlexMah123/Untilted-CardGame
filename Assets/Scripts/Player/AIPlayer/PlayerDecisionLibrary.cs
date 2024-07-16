@@ -4,12 +4,11 @@ using UnityEngine;
 
 public static class PlayerDecisionLibrary 
 {
-    #region Helper
-    public static T GetRandomEnum<T>()
+    public static GameChoice GetRandomGameChoice()
     {
-        System.Array A = System.Enum.GetValues(typeof(T));
-        T V = (T)A.GetValue(UnityEngine.Random.Range(0, A.Length));
-        return V;
+        System.Array A = System.Enum.GetValues(typeof(GameChoice));
+        GameChoice choice = (GameChoice)A.GetValue(UnityEngine.Random.Range(0, A.Length));
+        return choice;
     }
 
     public static GameChoice GetCounterChoice(GameChoice predictedMoveByOpponent)
@@ -34,6 +33,4 @@ public static class PlayerDecisionLibrary
     {
         return targetedPlayer.GetChoice();
     }
-
-    #endregion
 }

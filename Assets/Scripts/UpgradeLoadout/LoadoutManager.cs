@@ -24,6 +24,7 @@ public class LoadoutManager : MonoBehaviour
     public void AddSelectedUpgradeToActive()
     {
         //#TODO: need the cards be added to active
+        //#DEBUG
         Debug.Log($"Added card to active");
     }
 }

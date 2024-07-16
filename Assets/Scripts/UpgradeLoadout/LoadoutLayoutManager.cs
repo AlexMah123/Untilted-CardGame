@@ -118,6 +118,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     private void UpdateCardSlots()
     {
         //#TODO: have the card slots be updatable.
+        //#DEBUG
         Debug.Log("Updating Card Slots");
     }
 

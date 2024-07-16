@@ -28,6 +28,6 @@ public abstract class AIDecision : ScriptableObject
 
     protected GameChoice RandomChoice()
     {
-        return PlayerDecisionLibrary.GetRandomEnum<GameChoice>();
+        return PlayerDecisionLibrary.GetRandomGameChoice();
     }
 }

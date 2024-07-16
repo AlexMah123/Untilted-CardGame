@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ActiveLoadoutComponent : MonoBehaviour
 {
-    [Range(2, 10)]
+    [Header("Runtime Value")]
     public int maxLimitOfLoadout;
     public List<UpgradeDefinitionSO> upgradeSlots = new();
 
     [HideInInspector]
-    public IPlayer attachedPlayer;
+    public Player attachedPlayer;
 
     private void Start()
     {
@@ -17,6 +17,12 @@ public class ActiveLoadoutComponent : MonoBehaviour
         {
             throw new MissingReferenceException("ActiveLoadout does not have an reference to player");
         }
+    }
+
+    public void InitializeComponent(Player refPlayer, PlayerStatsSO referencedStats)
+    {
+        attachedPlayer = refPlayer;
+        maxLimitOfLoadout = referencedStats.cardSlots;
     }
 
     [ContextMenu("ActiveLoadout/Apply Passive Effect")]

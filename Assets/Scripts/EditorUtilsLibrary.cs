@@ -7,7 +7,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-public static class UtilsLibrary
+public static class EditorUtilsLibrary
 {
     static MethodInfo _clearConsoleMethod;
     static MethodInfo clearConsoleMethod

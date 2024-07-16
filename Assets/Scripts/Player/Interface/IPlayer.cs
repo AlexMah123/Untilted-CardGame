@@ -4,10 +4,10 @@ using UnityEngine;
 
 public interface IPlayer
 {
-    public PlayerStatsSO StatsConfig { get;}
-    public StatComponent StatComponent { get; }
     public ChoiceComponent ChoiceComponent { get; }
     public ActiveLoadoutComponent ActiveLoadoutComponent { get; }
+    public HealthStatComponent HealthStatComponent { get; }
+    public DamageStatComponent DamageStatComponent { get; }
 
     public GameChoice GetChoice();
 }

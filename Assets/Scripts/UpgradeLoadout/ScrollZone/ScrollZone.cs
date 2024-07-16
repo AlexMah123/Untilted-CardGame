@@ -25,6 +25,7 @@ public class ScrollZone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         if (scrollDelta != 0f)
         {
+            //#DEBUG
             Debug.Log("scrolling");
         }
     }

@@ -13,6 +13,10 @@ public enum GameChoice
 
 public class ChoiceComponent : MonoBehaviour
 {
+    [Header("Runtime Values")]
+    public GameChoice currentChoice = GameChoice.ROCK;
+
+    //events
     public event Action OnSealChoiceEvent;
 
     public Dictionary<GameChoice, bool> choicesAvailable = new Dictionary<GameChoice, bool> {

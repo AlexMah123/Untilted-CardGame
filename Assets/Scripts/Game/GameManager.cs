@@ -11,7 +11,6 @@ public enum GameResult
     DRAW
 }
 
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
@@ -24,6 +23,7 @@ public class GameManager : MonoBehaviour
     public event Action OnClearCardHandEvent;
     public event Action OnStartNewTurnEvent;
   
+    //flag
     private bool isConfirmCardEventBinded = false;
     
     private void OnEnable()
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
 
     public void HandleConfirmCardChoice(ChoiceCardUI cardUI)
     {
-        humanPlayer.currentChoice = cardUI.gameChoice;
+        humanPlayer.ChoiceComponent.currentChoice = cardUI.gameChoice;
 
         //trigger resolution of the round
         PlayRound();
@@ -79,23 +79,25 @@ public class GameManager : MonoBehaviour
 
     public void PlayRound()
     {
-        aiPlayer.currentChoice = aiPlayer.GetChoice();
+        aiPlayer.ChoiceComponent.currentChoice = aiPlayer.GetChoice();
 
         //if player is an ai player, update its Ai Module
         if(aiPlayer.GetComponent<AIPlayer>())
         {
-            aiPlayer.GetComponent<AIPlayer>().aiModuleConfig.UpdateAIModule(humanPlayer.currentChoice);
+            aiPlayer.GetComponent<AIPlayer>().aiModuleConfig.UpdateAIModule(humanPlayer.ChoiceComponent.currentChoice);
         }
 
-        Debug.Log($"Human Player has selected {humanPlayer.currentChoice}");
-        Debug.Log($"AI Player has selected {aiPlayer.currentChoice}");
+        //#DEBUG
+        Debug.Log($"Human Player has selected {humanPlayer.ChoiceComponent.currentChoice}");
+        Debug.Log($"AI Player has selected {aiPlayer.ChoiceComponent.currentChoice}");
 
-        GetGameResult(humanPlayer.currentChoice, aiPlayer.currentChoice);
+        //get the result based on the played choice, then evaluate them (broadcast all the neccesary events)
+        var roundResult = GameUtilsLibrary.GetGameResult(humanPlayer.ChoiceComponent.currentChoice, aiPlayer.ChoiceComponent.currentChoice);
+        EvaluateResults(roundResult);
 
         //After results, reset the turns
         //broadcast event, primarily binded to PlayerHandUIManager
         OnClearCardHandEvent?.Invoke();
-
 
         //#TODO: add some sort of delay between rounds for animation?
         //broadcast event, primarily binded to TurnSystemManager
@@ -109,34 +111,37 @@ public class GameManager : MonoBehaviour
     }
 
     #region Internal Functions
-    private GameResult GetGameResult(GameChoice humanPlayerChoice, GameChoice aiPlayerChoice)
+
+    private void EvaluateResults(GameResult roundResult)
     {
-        var result = GameResult.NONE;
-
-        if (humanPlayerChoice == aiPlayerChoice)
+        //#TODO: call the players win lose draw conditions
+        switch(roundResult)
         {
-            result = GameResult.DRAW;
-        }
-        else if (humanPlayerChoice == GameChoice.ROCK && aiPlayerChoice == GameChoice.SCISSOR ||
-                humanPlayerChoice == GameChoice.PAPER && aiPlayerChoice == GameChoice.ROCK ||
-                humanPlayerChoice == GameChoice.SCISSOR && aiPlayerChoice == GameChoice.PAPER)
-        {
-            result = GameResult.WIN;
-        }
-        else
-        {
-            result = GameResult.LOSE;
+            case GameResult.WIN:
+                //decrease the health based on the opposing player's damage
+                aiPlayer.HealthStatComponent.DecreaseHealth(humanPlayer.DamageStatComponent.damageAmount);
+                break;
+
+            case GameResult.LOSE:
+                //decrease the health based on the opposing player's damage
+                humanPlayer.HealthStatComponent.DecreaseHealth(aiPlayer.DamageStatComponent.damageAmount);
+                break;
+
+            case GameResult.DRAW:
+                //do nothing
+                break;
         }
 
-        Debug.Log($"Human Player has {result}");
+        //#TODO: Check players healths
 
-        return result;
+        //#DEBUG
+        Debug.Log($"Human Player has {roundResult}");
     }
 
 #if UNITY_EDITOR
     private void ClearEditorLog()
     {
-        UtilsLibrary.ClearLogConsole();
+        EditorUtilsLibrary.ClearLogConsole();
     }
 #endif
 

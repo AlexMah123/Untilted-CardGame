@@ -3,35 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(StatComponent), typeof(ChoiceComponent), typeof(ActiveLoadoutComponent))]
+[RequireComponent(typeof(ChoiceComponent), typeof(ActiveLoadoutComponent))]
+[RequireComponent(typeof(HealthStatComponent), typeof(DamageStatComponent))]
 public class Player : MonoBehaviour, IPlayer
 {
-    //components
-    public StatComponent StatComponent { get => statComponent; }
+    //inherited components from IPlayer
     public ChoiceComponent ChoiceComponent { get => choiceComponent; }
     public ActiveLoadoutComponent ActiveLoadoutComponent { get => activeLoadoutComponent; }
+    public HealthStatComponent HealthStatComponent { get => healthStatComponent; }
+    public DamageStatComponent DamageStatComponent { get => damageStatComponent; }
 
-    public PlayerStatsSO StatsConfig { get => statComponent.stats; }
-
-    [HideInInspector]
-    public GameChoice currentChoice = GameChoice.ROCK;
+    [Header("Player Stats Config")]
+    public PlayerStatsSO statsConfig;
 
     //local variables
-    private StatComponent statComponent;
     private ChoiceComponent choiceComponent;
     private ActiveLoadoutComponent activeLoadoutComponent;
+    private HealthStatComponent healthStatComponent;
+    private DamageStatComponent damageStatComponent;
+
 
     #region Overrides
     protected virtual void Awake()
     {
-        statComponent = GetComponent<StatComponent>();
         choiceComponent = GetComponent<ChoiceComponent>();
         activeLoadoutComponent = GetComponent<ActiveLoadoutComponent>();
-        activeLoadoutComponent.attachedPlayer = this;
+        healthStatComponent = GetComponent<HealthStatComponent>();
+        damageStatComponent = GetComponent<DamageStatComponent>();
 
 
-        currentChoice = GameChoice.ROCK;
-        //Debug.Log($"{this.GetType().Name} - Health: {statComponent.stats.health}, Damage: {statComponent.stats.damage}, CardSlots: {statComponent.stats.cardSlots}");
+        //Inject values
+        choiceComponent.currentChoice = GameChoice.ROCK;
+        activeLoadoutComponent.InitializeComponent(this, statsConfig);
+        healthStatComponent.InitializeComponent(statsConfig);
+        damageStatComponent.InitializeComponent(statsConfig);
     }
 
     protected virtual void Start()
@@ -47,7 +52,7 @@ public class Player : MonoBehaviour, IPlayer
     //overriden by AIPlayer, HumanPlayer is set by turn system manager/GameManager
     public virtual GameChoice GetChoice()
     {
-        return currentChoice;
+        return ChoiceComponent.currentChoice;
     }
     #endregion
 }
