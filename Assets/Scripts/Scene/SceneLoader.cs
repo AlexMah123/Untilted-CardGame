@@ -17,6 +17,11 @@ public static class SceneLoader
     public static void Load(Scene scene)
     {
         SceneManager.LoadScene((int)scene);
+
+        if(TimeManager.isTimePaused)
+        {
+            TimeManager.ResumeTime();
+        }
     }
 }
 

@@ -17,4 +17,9 @@ public class RandomDecision : AIDecision
             return MakeDecision();
         }
     }
+
+    public override void ResetAIConfig()
+    {
+        //empty
+    }
 }

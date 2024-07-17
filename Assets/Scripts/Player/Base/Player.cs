@@ -4,14 +4,15 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(ChoiceComponent), typeof(ActiveLoadoutComponent))]
-[RequireComponent(typeof(HealthStatComponent), typeof(DamageStatComponent))]
+[RequireComponent(typeof(HealthComponent), typeof(DamageComponent), typeof(EnergyComponent))]
 public class Player : MonoBehaviour, IPlayer
 {
     //inherited components from IPlayer
     public ChoiceComponent ChoiceComponent { get => choiceComponent; }
     public ActiveLoadoutComponent ActiveLoadoutComponent { get => activeLoadoutComponent; }
-    public HealthStatComponent HealthStatComponent { get => healthStatComponent; }
-    public DamageStatComponent DamageStatComponent { get => damageStatComponent; }
+    public HealthComponent HealthComponent { get => healthComponent; }
+    public DamageComponent DamageComponent { get => damageComponent; }
+    public EnergyComponent EnergyComponent { get => energyComponent; }
 
     [Header("Player Stats Config")]
     public PlayerStatsSO statsConfig;
@@ -19,8 +20,9 @@ public class Player : MonoBehaviour, IPlayer
     //local variables
     private ChoiceComponent choiceComponent;
     private ActiveLoadoutComponent activeLoadoutComponent;
-    private HealthStatComponent healthStatComponent;
-    private DamageStatComponent damageStatComponent;
+    private HealthComponent healthComponent;
+    private DamageComponent damageComponent;
+    private EnergyComponent energyComponent;
 
 
     #region Overrides
@@ -28,15 +30,16 @@ public class Player : MonoBehaviour, IPlayer
     {
         choiceComponent = GetComponent<ChoiceComponent>();
         activeLoadoutComponent = GetComponent<ActiveLoadoutComponent>();
-        healthStatComponent = GetComponent<HealthStatComponent>();
-        damageStatComponent = GetComponent<DamageStatComponent>();
-
+        healthComponent = GetComponent<HealthComponent>();
+        damageComponent = GetComponent<DamageComponent>();
+        energyComponent = GetComponent<EnergyComponent>();
 
         //Inject values
         choiceComponent.currentChoice = GameChoice.ROCK;
         activeLoadoutComponent.InitializeComponent(this, statsConfig);
-        healthStatComponent.InitializeComponent(statsConfig);
-        damageStatComponent.InitializeComponent(statsConfig);
+        healthComponent.InitializeComponent(statsConfig);
+        damageComponent.InitializeComponent(statsConfig);
+        energyComponent.InitializeComponent(statsConfig);
     }
 
     protected virtual void Start()

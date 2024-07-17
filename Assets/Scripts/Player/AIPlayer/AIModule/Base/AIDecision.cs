@@ -16,7 +16,10 @@ public abstract class AIDecision : ScriptableObject
     public void InitializeAIConfig(ChoiceComponent component)
     {
         choiceComponent = component;
+        ResetAIConfig();
     }
+
+    public abstract void ResetAIConfig();
 
     public abstract GameChoice MakeDecision();
 

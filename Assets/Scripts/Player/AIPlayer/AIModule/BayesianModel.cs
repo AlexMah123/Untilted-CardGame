@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Enemy/Decision/BayesianModelSO")]
@@ -57,6 +58,16 @@ public class BayesianModel : AIDecision
             return GetNextBestChoice();
         }
 
+    }
+
+    public override void ResetAIConfig()
+    {
+        opponentMoveCount = new Dictionary<GameChoice, int>
+        {
+            { GameChoice.ROCK, 0 },
+            { GameChoice.PAPER, 0 },
+            { GameChoice.SCISSOR, 0 }
+        };
     }
 
     public override void UpdateAIModule(GameChoice opponentChoice)

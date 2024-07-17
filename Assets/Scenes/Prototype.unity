@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 141485797}
   - component: {fileID: 141485796}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: GameStateText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -225,7 +225,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 260, y: -85}
+  m_AnchoredPosition: {x: 261, y: -85}
   m_SizeDelta: {x: 269.59, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &141485796
@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 232492621}
   - component: {fileID: 232492620}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: SettingsPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -553,6 +553,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 396273929}
     m_Modifications:
+    - target: {fileID: 1062328326778917399, guid: ddffd573763d57e43afe0c045a548a25,
+        type: 3}
+      propertyPath: attachedPlayer
+      value: 
+      objectReference: {fileID: 1824892700}
     - target: {fileID: 3564435707293647689, guid: ddffd573763d57e43afe0c045a548a25,
         type: 3}
       propertyPath: m_Pivot.x
@@ -2016,7 +2021,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 260, y: -200}
+  m_AnchoredPosition: {x: 261, y: -200}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1082725009
@@ -2381,10 +2386,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1344209822}
   - component: {fileID: 1344209820}
-  - component: {fileID: 1344209821}
   - component: {fileID: 1344209823}
   - component: {fileID: 1344209824}
-  - component: {fileID: 1344209825}
+  - component: {fileID: 1344209828}
+  - component: {fileID: 1344209827}
+  - component: {fileID: 1344209826}
   m_Layer: 0
   m_Name: AIPlayer
   m_TagString: Untagged
@@ -2405,20 +2411,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statsConfig: {fileID: 11400000, guid: af6be0f4975e2934aa9f5499aeb816ae, type: 2}
-  aiModuleConfig: {fileID: 11400000, guid: e312332acb26c6e4abf984696d51c82a, type: 2}
---- !u!114 &1344209821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1344209819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e893e422cb1ae214da4506faef43b179, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthAmount: 0
+  aiModuleConfig: {fileID: 11400000, guid: f12b92243688d8240b0391a685f61c97, type: 2}
 --- !u!4 &1344209822
 Transform:
   m_ObjectHideFlags: 0
@@ -2462,7 +2455,7 @@ MonoBehaviour:
   maxLimitOfLoadout: 0
   upgradeSlots: []
   attachedPlayer: {fileID: 0}
---- !u!114 &1344209825
+--- !u!114 &1344209826
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2471,10 +2464,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 1344209819}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5ff5fb3a8c0a74a96dc11dfab28884, type: 3}
+  m_Script: {fileID: 11500000, guid: 0af3a0eda3008cb428d13793a77e9f85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyAmount: 0
+--- !u!114 &1344209827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344209819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a999be3307d9c5a499e59639d655157d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damageAmount: 0
+--- !u!114 &1344209828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344209819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f401efcb8832bd04080d04d2e076b22b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthAmount: 0
 --- !u!1 &1389534267
 GameObject:
   m_ObjectHideFlags: 0
@@ -2546,7 +2565,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1490224454
 MonoBehaviour:
@@ -2864,7 +2883,7 @@ GameObject:
   - component: {fileID: 1580239545}
   - component: {fileID: 1580239546}
   m_Layer: 0
-  m_Name: UIManager
+  m_Name: GameUIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3023,10 +3042,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1824892702}
   - component: {fileID: 1824892700}
-  - component: {fileID: 1824892701}
   - component: {fileID: 1824892703}
   - component: {fileID: 1824892704}
-  - component: {fileID: 1824892705}
+  - component: {fileID: 1824892708}
+  - component: {fileID: 1824892707}
+  - component: {fileID: 1824892706}
   m_Layer: 0
   m_Name: HumanPlayer
   m_TagString: Untagged
@@ -3047,19 +3067,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statsConfig: {fileID: 11400000, guid: 46b404202d4889b4eb3d741afff23fd1, type: 2}
---- !u!114 &1824892701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1824892699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e893e422cb1ae214da4506faef43b179, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthAmount: 0
 --- !u!4 &1824892702
 Transform:
   m_ObjectHideFlags: 0
@@ -3103,7 +3110,7 @@ MonoBehaviour:
   maxLimitOfLoadout: 0
   upgradeSlots: []
   attachedPlayer: {fileID: 0}
---- !u!114 &1824892705
+--- !u!114 &1824892706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3112,10 +3119,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 1824892699}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5ff5fb3a8c0a74a96dc11dfab28884, type: 3}
+  m_Script: {fileID: 11500000, guid: 0af3a0eda3008cb428d13793a77e9f85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyAmount: 0
+--- !u!114 &1824892707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1824892699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a999be3307d9c5a499e59639d655157d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damageAmount: 0
+--- !u!114 &1824892708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1824892699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f401efcb8832bd04080d04d2e076b22b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthAmount: 0
 --- !u!1 &1863573502
 GameObject:
   m_ObjectHideFlags: 0
@@ -3410,6 +3443,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3841891671755303554, guid: 48cc70db241f334479b69d6e0abbb271,
+        type: 3}
+      propertyPath: attachedPlayer
+      value: 
+      objectReference: {fileID: 1344209820}
     - target: {fileID: 8802141367421710461, guid: 48cc70db241f334479b69d6e0abbb271,
         type: 3}
       propertyPath: attachedPlayer

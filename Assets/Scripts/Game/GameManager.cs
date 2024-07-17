@@ -118,13 +118,13 @@ public class GameManager : MonoBehaviour
         switch(roundResult)
         {
             case GameResult.WIN:
-                //decrease the health based on the opposing player's damage
-                aiPlayer.HealthStatComponent.DecreaseHealth(humanPlayer.DamageStatComponent.damageAmount);
+                //human player deal dmg to opposing player
+                humanPlayer.DamageComponent.DealDamage(aiPlayer, humanPlayer.DamageComponent.damageAmount);
                 break;
 
             case GameResult.LOSE:
-                //decrease the health based on the opposing player's damage
-                humanPlayer.HealthStatComponent.DecreaseHealth(aiPlayer.DamageStatComponent.damageAmount);
+                //aiPlayer player deal dmg to human player
+                aiPlayer.DamageComponent.DealDamage(humanPlayer, aiPlayer.DamageComponent.damageAmount);
                 break;
 
             case GameResult.DRAW:

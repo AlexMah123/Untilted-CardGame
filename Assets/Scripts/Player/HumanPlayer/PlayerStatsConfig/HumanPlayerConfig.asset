@@ -15,3 +15,4 @@ MonoBehaviour:
   health: 3
   damage: 1
   cardSlots: 2
+  energy: 0

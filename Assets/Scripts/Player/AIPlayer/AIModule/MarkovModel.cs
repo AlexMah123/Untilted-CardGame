@@ -54,6 +54,16 @@ public class MarkovModel : AIDecision
         }
     }
 
+    public override void ResetAIConfig()
+    {
+        transitionMatrix = new Dictionary<GameChoice, Dictionary<GameChoice, int>>()
+        {
+            { GameChoice.ROCK, new Dictionary<GameChoice, int>{ {GameChoice.ROCK, 0}, {GameChoice.PAPER, 0}, {GameChoice.SCISSOR, 0} } },
+            { GameChoice.PAPER, new Dictionary<GameChoice, int>{ {GameChoice.ROCK, 0}, {GameChoice.PAPER, 0}, {GameChoice.SCISSOR, 0} } },
+            { GameChoice.SCISSOR, new Dictionary<GameChoice, int>{ {GameChoice.ROCK, 0}, {GameChoice.PAPER, 0}, {GameChoice.SCISSOR, 0} } },
+        };
+    }
+
     public override void UpdateAIModule(GameChoice opponentChoice)
     {
         if(transitionMatrix.ContainsKey(opponentLastChoice) && transitionMatrix[opponentLastChoice].ContainsKey(opponentChoice))

@@ -13,7 +13,7 @@ public class HealthStatUI : MonoBehaviour
     {
         if(attachedPlayer != null)
         {
-            attachedPlayer.HealthStatComponent.OnHealthModifiedEvent += HandleOnHealthModified;
+            attachedPlayer.HealthComponent.OnHealthModifiedEvent += HandleOnHealthModified;
         }
         else
         {
@@ -21,7 +21,7 @@ public class HealthStatUI : MonoBehaviour
         }
 
         //initial call to set values
-        HandleOnHealthModified(attachedPlayer.HealthStatComponent.healthAmount);
+        HandleOnHealthModified(attachedPlayer.HealthComponent.healthAmount);
     }
 
     private void HandleOnHealthModified(int newHealth)

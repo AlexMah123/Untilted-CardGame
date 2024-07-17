@@ -4,9 +4,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class GameUIManager : MonoBehaviour
 {
-    public static UIManager Instance;
+    public static GameUIManager Instance;
 
     [Header("Layout Groups")]
     public GameObject GameplayGroup;
@@ -38,6 +38,11 @@ public class UIManager : MonoBehaviour
         }
 #endif
 
+
+        if (SettingsGroup.activeSelf)
+        {
+            TimeManager.PauseTime();
+        }
     }
 
     public void ToggleSettingsGroup(bool isOn)
@@ -45,6 +50,16 @@ public class UIManager : MonoBehaviour
         if (SettingsGroup.activeSelf != isOn)
         {
             SettingsGroup.SetActive(isOn);
+
+
+            if (isOn)
+            {
+                TimeManager.PauseTime();
+            }
+            else
+            {
+                TimeManager.ResumeTime();
+            }
         }
 
         if (!GameplayGroup.activeSelf)
