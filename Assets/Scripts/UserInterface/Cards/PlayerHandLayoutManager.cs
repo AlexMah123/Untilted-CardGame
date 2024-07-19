@@ -34,17 +34,17 @@ public class PlayerHandLayoutManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if(TurnSystemManager.Instance != null)
+        if(!isOnChangeTurnEventBinded)
         {
             BindChangeTurnEvent();
         }
 
-        if(GameManager.Instance != null)
+        if(!isOnClearHandEventBinded)
         {
             BindClearCardHandEvent();
         }
 
-        if(attachedPlayer != null)
+        if(!isOnSealChoiceEventBinded)
         {
             BindSealChoiceEvent();
         }

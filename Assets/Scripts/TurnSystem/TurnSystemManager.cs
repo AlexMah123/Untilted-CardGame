@@ -20,11 +20,13 @@ public class TurnSystemManager : MonoBehaviour
 
     //declaration of events
     public event Action<TurnSystemManager, Turn, Turn> OnChangedTurnEvent;
+
+    //flag
     private bool isStartNewTurnEventBinded = false;
 
     private void OnEnable()
     {
-        if (GameManager.Instance != null)
+        if (!isStartNewTurnEventBinded)
         {
             BindStartNewTurnEvent();
         }

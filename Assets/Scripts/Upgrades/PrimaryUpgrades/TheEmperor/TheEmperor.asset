@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8e47d65f71f33d46aa924e17b49c643, type: 3}
   m_Name: TheEmperor
   m_EditorClassIdentifier: 
-  upgradeImage: {fileID: 0}
+  upgradeSprite: {fileID: 21300000, guid: 759e7cd22d56cef4e9679110e561762f, type: 3}
   upgradeName: The Emperor
   upgradeDefinition: 
   isActivatable: 0

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public abstract class UpgradeDefinitionSO : ScriptableObject
 {
     [Header("User Interface Configs")]
-    public Image upgradeImage;
+    public Sprite upgradeSprite;
     public string upgradeName;
     
     [Multiline]

@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     
     private void OnEnable()
     {
-        if (CardConfirmation.Instance != null)
+        if (!isConfirmCardEventBinded)
         {
             BindConfirmCardChoiceEvent();
         }
@@ -109,6 +109,13 @@ public class GameManager : MonoBehaviour
 #endif
         
     }
+
+    [ContextMenu("GameManager/Clear Round")]
+    public void ClearRound()
+    {
+        OnClearCardHandEvent?.Invoke();
+    }
+
 
     #region Internal Functions
 

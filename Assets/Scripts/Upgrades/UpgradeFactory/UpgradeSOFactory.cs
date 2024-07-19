@@ -24,7 +24,7 @@ public class UpgradeSOFactory : MonoBehaviour
     public static UpgradeSOFactory Instance;
 
     [Header("Upgrade List")]
-    public UpgradeListSO totalPossibleUpgrade;
+    public UpgradeCollectionSO totalPossibleUpgrade;
 
     private void Awake()
     {
