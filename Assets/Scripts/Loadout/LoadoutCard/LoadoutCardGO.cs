@@ -5,9 +5,19 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+public struct LoadoutCardGOInfo
+{
+    public LoadoutCardGOInfo(UpgradeDefinitionSO _upgradeSO)
+    {
+        upgradeSO = _upgradeSO;
+    }
+
+    public UpgradeDefinitionSO upgradeSO;
+}
+
 public class LoadoutCardGO : MonoBehaviour
 {
-    [Header("Card Configs")]
+    [Header("Card Visual Configs")]
     public SpriteRenderer cardSpriteRenderer;
     public SpriteRenderer lockedSpriteRenderer;
     public Vector3 hoveredOffset;
@@ -18,13 +28,18 @@ public class LoadoutCardGO : MonoBehaviour
     public Color LockedColor;
     public bool isLocked = false;
 
+    [Header("Card Configs")]
+    public LoadoutCardGOInfo cardInfo;
+
     //private
     private Vector2 originalCardScale;
     private int originalSortingOrder;
 
+    private bool isHoveredOver;
+
     //events
     public event Action OnCardEndInteractEvent;
-    public event Action OnCardSelectedEvent;
+    public event Action<LoadoutCardGOInfo> OnCardSelectedEvent;
 
     public bool IsLocked
     {
@@ -49,6 +64,7 @@ public class LoadoutCardGO : MonoBehaviour
     {
         if(upgradeSO != null)
         {
+            cardInfo.upgradeSO = upgradeSO;
             cardSpriteRenderer.sprite = upgradeSO.upgradeSprite;
         }
         else
@@ -66,15 +82,23 @@ public class LoadoutCardGO : MonoBehaviour
 
     private void OnMouseExit()
     {
-        //reset the card layout and then broadcast event
         ResetCardState();
     }
 
     private void OnMouseDown()
     {
-        //reset the card layout and then broadcast event
-        //ResetCardState();
-        OnCardSelectedEvent?.Invoke();
+        
+    }
+
+    private void OnMouseUpAsButton()
+    {
+        if (IsLocked)
+        {
+            return;
+        }
+
+        //binded primarily to LoadoutLayoutManager
+        OnCardSelectedEvent?.Invoke(cardInfo);
     }
 
     protected void SetCardHovered()
@@ -94,7 +118,7 @@ public class LoadoutCardGO : MonoBehaviour
         cardSpriteRenderer.sortingOrder = originalSortingOrder;
         lockedSpriteRenderer.sortingOrder = originalSortingOrder + 1;
 
-        //bind if needed
+        //bind if needed to. 
         OnCardEndInteractEvent?.Invoke();
     }
 }

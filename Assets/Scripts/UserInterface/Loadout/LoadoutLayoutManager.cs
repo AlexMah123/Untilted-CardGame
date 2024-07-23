@@ -11,6 +11,9 @@ public class LoadoutLayoutManager : MonoBehaviour
 {
     public static LoadoutLayoutManager Instance;
 
+    [Header("ActiveLoadoutLayoutManager")]
+    public ActiveLoadoutLayoutManager ActiveLoadoutLayoutManager;
+
     [Header("Layout Config")]
     public Transform spawnContainer;
     public float radiusFromCenter;
@@ -24,12 +27,13 @@ public class LoadoutLayoutManager : MonoBehaviour
 
     //private
     private List<LoadoutCardGO> cardSlots = new();
+    private int loadoutPageIndex;
 
     //factory
     private LoadoutCardFactory upgradeCardFactory;
 
     //event
-    public event Action OnLoadoutSelectedEvent;
+    public event Action<UpgradeDefinitionSO> OnLoadoutSelectedEvent;
 
     //flag
     private bool isInitializeLoadoutEventBinded = false;
@@ -93,13 +97,12 @@ public class LoadoutLayoutManager : MonoBehaviour
 
 
     #region Public methods
-    public void HandleOnCardSelected()
+    public void HandleOnCardSelected(LoadoutCardGOInfo cardInfo)
     {
-        //fired on card click
-        OnLoadoutSelectedEvent?.Invoke();
+        //broadcast event to LoadoutManager
+        OnLoadoutSelectedEvent?.Invoke(cardInfo.upgradeSO);
 
-        //UpdateCardSlots();
-        UpdateActiveCardSlots();
+        UpdateActiveCardSlots(cardInfo.upgradeSO);
     }
 
     public void HandleOnInitializeLayout(LoadoutData _loadoutData)
@@ -110,16 +113,15 @@ public class LoadoutLayoutManager : MonoBehaviour
 
     public void HandleOnPageUpdated(int currentPageIndex)
     {
-        UpdateCardSlots(currentPageIndex);
+        loadoutPageIndex = currentPageIndex;
+        UpdateCardSlots(loadoutPageIndex);
     }
 
     #endregion
 
     #region Internal methods
-    private void RequestLoadoutGO()
+     private void RequestLoadoutGO()
     {
-        cardSlots.Clear();
-
         for(int i = 0; i < displayAmountPerPage; i++)
         {
             LoadoutCardCreationInfo creationInfo = new(spawnContainer);
@@ -179,9 +181,9 @@ public class LoadoutLayoutManager : MonoBehaviour
         return cardSlots;
     }
 
-    private void UpdateCardSlots(int currentPageIndex)
+    private void UpdateCardSlots(int pageIndex)
     {
-        int startIndex = currentPageIndex * displayAmountPerPage;
+        int startIndex = pageIndex * displayAmountPerPage;
         int endIndex = Mathf.Min(startIndex + displayAmountPerPage, loadoutData.totalUpgrades.Count);
 
         for (int i = 0; i < cardSlots.Count; i++)
@@ -204,11 +206,18 @@ public class LoadoutLayoutManager : MonoBehaviour
         }
     }
 
-    private void UpdateActiveCardSlots()
+    private void UpdateActiveCardSlots(UpgradeDefinitionSO selectedUpgrade)
     {
-        //#TODO: have the active card slots be updatable.
-        //#TODO: remove the clicked card
-        Debug.Log("Updating Active Card Slots");
+        //remove from the current list and update the layout
+        loadoutData.totalUpgrades.Remove(selectedUpgrade);
+        UpdateCardSlots(loadoutPageIndex);
+
+        //update the activeloadoutlayout
+        ActiveLoadoutLayoutManager.UpdateActiveLoadout(selectedUpgrade);
+
+        //temp
+        //update the loadoutpage buttons
+        LoadoutPageManager.Instance.UpdateButtonState();
     }
     #endregion
 

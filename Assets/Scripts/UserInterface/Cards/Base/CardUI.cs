@@ -42,16 +42,15 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
 
     #region Pointer Interface
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         //if player is already dragging a card, dont hover
         if (eventData.pointerDrag != null) return;
 
         SetCardHovered();
-        //#TODO: Move other cards away so its clearer?
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         //if player is already dragging a card, dont hover
         if (eventData.pointerDrag != null) return;

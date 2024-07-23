@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7084182591955085186}
   - component: {fileID: 2894337446451464476}
   - component: {fileID: 8790829373188093239}
-  - component: {fileID: 3651324989250792230}
+  - component: {fileID: 6516805988425230667}
   m_Layer: 5
-  m_Name: GenericCardUI
+  m_Name: LoadoutCardUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3651324989250792230
+--- !u!114 &6516805988425230667
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,11 +86,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2130793156531348567}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc223fc3d60574b44821254d3e04d58a, type: 3}
+  m_Script: {fileID: 11500000, guid: 428ad333b172d9c43a73d52a7cf589a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   hoveredOffset: {x: 0, y: 0, z: 0}
-  hoveredEnlargedScale: 0
+  hoveredEnlargedScale: 1
   shouldEnlargeOnHover: 0
   shouldReorderToTop: 0
 --- !u!1 &8038382709288226848

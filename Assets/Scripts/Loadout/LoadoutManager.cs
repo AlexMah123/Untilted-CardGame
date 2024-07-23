@@ -7,14 +7,16 @@ using UnityEngine;
 
 public struct LoadoutData
 { 
-    public LoadoutData(List<UpgradeDefinitionSO> _totalUpgrades, List<UpgradeDefinitionSO>_totalUnlockedUpgrades)
+    public LoadoutData(List<UpgradeDefinitionSO> _totalUpgrades, List<UpgradeDefinitionSO>_totalUnlockedUpgrades, List<UpgradeDefinitionSO> _currentActiveUpgrades)
     {
         totalUpgrades = _totalUpgrades;
         totalUnlockedUpgrades = _totalUnlockedUpgrades;
+        currentActiveUpgrades = _currentActiveUpgrades;
     }
 
     public List<UpgradeDefinitionSO> totalUpgrades;
     public List<UpgradeDefinitionSO> totalUnlockedUpgrades;
+    public List<UpgradeDefinitionSO> currentActiveUpgrades;
 }
 
 
@@ -28,6 +30,9 @@ public class LoadoutManager : MonoBehaviour
     [Header("Upgrades unlocked by player")]
     public List<UpgradeDefinitionSO> totalUpgrades = new();
     public List<UpgradeDefinitionSO> totalUnlockedUpgrades = new();
+
+    [Header("Player current upgrade")]
+    public Player currentPlayer;
 
     public event Action<LoadoutData> OnInitializeLoadoutEvent;
 
@@ -72,14 +77,19 @@ public class LoadoutManager : MonoBehaviour
         }
 
         InitializateData();
-        OnInitializeLoadoutEvent?.Invoke(new LoadoutData(totalUpgrades, totalUnlockedUpgrades));
+
+        //#TODO: Add Players active upgrades in
+        LoadoutData loadoutData = new LoadoutData(totalUpgrades, totalUnlockedUpgrades, new());
+        OnInitializeLoadoutEvent?.Invoke(loadoutData);
     }
 
-    public void AddSelectedUpgradeToActive()
+    public void AddSelectedUpgradeToActive(UpgradeDefinitionSO addedUpgradeSO)
     {
         //#TODO: need the cards be added to active
         //#DEBUG
-        Debug.Log($"Added card to active");
+        Debug.Log($"Added upgrade to player");
+
+        //currentPlayer.ActiveLoadoutComponent.AddToLoadout(addedUpgradeSO);
     }
 
     #region Internal Methods

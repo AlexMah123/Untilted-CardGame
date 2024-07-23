@@ -11,7 +11,7 @@ public class LoadoutPageManager : MonoBehaviour
     [SerializeField] Button previousButton;
     [SerializeField] Button nextButton;
 
-    public int currentPageIndex = 1;
+    private int currentPageIndex = 0;
 
     public event Action<int> OnLoadoutPageUpdatedEvent;
 
@@ -29,7 +29,7 @@ public class LoadoutPageManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateButtonState();
+        Invoke(nameof(UpdateButtonState), 0.1f);
     }
 
     public void PreviousPage()
@@ -37,7 +37,7 @@ public class LoadoutPageManager : MonoBehaviour
         currentPageIndex--;
         UpdateButtonState();
 
-        //call update or something
+        //primarily binded to LoadoutLayoutManager
         OnLoadoutPageUpdatedEvent?.Invoke(currentPageIndex);
     }
 
@@ -46,11 +46,11 @@ public class LoadoutPageManager : MonoBehaviour
         currentPageIndex++;
         UpdateButtonState();
 
-        //call update or something
+        //primarily binded to LoadoutLayoutManager
         OnLoadoutPageUpdatedEvent?.Invoke(currentPageIndex);
     }
 
-    private void UpdateButtonState()
+    public void UpdateButtonState()
     {
         previousButton.interactable = (currentPageIndex == 0) ? false : true;
         nextButton.interactable = (currentPageIndex + 1) * LoadoutLayoutManager.Instance.displayAmountPerPage < LoadoutLayoutManager.Instance.loadoutData.totalUpgrades.Count;
