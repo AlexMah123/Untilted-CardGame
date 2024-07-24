@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,13 +7,15 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
 {
     public GameObject activeLoadoutParent;
 
+    public static event Action OnActiveLoadoutUpdatedEvent;
+
     private void Start()
     {
         InitializeActiveLoadout();
 
     }
 
-    public void UpdateActiveLoadout(UpgradeDefinitionSO selectedUpgrade)
+    public bool UpdateLayout(UpgradeDefinitionSO selectedUpgrade)
     {
         GameObject loadoutCardGO = GetFirstInactiveLoadout();
 
@@ -24,9 +27,14 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
             {
                 loadoutCardUI.InitializeCard(selectedUpgrade);
                 loadoutCardGO.SetActive(true);
+
+                OnActiveLoadoutUpdatedEvent?.Invoke();
+                return true;
             }
         }
 
+        //fallback defaults to false.
+        return false;
     }
 
     #region Internal methods

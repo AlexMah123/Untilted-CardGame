@@ -15,6 +15,16 @@ public class LoadoutPageManager : MonoBehaviour
 
     public event Action<int> OnLoadoutPageUpdatedEvent;
 
+    private void OnEnable()
+    {
+        ActiveLoadoutLayoutManager.OnActiveLoadoutUpdatedEvent += UpdateButtonState;
+    }
+
+    private void OnDisable()
+    {
+        ActiveLoadoutLayoutManager.OnActiveLoadoutUpdatedEvent -= UpdateButtonState;
+    }
+
     private void Awake()
     {
         if(Instance != null && Instance != this)

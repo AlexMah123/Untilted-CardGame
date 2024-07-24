@@ -208,16 +208,15 @@ public class LoadoutLayoutManager : MonoBehaviour
 
     private void UpdateActiveCardSlots(UpgradeDefinitionSO selectedUpgrade)
     {
-        //remove from the current list and update the layout
-        loadoutData.totalUpgrades.Remove(selectedUpgrade);
-        UpdateCardSlots(loadoutPageIndex);
-
         //update the activeloadoutlayout
-        ActiveLoadoutLayoutManager.UpdateActiveLoadout(selectedUpgrade);
+        bool success = ActiveLoadoutLayoutManager.UpdateLayout(selectedUpgrade);
 
-        //temp
-        //update the loadoutpage buttons
-        LoadoutPageManager.Instance.UpdateButtonState();
+        if(success)
+        {
+            //remove from the current list and update the layout
+            loadoutData.totalUpgrades.Remove(selectedUpgrade);
+            UpdateCardSlots(loadoutPageIndex);
+        }
     }
     #endregion
 

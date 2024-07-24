@@ -40,8 +40,9 @@ public class ChoiceCardUI : CardUI, IBeginDragHandler, IDragHandler, IEndDragHan
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        //only proceed if left mouse button is used.
         //dont assign event data.pointerdrag if card is sealed. Automatically does not run OnDrag, OnEndDrag
-        if (IsSealed || !isMoveable)
+        if (eventData.button != PointerEventData.InputButton.Left || IsSealed || !isMoveable)
         {
             eventData.pointerDrag = null;
             return;
@@ -56,6 +57,9 @@ public class ChoiceCardUI : CardUI, IBeginDragHandler, IDragHandler, IEndDragHan
 
     public void OnDrag(PointerEventData eventData)
     {
+        //only proceed if left mouse button is used.
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
         //follow the mouse cursor
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
         transform.localEulerAngles = Vector3.zero;
@@ -63,6 +67,9 @@ public class ChoiceCardUI : CardUI, IBeginDragHandler, IDragHandler, IEndDragHan
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        //only proceed if left mouse button is used.
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
         //reset the raycast so it can be selected again.
         cardImage.raycastTarget = true;
 
