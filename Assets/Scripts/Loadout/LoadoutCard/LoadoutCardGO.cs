@@ -77,11 +77,15 @@ public class LoadoutCardGO : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         SetCardHovered();
     }
 
     private void OnMouseExit()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         ResetCardState();
     }
 
@@ -92,6 +96,8 @@ public class LoadoutCardGO : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         if (IsLocked)
         {
             return;

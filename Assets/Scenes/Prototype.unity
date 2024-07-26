@@ -913,8 +913,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 937547841}
+        m_TargetAssemblyTypeName: GameUIManager, Assembly-CSharp
         m_MethodName: ToggleSettingsGroup
         m_Mode: 6
         m_Arguments:
@@ -1179,8 +1179,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 937547841}
+        m_TargetAssemblyTypeName: GameUIManager, Assembly-CSharp
         m_MethodName: ToggleSettingsGroup
         m_Mode: 6
         m_Arguments:
@@ -1826,7 +1826,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 787946715}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 937547839}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &787946715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2076,7 +2088,7 @@ GameObject:
   - component: {fileID: 1082725008}
   - component: {fileID: 1082725009}
   m_Layer: 5
-  m_Name: ButtonLayout
+  m_Name: ButtonPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2768,8 +2780,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 937547841}
+        m_TargetAssemblyTypeName: GameUIManager, Assembly-CSharp
         m_MethodName: ExitToMainMenu
         m_Mode: 1
         m_Arguments:
@@ -3507,7 +3519,7 @@ SceneRoots:
   - {fileID: 1257011706}
   - {fileID: 1136150047}
   - {fileID: 618081187}
+  - {fileID: 387824892}
   - {fileID: 226543718}
   - {fileID: 1912330286}
   - {fileID: 890667416}
-  - {fileID: 387824892}
