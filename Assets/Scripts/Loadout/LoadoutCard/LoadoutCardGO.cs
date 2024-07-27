@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -15,6 +16,7 @@ public struct LoadoutCardGOInfo
     public UpgradeDefinitionSO upgradeSO;
 }
 
+[RequireComponent(typeof(InspectComponent))]
 public class LoadoutCardGO : MonoBehaviour
 {
     [Header("Card Visual Configs")]
@@ -34,8 +36,6 @@ public class LoadoutCardGO : MonoBehaviour
     //private
     private Vector2 originalCardScale;
     private int originalSortingOrder;
-
-    private bool isHoveredOver;
 
     //events
     public event Action OnCardEndInteractEvent;
@@ -60,12 +60,50 @@ public class LoadoutCardGO : MonoBehaviour
         originalCardScale = transform.localScale;
     }
 
-    public void InitialiseLoadoutGO(UpgradeDefinitionSO upgradeSO, bool isLocked)
+    private void Update()
     {
-        if(upgradeSO != null)
+        HandleOnInspected();
+        HandleOnSelected();
+    }
+
+    private void HandleOnSelected()
+    {
+        if (Input.GetMouseButtonUp((int)MouseButton.Left))
         {
-            cardInfo.upgradeSO = upgradeSO;
-            cardSpriteRenderer.sprite = upgradeSO.upgradeSprite;
+            if (EventSystem.current.IsPointerOverGameObject() || IsLocked) return;
+
+            if (IsPointerOverGameObject())
+            {
+                ResetCardState();
+
+                //binded primarily to LoadoutLayoutManager
+                OnCardSelectedEvent?.Invoke(cardInfo);
+            }
+        }
+    }
+
+    private void HandleOnInspected()
+    {
+        if (Input.GetMouseButtonUp((int)MouseButton.Right))
+        {
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
+            if (IsPointerOverGameObject())
+            {
+                ResetCardState();
+
+                //binded primarily to InspectUI
+                InspectComponent.InspectCard(cardInfo.upgradeSO);
+            }
+        }
+    }
+
+    public void InitialiseLoadoutGO(LoadoutCardGOInfo loadoutCardInfo, bool isLocked)
+    {
+        if(loadoutCardInfo.upgradeSO != null)
+        {
+            cardInfo.upgradeSO = loadoutCardInfo.upgradeSO;
+            cardSpriteRenderer.sprite = cardInfo.upgradeSO.upgradeSprite;
         }
         else
         {
@@ -89,24 +127,6 @@ public class LoadoutCardGO : MonoBehaviour
         ResetCardState();
     }
 
-    private void OnMouseDown()
-    {
-        
-    }
-
-    private void OnMouseUpAsButton()
-    {
-        if (EventSystem.current.IsPointerOverGameObject()) return;
-
-        if (IsLocked)
-        {
-            return;
-        }
-
-        //binded primarily to LoadoutLayoutManager
-        OnCardSelectedEvent?.Invoke(cardInfo);
-    }
-
     protected void SetCardHovered()
     {
         //move the offset then scale up
@@ -126,5 +146,16 @@ public class LoadoutCardGO : MonoBehaviour
 
         //bind if needed to. 
         OnCardEndInteractEvent?.Invoke();
+    }
+
+    protected bool IsPointerOverGameObject()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            return hit.transform == transform;
+        }
+        return false;
     }
 }

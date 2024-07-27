@@ -6,16 +6,45 @@ using UnityEngine;
 public class ActiveLoadoutLayoutManager : MonoBehaviour
 {
     public GameObject activeLoadoutParent;
+    public LoadoutLayoutManager loadoutLayoutManager;
 
-    public static event Action OnActiveLoadoutUpdatedEvent;
+    public event Action OnActiveLoadoutUpdatedEvent;
+
+    public event Action<LoadoutCardGOInfo> OnActiveLoadoutRemovedEvent;
+
+    private void OnEnable()
+    {
+        LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>();
+
+        foreach (var loadoutCard in loadoutCards)
+        {
+            loadoutCard.OnCardRemovedEvent += HandleCardRemoved;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if(activeLoadoutParent != null)
+        {
+            LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>();
+
+            foreach (var loadoutCard in loadoutCards)
+            {
+                if(loadoutCard != null)
+                {
+                    loadoutCard.OnCardRemovedEvent -= HandleCardRemoved;
+                }
+            }
+        }
+
+    }
 
     private void Start()
     {
         InitializeActiveLoadout();
-
     }
 
-    public bool UpdateLayout(UpgradeDefinitionSO selectedUpgrade)
+    public bool AddUpgrade(UpgradeDefinitionSO selectedUpgrade)
     {
         GameObject loadoutCardGO = GetFirstInactiveLoadout();
 
@@ -25,16 +54,21 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
 
             if (loadoutCardUI)
             {
-                loadoutCardUI.InitializeCard(selectedUpgrade);
+                loadoutCardUI.InitializeCard(new LoadoutCardGOInfo(selectedUpgrade));
                 loadoutCardGO.SetActive(true);
 
-                OnActiveLoadoutUpdatedEvent?.Invoke();
                 return true;
             }
         }
 
         //fallback defaults to false.
         return false;
+    }
+
+    public void HandleCardRemoved(LoadoutCardGOInfo loadoutCardInfo)
+    {
+        OnActiveLoadoutRemovedEvent?.Invoke(loadoutCardInfo);
+        OnActiveLoadoutUpdatedEvent?.Invoke();
     }
 
     #region Internal methods
@@ -46,6 +80,8 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
         {
             loadoutGO.SetActive(false);
         }
+
+        OnActiveLoadoutUpdatedEvent?.Invoke();
     }
 
     private GameObject GetFirstInactiveLoadout()
@@ -74,5 +110,7 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
 
         return loadoutGO;
     }
+
+    
     #endregion
 }

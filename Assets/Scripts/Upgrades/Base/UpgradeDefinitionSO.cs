@@ -12,7 +12,7 @@ public abstract class UpgradeDefinitionSO : ScriptableObject
     public string upgradeName;
     
     [Multiline]
-    public string upgradeDefinition;
+    public string upgradeDescription;
 
     [Header("Gameplay Configs")]
     public bool isActivatable;

@@ -8,6 +8,8 @@ public class LoadoutPageManager : MonoBehaviour
 {
     public static LoadoutPageManager Instance;
 
+    public ActiveLoadoutLayoutManager activeLoadoutLayoutManager;
+
     [SerializeField] Button previousButton;
     [SerializeField] Button nextButton;
 
@@ -17,12 +19,12 @@ public class LoadoutPageManager : MonoBehaviour
 
     private void OnEnable()
     {
-        ActiveLoadoutLayoutManager.OnActiveLoadoutUpdatedEvent += UpdateButtonState;
+        activeLoadoutLayoutManager.OnActiveLoadoutUpdatedEvent += UpdateButtonState;
     }
 
     private void OnDisable()
     {
-        ActiveLoadoutLayoutManager.OnActiveLoadoutUpdatedEvent -= UpdateButtonState;
+        activeLoadoutLayoutManager.OnActiveLoadoutUpdatedEvent -= UpdateButtonState;
     }
 
     private void Awake()
@@ -62,7 +64,7 @@ public class LoadoutPageManager : MonoBehaviour
 
     public void UpdateButtonState()
     {
-        previousButton.interactable = (currentPageIndex == 0) ? false : true;
-        nextButton.interactable = (currentPageIndex + 1) * LoadoutLayoutManager.Instance.displayAmountPerPage < LoadoutLayoutManager.Instance.loadoutData.totalUpgrades.Count;
+        previousButton.interactable = (currentPageIndex > 0);
+        nextButton.interactable = ((currentPageIndex + 1) * LoadoutLayoutManager.Instance.displayAmountPerPage) < LoadoutLayoutManager.Instance.loadoutData.totalUpgrades.Count;
     }
 }

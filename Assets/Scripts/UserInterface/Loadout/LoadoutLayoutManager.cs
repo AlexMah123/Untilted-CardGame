@@ -38,6 +38,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     //flag
     private bool isInitializeLoadoutEventBinded = false;
     private bool isLoadoutPageUpdatedEventBinded = false;
+    private bool isActiveLoadoutRemovedEventBinded = false;
 
     private void OnEnable()
     {
@@ -51,6 +52,12 @@ public class LoadoutLayoutManager : MonoBehaviour
             BindOnLoadoutPageUpdatedEvent();
         }
 
+        if(!isActiveLoadoutRemovedEventBinded)
+        {
+            BindOnActiveLoadoutRemoveEvent();
+        }
+
+
     }
 
     private void OnDisable()
@@ -63,6 +70,11 @@ public class LoadoutLayoutManager : MonoBehaviour
         if (isLoadoutPageUpdatedEventBinded)
         {
             UnbindOnLoadoutPageUpdatedEvent();
+        }
+
+        if (isActiveLoadoutRemovedEventBinded)
+        {
+            UnbindOnActiveLoadoutRemoveEvent();
         }
 
     }
@@ -93,16 +105,18 @@ public class LoadoutLayoutManager : MonoBehaviour
         {
             BindOnLoadoutPageUpdatedEvent();
         }
+
+        if (!isActiveLoadoutRemovedEventBinded)
+        {
+            BindOnActiveLoadoutRemoveEvent();
+        }
     }
 
 
     #region Public methods
     public void HandleOnCardSelected(LoadoutCardGOInfo cardInfo)
     {
-        //broadcast event to LoadoutManager
-        OnLoadoutSelectedEvent?.Invoke(cardInfo.upgradeSO);
-
-        UpdateActiveCardSlots(cardInfo.upgradeSO);
+        AddToActiveCardSlots(cardInfo.upgradeSO);
     }
 
     public void HandleOnInitializeLayout(LoadoutData _loadoutData)
@@ -117,10 +131,21 @@ public class LoadoutLayoutManager : MonoBehaviour
         UpdateCardSlots(loadoutPageIndex);
     }
 
+    public void HandleOnCardEndInteract()
+    {
+        ArrangeCardsInArc();
+    }
+
+    public void HandleOnActiveLoadoutRemoved(LoadoutCardGOInfo removedCardInfo)
+    {
+        loadoutData.totalUpgrades.Add(removedCardInfo.upgradeSO);
+        UpdateCardSlots(loadoutPageIndex);
+    }
+
     #endregion
 
     #region Internal methods
-     private void RequestLoadoutGO()
+    private void RequestLoadoutGO()
     {
         for(int i = 0; i < displayAmountPerPage; i++)
         {
@@ -131,18 +156,19 @@ public class LoadoutLayoutManager : MonoBehaviour
             cardSlots.Add(upgradeCard);
         }
 
+        //bind on click
         BindOnCardSelectedEvent(GetCardSlots());
+
+        //bind on endinteract
+        BindOnCardEndInteractEvent(GetCardSlots());
     }
 
     private void InitializeLayout()
     {
-        //create the objects
         RequestLoadoutGO();
 
-        //update their sprite
         UpdateCardSlots(0);
 
-        //arrange them
         ArrangeCardsInArc();
     }
 
@@ -195,29 +221,76 @@ public class LoadoutLayoutManager : MonoBehaviour
                 var isUnlocked = loadoutData.totalUnlockedUpgrades.Any(unlockedUpgrade => unlockedUpgrade.upgradeName == upgrade.upgradeName);
 
                 cardSlots[i].cardSpriteRenderer.sprite = upgrade.upgradeSprite;
-                cardSlots[i].InitialiseLoadoutGO(upgrade, !isUnlocked);
+                cardSlots[i].InitialiseLoadoutGO(new LoadoutCardGOInfo(upgrade), !isUnlocked);
                 cardSlots[i].gameObject.SetActive(true);
             }
             else
             {
-                cardSlots[i].InitialiseLoadoutGO(null, true);
+                cardSlots[i].InitialiseLoadoutGO(new LoadoutCardGOInfo(null), true);
                 cardSlots[i].gameObject.SetActive(false);
             }
         }
     }
 
-    private void UpdateActiveCardSlots(UpgradeDefinitionSO selectedUpgrade)
+    private void AddToActiveCardSlots(UpgradeDefinitionSO selectedUpgrade)
     {
         //update the activeloadoutlayout
-        bool success = ActiveLoadoutLayoutManager.UpdateLayout(selectedUpgrade);
+        bool success = ActiveLoadoutLayoutManager.AddUpgrade(selectedUpgrade);
 
         if(success)
         {
             //remove from the current list and update the layout
             loadoutData.totalUpgrades.Remove(selectedUpgrade);
             UpdateCardSlots(loadoutPageIndex);
+
+            //temp, updates the button state
+            LoadoutPageManager.Instance.UpdateButtonState();
+
+            //broadcast event to LoadoutManager
+            OnLoadoutSelectedEvent?.Invoke(selectedUpgrade);
         }
     }
+    #endregion
+
+    #region Bind CardEndInteract Event
+    public void BindOnCardEndInteractEvent(List<LoadoutCardGO> cardUIList)
+    {
+        foreach (var card in cardUIList)
+        {
+            card.OnCardEndInteractEvent += HandleOnCardEndInteract;
+        }
+    }
+
+    public void UnbindOnCardEndInteractDelegate(List<CardUI> cardUIList)
+    {
+        foreach (var card in cardUIList)
+        {
+            card.OnCardEndInteractEvent -= HandleOnCardEndInteract;
+        }
+    }
+
+    #endregion
+
+    #region Bind ActiveLoadoutRemove Event
+
+    public void BindOnActiveLoadoutRemoveEvent()
+    {
+        if (ActiveLoadoutLayoutManager)
+        {
+            ActiveLoadoutLayoutManager.OnActiveLoadoutRemovedEvent += HandleOnActiveLoadoutRemoved;
+            isActiveLoadoutRemovedEventBinded = true;
+        }
+    }
+
+    public void UnbindOnActiveLoadoutRemoveEvent()
+    {
+        if(ActiveLoadoutLayoutManager)
+        {
+            ActiveLoadoutLayoutManager.OnActiveLoadoutRemovedEvent -= HandleOnActiveLoadoutRemoved;
+            isActiveLoadoutRemovedEventBinded = false;
+        }
+    }
+
     #endregion
 
     #region Bind LoadoutCardSelected Event

@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+[RequireComponent(typeof(InspectComponent))]
 public class LoadoutCardUI : CardUI, IPointerClickHandler
 {
-    public event Action OnCardInspectEvent;
+    public LoadoutCardGOInfo cardInfo;
+
+    public event Action<LoadoutCardGOInfo> OnCardRemovedEvent;
 
     public override void OnPointerEnter(PointerEventData eventData)
     {
@@ -21,16 +24,22 @@ public class LoadoutCardUI : CardUI, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button != PointerEventData.InputButton.Left) return;
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnCardRemovedEvent?.Invoke(cardInfo);
+            gameObject.SetActive(false);
+        }
 
-        OnCardInspectEvent?.Invoke();
-        Debug.Log("Show Details, have a remove button at btm");
-
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            InspectComponent.InspectCard(cardInfo.upgradeSO);
+        }
     }
 
-    public void InitializeCard(UpgradeDefinitionSO upgradeSO)
+    public void InitializeCard(LoadoutCardGOInfo loadoutCardInfo)
     {
-        cardImage.sprite = upgradeSO.upgradeSprite;
+        cardInfo.upgradeSO = loadoutCardInfo.upgradeSO;
+        cardImage.sprite = cardInfo.upgradeSO.upgradeSprite;
     }
 
     
