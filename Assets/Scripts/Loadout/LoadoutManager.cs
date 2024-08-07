@@ -5,20 +5,6 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public struct LoadoutData
-{ 
-    public LoadoutData(List<UpgradeDefinitionSO> _totalUpgrades, List<UpgradeDefinitionSO>_totalUnlockedUpgrades, List<UpgradeDefinitionSO> _currentActiveUpgrades)
-    {
-        totalUpgrades = _totalUpgrades;
-        totalUnlockedUpgrades = _totalUnlockedUpgrades;
-        currentActiveUpgrades = _currentActiveUpgrades;
-    }
-
-    public List<UpgradeDefinitionSO> totalUpgrades;
-    public List<UpgradeDefinitionSO> totalUnlockedUpgrades;
-    public List<UpgradeDefinitionSO> currentActiveUpgrades;
-}
-
 
 public class LoadoutManager : MonoBehaviour
 {

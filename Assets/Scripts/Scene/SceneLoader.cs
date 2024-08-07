@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [Serializable]
-public enum Scene
+public enum SCENE
 {
+    EXIT = -1,
     MENU,
     GAMESCENE
 }
@@ -14,13 +15,25 @@ public enum Scene
 
 public static class SceneLoader
 {
-    public static void Load(Scene scene)
+    public static void Load(SCENE scene)
     {
-        SceneManager.LoadScene((int)scene);
-
-        if(TimeManager.isTimePaused)
+        if (TimeManager.isTimePaused)
         {
             TimeManager.ResumeTime();
+        }
+
+        switch (scene)
+        {
+            case SCENE.EXIT:
+                Application.Quit();
+
+                //#DEBUG
+                Debug.Log("Quiting");
+                break;
+
+            default:
+                SceneManager.LoadScene((int)scene);
+                break;
         }
     }
 }

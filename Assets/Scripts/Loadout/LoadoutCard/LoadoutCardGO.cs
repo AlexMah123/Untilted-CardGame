@@ -6,15 +6,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public struct LoadoutCardGOInfo
-{
-    public LoadoutCardGOInfo(UpgradeDefinitionSO _upgradeSO)
-    {
-        upgradeSO = _upgradeSO;
-    }
-
-    public UpgradeDefinitionSO upgradeSO;
-}
 
 [RequireComponent(typeof(InspectComponent))]
 public class LoadoutCardGO : MonoBehaviour
