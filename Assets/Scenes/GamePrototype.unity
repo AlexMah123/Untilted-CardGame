@@ -3727,6 +3727,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1922461815315055826, guid: 9beefc3d17604864392fa23e76a0d0e7,
+        type: 3}
+      propertyPath: sceneToTransition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6374181129659516827, guid: 9beefc3d17604864392fa23e76a0d0e7,
+        type: 3}
+      propertyPath: m_text
+      value: Level Select
+      objectReference: {fileID: 0}
     - target: {fileID: 6374181129659516827, guid: 9beefc3d17604864392fa23e76a0d0e7,
         type: 3}
       propertyPath: m_fontSize
@@ -3735,7 +3745,7 @@ PrefabInstance:
     - target: {fileID: 8045739741733505721, guid: 9beefc3d17604864392fa23e76a0d0e7,
         type: 3}
       propertyPath: m_Name
-      value: LevelTransitionButton_MainMenu
+      value: LevelTransitionButton_LevelSelect
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

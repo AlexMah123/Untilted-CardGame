@@ -9,7 +9,9 @@ public enum SCENE
 {
     EXIT = -1,
     MENU,
-    GAMESCENE
+    LEVELSELECT,
+    GAMESCENE,
+    LOADOUT,
 }
 
 
