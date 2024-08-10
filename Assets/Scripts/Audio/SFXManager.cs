@@ -7,7 +7,11 @@ public class SFXManager : MonoBehaviour
 {
     public static SFXManager Instance;
 
+    [Header("Sound FX Prefab")]
     [SerializeField] private AudioSource soundFXObject;
+
+    [Header("SFX Library")]
+    public SoundLibrary sfxLibrary;
 
     private void Awake()
     {
@@ -22,7 +26,7 @@ public class SFXManager : MonoBehaviour
         }
     }
 
-    public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform, float volume)
+    public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform)
     {
         if (audioClip == null)
         {
@@ -32,10 +36,16 @@ public class SFXManager : MonoBehaviour
         AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
 
         audioSource.clip = audioClip;
-        audioSource.volume = volume;
         audioSource.Play();
 
         float clipLength = audioSource.clip.length;
         Destroy(audioSource.gameObject, clipLength);
+    }
+
+    public void PlaySoundFXClip(string soundName, Transform spawnTransform)
+    {
+        var audioClip = sfxLibrary.GetAudioClip(soundName);
+
+        PlaySoundFXClip(audioClip, spawnTransform);
     }
 }

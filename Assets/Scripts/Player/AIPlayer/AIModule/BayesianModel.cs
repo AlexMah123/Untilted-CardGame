@@ -8,18 +8,18 @@ public class BayesianModel : AIDecision
 {
     private Dictionary<GameChoice, int> opponentMoveCount = new Dictionary<GameChoice, int>
     {
-        { GameChoice.ROCK, 0 },
-        { GameChoice.PAPER, 0 },
-        { GameChoice.SCISSOR, 0 }
+        { GameChoice.Rock, 0 },
+        { GameChoice.Paper, 0 },
+        { GameChoice.Scissor, 0 }
     };
 
     public override GameChoice MakeDecision()
     {
         //defaulted values
-        GameChoice aiDecision = GameChoice.ROCK;
+        GameChoice aiDecision = GameChoice.Rock;
 
         //sum the total thrown moves by the opponent
-        int totalMoves = opponentMoveCount[GameChoice.ROCK] + opponentMoveCount[GameChoice.PAPER] + opponentMoveCount[GameChoice.SCISSOR];
+        int totalMoves = opponentMoveCount[GameChoice.Rock] + opponentMoveCount[GameChoice.Paper] + opponentMoveCount[GameChoice.Scissor];
 
         //if its the first time playing, return a random move
         if (totalMoves == 0) return RandomChoice();
@@ -28,24 +28,24 @@ public class BayesianModel : AIDecision
         if (Random.value > aiAccuracy) return RandomChoice();
 
         //calculate the individual probability against the total amount of moves the player has thrown.
-        float rockProbability = (float)opponentMoveCount[GameChoice.ROCK] / totalMoves;
-        float paperProbability = (float)opponentMoveCount[GameChoice.PAPER] / totalMoves;
-        float scissorsProbability = (float)opponentMoveCount[GameChoice.SCISSOR] / totalMoves;
+        float rockProbability = (float)opponentMoveCount[GameChoice.Rock] / totalMoves;
+        float paperProbability = (float)opponentMoveCount[GameChoice.Paper] / totalMoves;
+        float scissorsProbability = (float)opponentMoveCount[GameChoice.Scissor] / totalMoves;
 
         //defaulted
-        GameChoice predictedMoveByOpponent = GameChoice.ROCK;
+        GameChoice predictedMoveByOpponent = GameChoice.Rock;
 
         if (rockProbability >= paperProbability && rockProbability >= scissorsProbability)
         {
-            predictedMoveByOpponent = GameChoice.ROCK;
+            predictedMoveByOpponent = GameChoice.Rock;
         }
         else if(paperProbability >= rockProbability && paperProbability >= scissorsProbability)
         {
-            predictedMoveByOpponent = GameChoice.PAPER;
+            predictedMoveByOpponent = GameChoice.Paper;
         }
         else
         {
-            predictedMoveByOpponent = GameChoice.SCISSOR;
+            predictedMoveByOpponent = GameChoice.Scissor;
         }
 
         aiDecision = PlayerDecisionLibrary.GetCounterChoice(predictedMoveByOpponent);
@@ -64,9 +64,9 @@ public class BayesianModel : AIDecision
     {
         opponentMoveCount = new Dictionary<GameChoice, int>
         {
-            { GameChoice.ROCK, 0 },
-            { GameChoice.PAPER, 0 },
-            { GameChoice.SCISSOR, 0 }
+            { GameChoice.Rock, 0 },
+            { GameChoice.Paper, 0 },
+            { GameChoice.Scissor, 0 }
         };
     }
 

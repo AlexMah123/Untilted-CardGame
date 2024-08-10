@@ -8,7 +8,6 @@ public class HealthStatUI : MonoBehaviour
     public Player attachedPlayer;
     [SerializeField] TextMeshProUGUI healthText;    
     
-
     private void Start()
     {
         if(attachedPlayer != null)

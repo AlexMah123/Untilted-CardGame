@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LevelTransitionHandler : MonoBehaviour
 {
-    public SCENE sceneToTransition;
+    public Scene sceneToTransition;
+    public Transition transitionType;
 
     public void LoadLevel()
     {
-        HandleLoadScene();
+        var audioClip = SFXManager.Instance.sfxLibrary.GetAudioClip("ButtonClick");
+        SFXManager.Instance.PlaySoundFXClip(audioClip, transform);
+
+        StartCoroutine(HandleLoadScene(audioClip.length));
     }
 
-    private void HandleLoadScene()
+    private IEnumerator HandleLoadScene(float duration)
     {
-        SceneLoader.Load(sceneToTransition);
+        yield return new WaitForSecondsRealtime(duration);
+
+        SceneTransitionManager.Instance.LoadScene(sceneToTransition, transitionType);
     }
 }

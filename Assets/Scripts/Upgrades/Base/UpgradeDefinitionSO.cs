@@ -16,7 +16,7 @@ public abstract class UpgradeDefinitionSO : ScriptableObject
 
     [Header("Gameplay Configs")]
     public bool isActivatable;
-    public UPGRADE_TYPE upgradeType;
+    public UpgradeType upgradeType;
 
     public virtual void ApplyPassiveEffect(IPlayer player)
     {

@@ -15,12 +15,12 @@ public static class PlayerDecisionLibrary
     {
         switch (predictedMoveByOpponent)
         {
-            case GameChoice.ROCK:           return GameChoice.PAPER;
-            case GameChoice.PAPER:          return GameChoice.SCISSOR;
-            case GameChoice.SCISSOR:        return GameChoice.ROCK;
+            case GameChoice.Rock:           return GameChoice.Paper;
+            case GameChoice.Paper:          return GameChoice.Scissor;
+            case GameChoice.Scissor:        return GameChoice.Rock;
 
             //shouldnt happen
-            default:                        return GameChoice.ROCK;
+            default:                        return GameChoice.Rock;
         }
     }
 

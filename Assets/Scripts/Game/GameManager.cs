@@ -5,10 +5,10 @@ using UnityEngine;
 
 public enum GameResult
 {
-    NONE,
-    WIN,
-    LOSE,
-    DRAW
+    None,
+    Win,
+    Lose,
+    Draw
 }
 
 public class GameManager : MonoBehaviour
@@ -124,17 +124,17 @@ public class GameManager : MonoBehaviour
         //#TODO: call the players win lose draw conditions
         switch(roundResult)
         {
-            case GameResult.WIN:
+            case GameResult.Win:
                 //human player deal dmg to opposing player
                 humanPlayer.DamageComponent.DealDamage(aiPlayer, humanPlayer.DamageComponent.damageAmount);
                 break;
 
-            case GameResult.LOSE:
+            case GameResult.Lose:
                 //aiPlayer player deal dmg to human player
                 aiPlayer.DamageComponent.DealDamage(humanPlayer, aiPlayer.DamageComponent.damageAmount);
                 break;
 
-            case GameResult.DRAW:
+            case GameResult.Draw:
                 //do nothing
                 break;
         }

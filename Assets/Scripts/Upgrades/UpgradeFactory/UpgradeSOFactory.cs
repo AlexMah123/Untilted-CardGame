@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum UPGRADE_TYPE
+public enum UpgradeType
 {
-    NONE,
-    DEATH,
-    JUSTICE,
-    THE_CHARIOT,
-    THE_DEVIL,
-    THE_EMPEROR,
-    THE_EMPRESS,
-    THE_FOOL,
-    THE_HIGH_PRIESTESS,
-    THE_LOVERS,
-    THE_SUN,
-    THE_WHEEL_OF_FORTUNE,
+    None,
+    Death,
+    Justice,
+    TheChariot,
+    TheDevil,
+    TheEmperor,
+    TheEmpress,
+    TheFool,
+    TheHighPriestess,
+    TheLovers,
+    TheSun,
+    TheWheelOfFortune,
 }
 
 public class UpgradeSOFactory : MonoBehaviour
@@ -38,7 +38,7 @@ public class UpgradeSOFactory : MonoBehaviour
         }
     }
 
-    public static UpgradeDefinitionSO CreateUpgradeDefinitionSO(UPGRADE_TYPE upgradeEnum)
+    public static UpgradeDefinitionSO CreateUpgradeDefinitionSO(UpgradeType upgradeEnum)
     {
         UpgradeDefinitionSO queriedSO = Instance.totalPossibleUpgrade.upgradeList.FirstOrDefault(x => x.upgradeType == upgradeEnum);
 
