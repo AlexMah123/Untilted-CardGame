@@ -8,8 +8,11 @@ public class GameData
 {
     public int number;
 
+    public Dictionary<string, bool> upgradesUnlocked;
+
     public GameData()
     {
         number = 0;
+        upgradesUnlocked = new();
     }
 }

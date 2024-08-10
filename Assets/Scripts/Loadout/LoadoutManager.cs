@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class LoadoutManager : MonoBehaviour
+public class LoadoutManager : MonoBehaviour, ISavableData
 {
     public static LoadoutManager Instance;
 
@@ -51,7 +51,6 @@ public class LoadoutManager : MonoBehaviour
         {
             Instance = this;
         }
-        
     }
 
     private void Start()
@@ -64,12 +63,12 @@ public class LoadoutManager : MonoBehaviour
 
         InitializateData();
 
-        //#TODO: Add Players active upgrades in
+        //#TODO: Add Players active upgrades in, 3rd param
         LoadoutData loadoutData = new LoadoutData(totalUpgrades, totalUnlockedUpgrades, new());
         OnInitializeLoadoutEvent?.Invoke(loadoutData);
     }
 
-    public void AddSelectedUpgradeToActive(UpgradeDefinitionSO addedUpgradeSO)
+    public void HandleSelectedUpgradeToActive(UpgradeDefinitionSO addedUpgradeSO)
     {
         //#TODO: need the cards be added to active
         //#DEBUG
@@ -78,6 +77,19 @@ public class LoadoutManager : MonoBehaviour
         //currentPlayer.ActiveLoadoutComponent.AddToLoadout(addedUpgradeSO);
     }
 
+    #region Savable Interface
+    public void LoadData(GameData data)
+    {
+        Debug.Log($"Loading Data since scene changed {data.number}");
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.number++;
+        Debug.Log($"Loading Data since scene changed {data.number}");
+    }
+    #endregion
+
     #region Internal Methods
     private void InitializateData()
     {
@@ -85,13 +97,12 @@ public class LoadoutManager : MonoBehaviour
     }
     #endregion
 
-
     #region Bind LoadoutSelectedEvent
     private void BindLoadoutSelectedEvent()
     {
         if (LoadoutLayoutManager.Instance != null)
         {
-            LoadoutLayoutManager.Instance.OnLoadoutSelectedEvent += AddSelectedUpgradeToActive;
+            LoadoutLayoutManager.Instance.OnLoadoutSelectedEvent += HandleSelectedUpgradeToActive;
             isLoadoutSelectedEventBinded = true;
         }
     }
@@ -100,7 +111,7 @@ public class LoadoutManager : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            LoadoutLayoutManager.Instance.OnLoadoutSelectedEvent -= AddSelectedUpgradeToActive;
+            LoadoutLayoutManager.Instance.OnLoadoutSelectedEvent -= HandleSelectedUpgradeToActive;
             isLoadoutSelectedEventBinded = true;
         }
     }

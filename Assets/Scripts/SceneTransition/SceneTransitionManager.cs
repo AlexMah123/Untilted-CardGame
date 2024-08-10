@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [Serializable]
-public enum Scene
+public enum SceneType
 {
     Exit = -1,
     Menu,
@@ -28,6 +28,7 @@ public class SceneTransitionManager : MonoBehaviour
     public GameObject transitionsContainer;
 
     private SceneTransition[] transitions;
+    private bool isTransitioning = false;
 
     private void Awake()
     {
@@ -47,25 +48,34 @@ public class SceneTransitionManager : MonoBehaviour
         transitions = transitionsContainer.GetComponentsInChildren<SceneTransition>();
     }
 
-    public void LoadScene(Scene scene, Transition transitionType)
+    public void LoadScene(SceneType scene, Transition transitionType)
     {
+        //early return to prevent spamming
+        if (isTransitioning) return;
+
         SFXManager.Instance.PlaySoundFXClip("SceneTransition", transform);
         StartCoroutine(LoadSceneAsync(scene, transitionType));
     }
 
-    private IEnumerator LoadSceneAsync(Scene sceneType, Transition transitionType)
+    private IEnumerator LoadSceneAsync(SceneType sceneType, Transition transitionType)
     {
+        //set flag to true
+        isTransitioning = true;
+
         if (TimeManager.isTimePaused)
         {
             TimeManager.ResumeTime();
         }
 
-        if(sceneType == Scene.Exit)
+        if(sceneType == SceneType.Exit)
         {
             Application.Quit();
 
             //#DEBUG
             Debug.Log("Quitting Game");
+
+            //early reset
+            isTransitioning = false;
             yield break;
         }
 
@@ -85,5 +95,8 @@ public class SceneTransitionManager : MonoBehaviour
 
         //play animation to transition out of new scene
         yield return transition.AnimateTransitionOut();
+
+        //reset flag
+        isTransitioning = false;
     }
 }

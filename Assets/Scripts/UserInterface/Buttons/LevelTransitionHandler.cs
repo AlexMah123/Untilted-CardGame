@@ -5,15 +5,19 @@ using UnityEngine;
 
 public class LevelTransitionHandler : MonoBehaviour
 {
-    public Scene sceneToTransition;
+    public SceneType sceneToTransition;
     public Transition transitionType;
+
+    private Coroutine coroutine;
 
     public void LoadLevel()
     {
+        if (coroutine != null) return;
+
         var audioClip = SFXManager.Instance.sfxLibrary.GetAudioClip("ButtonClick");
         SFXManager.Instance.PlaySoundFXClip(audioClip, transform);
 
-        StartCoroutine(HandleLoadScene(audioClip.length));
+        coroutine = StartCoroutine(HandleLoadScene(audioClip.length));
     }
 
     private IEnumerator HandleLoadScene(float duration)
@@ -21,5 +25,6 @@ public class LevelTransitionHandler : MonoBehaviour
         yield return new WaitForSecondsRealtime(duration);
 
         SceneTransitionManager.Instance.LoadScene(sceneToTransition, transitionType);
+        coroutine = null;
     }
 }
