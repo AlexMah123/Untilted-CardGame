@@ -14,7 +14,7 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
 
     private void OnEnable()
     {
-        LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>();
+        LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
 
         foreach (var loadoutCard in loadoutCards)
         {
@@ -26,7 +26,7 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
     {
         if(activeLoadoutParent != null)
         {
-            LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>();
+            LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
 
             foreach (var loadoutCard in loadoutCards)
             {
@@ -36,7 +36,6 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
                 }
             }
         }
-
     }
 
     private void Start()

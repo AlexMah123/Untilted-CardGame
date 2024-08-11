@@ -921,7 +921,7 @@ PrefabInstance:
     - target: {fileID: 2130793156531348567, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
@@ -1001,12 +1001,12 @@ PrefabInstance:
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 450
       objectReference: {fileID: 0}
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
@@ -1062,7 +1062,7 @@ PrefabInstance:
     - target: {fileID: 2130793156531348567, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
@@ -1142,12 +1142,12 @@ PrefabInstance:
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 202.75
       objectReference: {fileID: 0}
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
@@ -1328,9 +1328,11 @@ MonoBehaviour:
   totalUpgradesInGame:
   - {fileID: 11400000, guid: 4f02e9236c7c8144592ac1e0c006141f, type: 2}
   totalUpgrades: []
-  totalUnlockedUpgrades:
+  cachedUpgradesUnlocked:
   - {fileID: 11400000, guid: 4b53ea2d60c1977429763639837f549b, type: 2}
-  currentPlayer: {fileID: 0}
+  - {fileID: 11400000, guid: 18d759f3d231e29409cab080507da93f, type: 2}
+  cachedEquippedUpgrades:
+  - {fileID: 11400000, guid: 18d759f3d231e29409cab080507da93f, type: 2}
 --- !u!1 &982583218
 GameObject:
   m_ObjectHideFlags: 0
@@ -2190,7 +2192,7 @@ PrefabInstance:
     - target: {fileID: 2130793156531348567, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
@@ -2270,12 +2272,12 @@ PrefabInstance:
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 697.25
       objectReference: {fileID: 0}
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 7084182591955085186, guid: e36a8bf97617cc642b6ae73ce790b04e,
         type: 3}

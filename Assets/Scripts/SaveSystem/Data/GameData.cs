@@ -9,6 +9,7 @@ public class GameData
     public int number;
 
     public Dictionary<string, bool> upgradesUnlocked;
+    public Dictionary<string, bool> currentEquippedUpgrades;
 
     public GameData()
     {

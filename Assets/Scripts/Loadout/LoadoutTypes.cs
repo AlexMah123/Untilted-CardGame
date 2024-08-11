@@ -8,12 +8,12 @@ public struct LoadoutData
     {
         totalUpgrades = _totalUpgrades;
         totalUnlockedUpgrades = _totalUnlockedUpgrades;
-        currentActiveUpgrades = _currentActiveUpgrades;
+        currentEquippedUpgrades = _currentActiveUpgrades;
     }
 
     public List<UpgradeDefinitionSO> totalUpgrades;
     public List<UpgradeDefinitionSO> totalUnlockedUpgrades;
-    public List<UpgradeDefinitionSO> currentActiveUpgrades;
+    public List<UpgradeDefinitionSO> currentEquippedUpgrades;
 }
 
 

@@ -14,11 +14,12 @@ public class LoadoutManager : MonoBehaviour, ISavableData
     [SerializeField] List<UpgradeCollectionSO> totalUpgradesInGame = new();
 
     [Header("Upgrades unlocked by player")]
-    public List<UpgradeDefinitionSO> totalUpgrades = new();
-    public List<UpgradeDefinitionSO> totalUnlockedUpgrades = new();
+    [SerializeField] private List<UpgradeDefinitionSO> totalUpgrades = new();
+    public List<UpgradeDefinitionSO> cachedUpgradesUnlocked = new();
+    public List<UpgradeDefinitionSO> cachedEquippedUpgrades = new();
 
-    [Header("Player current upgrade")]
-    public Player currentPlayer;
+    //[Header("Player current upgrade")]
+    //public Player currentPlayer;
 
     public event Action<LoadoutData> OnInitializeLoadoutEvent;
 
@@ -56,15 +57,20 @@ public class LoadoutManager : MonoBehaviour, ISavableData
     private void Start()
     {
         //to avoid racing condition
-        if(!isLoadoutSelectedEventBinded)
+        if (!isLoadoutSelectedEventBinded)
         {
             BindLoadoutSelectedEvent();
         }
 
         InitializateData();
 
-        //#TODO: Add Players active upgrades in, 3rd param
-        LoadoutData loadoutData = new LoadoutData(totalUpgrades, totalUnlockedUpgrades, new());
+        //needs a frame to let singletons exist
+        Invoke(nameof(Testing), 0.1f);
+    }
+
+    void Testing()
+    {
+        LoadoutData loadoutData = new LoadoutData(totalUpgrades, cachedUpgradesUnlocked, cachedEquippedUpgrades);
         OnInitializeLoadoutEvent?.Invoke(loadoutData);
     }
 
@@ -72,7 +78,7 @@ public class LoadoutManager : MonoBehaviour, ISavableData
     {
         //#TODO: need the cards be added to active
         //#DEBUG
-        Debug.Log($"Added upgrade to player");
+        Debug.Log($"Added {addedUpgradeSO} to player");
 
         //currentPlayer.ActiveLoadoutComponent.AddToLoadout(addedUpgradeSO);
     }
@@ -80,13 +86,22 @@ public class LoadoutManager : MonoBehaviour, ISavableData
     #region Savable Interface
     public void LoadData(GameData data)
     {
-        Debug.Log($"Loading Data since scene changed {data.number}");
+        //foreach data.upgradeunlocked, add to cachedUpgradesUnlocked
+        //foreach data.upgradeunlocked, add to cachedEquippedUpgrades
+
+        Debug.Log($"game data is loaded : {data.number}");
+
+        //Debug.Log($"Loading Data since scene changed {data.number}");
     }
 
     public void SaveData(ref GameData data)
     {
-        data.number++;
-        Debug.Log($"Loading Data since scene changed {data.number}");
+        //foreach cachedUpgradesUnlocked rewrite data.upgradeunlocked
+        //foreach cachedEquippedUpgrades rewrite data.upgradeunlocked
+
+        Debug.Log($"game data is saved : {data.number++}");
+
+        //Debug.Log($"Loading Data since scene changed {data.number}");
     }
     #endregion
 

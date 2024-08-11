@@ -25,7 +25,7 @@ public class LoadoutCardGO : MonoBehaviour
     public LoadoutCardGOInfo cardInfo;
 
     //private
-    private Vector2 originalCardScale;
+    private Vector3 originalCardScale;
     private int originalSortingOrder;
 
     //events
