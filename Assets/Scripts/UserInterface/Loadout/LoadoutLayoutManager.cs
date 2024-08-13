@@ -34,6 +34,7 @@ public class LoadoutLayoutManager : MonoBehaviour
 
     //event
     public event Action<UpgradeDefinitionSO> OnLoadoutSelectedEvent;
+    public event Action<UpgradeDefinitionSO> OnEquippedLoadoutRemoved;
 
     //flag
     private bool isInitializeLoadoutEventBinded = false;
@@ -136,7 +137,9 @@ public class LoadoutLayoutManager : MonoBehaviour
 
     public void HandleOnActiveLoadoutRemoved(LoadoutCardGOInfo removedCardInfo)
     {
-        cachedLoadoutData.totalUpgrades.Add(removedCardInfo.upgradeSO);
+        //broadcast event to LoadoutManager to update the data (remove and add from totalupgrades and equipped)
+        OnEquippedLoadoutRemoved?.Invoke(removedCardInfo.upgradeSO);
+
         UpdateCardSlots(loadoutPageIndex);
     }
 
@@ -166,19 +169,22 @@ public class LoadoutLayoutManager : MonoBehaviour
         //request creation of upgrade layout
         RequestLoadoutGO();
 
-        //update the layout buttons on the first page
-        UpdateCardSlots(0);
-
         //update the layout into an arc
         ArrangeCardsInArc();
 
-        //foreach upgrade in cachedloadout (save), set them to active
+        //update the layout buttons on the first page
+        UpdateCardSlots(0);
+
+        LoadoutPageManager.Instance.UpdateButtonState();
+
         InitializeEquippedUpgrades();
     }
 
     private void InitializeEquippedUpgrades()
     {
-        foreach (UpgradeDefinitionSO upgrades in cachedLoadoutData.currentEquippedUpgrades)
+        var upgradesCopy = new List<UpgradeDefinitionSO>(cachedLoadoutData.totalEquippedUpgrades);
+
+        foreach (var upgrades in upgradesCopy)
         {
             AddToActiveCardSlots(upgrades);
         }
@@ -222,14 +228,14 @@ public class LoadoutLayoutManager : MonoBehaviour
     private void UpdateCardSlots(int pageIndex)
     {
         int startIndex = pageIndex * displayAmountPerPage;
-        int endIndex = Mathf.Min(startIndex + displayAmountPerPage, cachedLoadoutData.totalUpgrades.Count);
+        int endIndex = Mathf.Min(startIndex + displayAmountPerPage, cachedLoadoutData.totalUpgradesInGame.Count);
 
         for (int i = 0; i < cardSlots.Count; i++)
         {
             if(i < endIndex - startIndex)
             {
                 //compare if unlockedupgrade contains the total upgrade
-                var upgrade = cachedLoadoutData.totalUpgrades[startIndex + i];
+                var upgrade = cachedLoadoutData.totalUpgradesInGame[startIndex + i];
                 var isUnlocked = cachedLoadoutData.totalUnlockedUpgrades.Any(unlockedUpgrade => unlockedUpgrade.upgradeName == upgrade.upgradeName);
 
                 cardSlots[i].cardSpriteRenderer.sprite = upgrade.upgradeSprite;
@@ -251,15 +257,13 @@ public class LoadoutLayoutManager : MonoBehaviour
 
         if(success)
         {
-            //remove from the current list and update the layout
-            cachedLoadoutData.totalUpgrades.Remove(selectedUpgrade);
+            //broadcast event to LoadoutManager to update the data (remove and add from totalupgrades and equipped)
+            OnLoadoutSelectedEvent?.Invoke(selectedUpgrade);
+
             UpdateCardSlots(loadoutPageIndex);
 
             //temp, updates the button state
             LoadoutPageManager.Instance.UpdateButtonState();
-
-            //broadcast event to LoadoutManager
-            OnLoadoutSelectedEvent?.Invoke(selectedUpgrade);
         }
     }
     #endregion

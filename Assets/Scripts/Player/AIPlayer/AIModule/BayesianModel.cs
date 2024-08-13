@@ -85,7 +85,7 @@ public class BayesianModel : AIDecision
         sortedOpponentMostThrownMove.Sort((choice1, choice2) => opponentMoveCount[choice2].CompareTo(opponentMoveCount[choice1]));
 
         // Return the next available choice
-        foreach (var choice in sortedOpponentMostThrownMove)
+        foreach (GameChoice choice in sortedOpponentMostThrownMove)
         {
             GameChoice counterChoice = PlayerDecisionLibrary.GetCounterChoice(choice);
             if (choiceComponent.IsChoiceAvailable(choice))

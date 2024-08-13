@@ -1,19 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public struct LoadoutData
 {
-    public LoadoutData(List<UpgradeDefinitionSO> _totalUpgrades, List<UpgradeDefinitionSO> _totalUnlockedUpgrades, List<UpgradeDefinitionSO> _currentActiveUpgrades)
+    public LoadoutData(List<UpgradeDefinitionSO> _totalUpgrades, HashSet<UpgradeDefinitionSO> _totalUnlockedUpgrades, HashSet<UpgradeDefinitionSO> _currentActiveUpgrades)
     {
-        totalUpgrades = _totalUpgrades;
+        totalUpgradesInGame = _totalUpgrades;
         totalUnlockedUpgrades = _totalUnlockedUpgrades;
-        currentEquippedUpgrades = _currentActiveUpgrades;
+        totalEquippedUpgrades = _currentActiveUpgrades;
     }
 
-    public List<UpgradeDefinitionSO> totalUpgrades;
-    public List<UpgradeDefinitionSO> totalUnlockedUpgrades;
-    public List<UpgradeDefinitionSO> currentEquippedUpgrades;
+    public List<UpgradeDefinitionSO> totalUpgradesInGame;
+    public HashSet<UpgradeDefinitionSO> totalUnlockedUpgrades;
+    public HashSet<UpgradeDefinitionSO> totalEquippedUpgrades;
 }
 
 

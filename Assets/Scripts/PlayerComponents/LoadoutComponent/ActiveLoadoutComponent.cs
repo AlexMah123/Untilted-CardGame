@@ -28,7 +28,7 @@ public class ActiveLoadoutComponent : MonoBehaviour
     [ContextMenu("ActiveLoadout/Apply Passive Effect")]
     public void ApplyPassiveEffects()
     {
-        foreach(var upgrade in upgradeSlots)
+        foreach(UpgradeDefinitionSO upgrade in upgradeSlots)
         {
             upgrade.ApplyPassiveEffect(attachedPlayer);
         }
@@ -37,7 +37,7 @@ public class ActiveLoadoutComponent : MonoBehaviour
     [ContextMenu("ActiveLoadout/Apply OnWin Effect")]
     public void ApplyOnWinEffects()
     {
-        foreach (var upgrade in upgradeSlots)
+        foreach (UpgradeDefinitionSO upgrade in upgradeSlots)
         {
             upgrade.OnWinRound(attachedPlayer);
         }
@@ -47,7 +47,7 @@ public class ActiveLoadoutComponent : MonoBehaviour
     [ContextMenu("ActiveLoadout/Apply OnLose Effect")]
     public void ApplyOnLoseEffect()
     {
-        foreach (var upgrade in upgradeSlots)
+        foreach (UpgradeDefinitionSO upgrade in upgradeSlots)
         {
             upgrade.OnWinRound(attachedPlayer);
         }
@@ -56,7 +56,7 @@ public class ActiveLoadoutComponent : MonoBehaviour
     [ContextMenu("ActiveLoadout/Apply OnDraw Effect")]
     public void ApplyOnDrawEffect()
     {
-        foreach (var upgrade in upgradeSlots)
+        foreach (UpgradeDefinitionSO upgrade in upgradeSlots)
         {
             upgrade.OnWinRound(attachedPlayer);
         }

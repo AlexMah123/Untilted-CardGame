@@ -18,6 +18,21 @@ public abstract class UpgradeDefinitionSO : ScriptableObject
     public bool isActivatable;
     public UpgradeType upgradeType;
 
+    public override bool Equals(object obj)
+    {
+        if(obj is UpgradeDefinitionSO other)
+        {
+            return upgradeType == other.upgradeType;
+        }
+
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return upgradeType.GetHashCode();
+    }
+
     public virtual void ApplyPassiveEffect(IPlayer player)
     {
 

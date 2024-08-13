@@ -15,22 +15,25 @@ public class LoadoutManager : MonoBehaviour, ISavableData
 
     [Header("Upgrades unlocked by player")]
     [SerializeField] private List<UpgradeDefinitionSO> totalUpgrades = new();
-    public List<UpgradeDefinitionSO> cachedUpgradesUnlocked = new();
-    public List<UpgradeDefinitionSO> cachedEquippedUpgrades = new();
-
-    //[Header("Player current upgrade")]
-    //public Player currentPlayer;
+    public HashSet<UpgradeDefinitionSO> cachedUpgradesUnlocked = new();
+    public HashSet<UpgradeDefinitionSO> cachedEquippedUpgrades = new();
 
     public event Action<LoadoutData> OnInitializeLoadoutEvent;
 
     //flag
     private bool isLoadoutSelectedEventBinded = false;
+    private bool isEquippedLoadoutRemovedEvent = false;
 
     private void OnEnable()
     {
         if(!isLoadoutSelectedEventBinded)
         {
             BindLoadoutSelectedEvent();
+        }
+
+        if (!isEquippedLoadoutRemovedEvent)
+        {
+           BindEquippedLoadoutRemovedEvent();
         }
     }
 
@@ -39,6 +42,11 @@ public class LoadoutManager : MonoBehaviour, ISavableData
         if(isLoadoutSelectedEventBinded)
         {
             UnbindLoadoutSelectedEvent();
+        }
+
+        if(isEquippedLoadoutRemovedEvent)
+        {
+            UnbindEquippedLoadoutRemovedEvent();
         }
     }
 
@@ -62,51 +70,89 @@ public class LoadoutManager : MonoBehaviour, ISavableData
             BindLoadoutSelectedEvent();
         }
 
-        InitializateData();
+        if (!isEquippedLoadoutRemovedEvent)
+        {
+            BindEquippedLoadoutRemovedEvent();
+        }
+
+        InitializateUpgradeData();
 
         //needs a frame to let singletons exist
-        Invoke(nameof(Testing), 0.1f);
+        Invoke(nameof(InitializeLoadoutData), 0.1f);
     }
 
-    void Testing()
+    void InitializeLoadoutData()
     {
         LoadoutData loadoutData = new LoadoutData(totalUpgrades, cachedUpgradesUnlocked, cachedEquippedUpgrades);
+
         OnInitializeLoadoutEvent?.Invoke(loadoutData);
     }
 
-    public void HandleSelectedUpgradeToActive(UpgradeDefinitionSO addedUpgradeSO)
+    public void HandleSelectedUpgradeEquipped(UpgradeDefinitionSO addedUpgradeSO)
     {
-        //#TODO: need the cards be added to active
-        //#DEBUG
-        Debug.Log($"Added {addedUpgradeSO} to player");
+        //remove from the total list available
+        totalUpgrades.Remove(addedUpgradeSO);
 
-        //currentPlayer.ActiveLoadoutComponent.AddToLoadout(addedUpgradeSO);
+        //add to the equipped upgrades
+        cachedEquippedUpgrades.Add(addedUpgradeSO);
+
+        //#DEBUG
+        //Debug.Log($"Added {addedUpgradeSO.upgradeName} to player");
+    }
+
+    public void HandleEquippedUpgradeRemoved(UpgradeDefinitionSO addedUpgradeSO)
+    {
+        //Add to the total list available
+        totalUpgrades.Add(addedUpgradeSO);
+
+        //remove from equipped upgrades
+        cachedEquippedUpgrades.Remove(addedUpgradeSO);
+
+        //#DEBUG
+        //Debug.Log($"Removed {addedUpgradeSO.upgradeName} from player");
     }
 
     #region Savable Interface
     public void LoadData(GameData data)
     {
-        //foreach data.upgradeunlocked, add to cachedUpgradesUnlocked
-        //foreach data.upgradeunlocked, add to cachedEquippedUpgrades
+        //clear when loading to overwrite
+        cachedUpgradesUnlocked.Clear();
+        foreach (UpgradeType upgradeUnlocked in data.playerUnlockedUpgrades)
+        {
+            cachedUpgradesUnlocked.Add(UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradeUnlocked));
+        }
 
-        Debug.Log($"game data is loaded : {data.number}");
+        cachedEquippedUpgrades.Clear();
+        foreach(UpgradeType upgradesEquipped in data.playerEquippedUpgrades)
+        {
+            cachedEquippedUpgrades.Add(UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradesEquipped));
+        }
 
-        //Debug.Log($"Loading Data since scene changed {data.number}");
+        //#DEBUG
+        //Debug.Log($"game data is loaded");
     }
 
     public void SaveData(ref GameData data)
     {
-        //foreach cachedUpgradesUnlocked rewrite data.upgradeunlocked
-        //foreach cachedEquippedUpgrades rewrite data.upgradeunlocked
+        data.playerUnlockedUpgrades.Clear();
+        foreach (UpgradeDefinitionSO upgradeSO in cachedUpgradesUnlocked)
+        {
+            data.playerUnlockedUpgrades.Add(upgradeSO.upgradeType);
+        }
 
-        Debug.Log($"game data is saved : {data.number++}");
+        data.playerEquippedUpgrades.Clear();
+        foreach (UpgradeDefinitionSO upgradeSO in cachedEquippedUpgrades)
+        {
+            data.playerEquippedUpgrades.Add(upgradeSO.upgradeType);
+        }
 
-        //Debug.Log($"Loading Data since scene changed {data.number}");
+        //#DEBUG
+        //Debug.Log($"game data is saved");
     }
     #endregion
 
     #region Internal Methods
-    private void InitializateData()
+    private void InitializateUpgradeData()
     {
         totalUpgrades = totalUpgradesInGame.SelectMany(upgradeCollection => upgradeCollection.upgradeList).ToList();
     }
@@ -117,17 +163,38 @@ public class LoadoutManager : MonoBehaviour, ISavableData
     {
         if (LoadoutLayoutManager.Instance != null)
         {
-            LoadoutLayoutManager.Instance.OnLoadoutSelectedEvent += HandleSelectedUpgradeToActive;
+            LoadoutLayoutManager.Instance.OnLoadoutSelectedEvent += HandleSelectedUpgradeEquipped;
             isLoadoutSelectedEventBinded = true;
         }
     }
 
     private void UnbindLoadoutSelectedEvent()
     {
-        if (GameManager.Instance != null)
+        if (LoadoutLayoutManager.Instance != null)
         {
-            LoadoutLayoutManager.Instance.OnLoadoutSelectedEvent -= HandleSelectedUpgradeToActive;
-            isLoadoutSelectedEventBinded = true;
+            LoadoutLayoutManager.Instance.OnLoadoutSelectedEvent -= HandleSelectedUpgradeEquipped;
+            isLoadoutSelectedEventBinded = false;
+        }
+    }
+    #endregion
+
+
+    #region Bind EquippedLoadoutRemovedEvent
+    private void BindEquippedLoadoutRemovedEvent()
+    {
+        if (LoadoutLayoutManager.Instance != null)
+        {
+            LoadoutLayoutManager.Instance.OnEquippedLoadoutRemoved += HandleEquippedUpgradeRemoved;
+            isEquippedLoadoutRemovedEvent = true;
+        }
+    }
+
+    private void UnbindEquippedLoadoutRemovedEvent()
+    {
+        if (LoadoutLayoutManager.Instance != null)
+        {
+            LoadoutLayoutManager.Instance.OnEquippedLoadoutRemoved -= HandleEquippedUpgradeRemoved;
+            isEquippedLoadoutRemovedEvent = true;
         }
     }
     #endregion
