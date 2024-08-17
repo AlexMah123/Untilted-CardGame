@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class LevelTransitionHandler : MonoBehaviour
+public class SceneTransitionHandler : MonoBehaviour
 {
     public SceneType sceneToTransition;
     public Transition transitionType;
 
     private Coroutine coroutine;
 
-    public void LoadLevel()
+    public void LoadScene()
     {
         if (coroutine != null) return;
 
