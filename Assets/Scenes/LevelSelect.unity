@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.003921569}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.19607843}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1195,6 +1195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 790c223fff73ca14a987aeeeefe3c601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentSelectedLevelSO: {fileID: 0}
   totalLevels:
   - levelConfig: {fileID: 11400000, guid: 40b3ce25bae93a14fadca35cec0d46f2, type: 2}
     isCompleted: 0

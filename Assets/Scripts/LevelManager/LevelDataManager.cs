@@ -24,6 +24,7 @@ public class LevelDataManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
+
 }
 
 [Serializable]

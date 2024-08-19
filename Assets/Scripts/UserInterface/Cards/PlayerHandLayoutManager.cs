@@ -101,6 +101,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
 
     public void HandleOnPlayerStartTurn(Player player)
     {
+        //used to deal/display the card choices.
         RequestCardChoices(attachedPlayer);
     }
 

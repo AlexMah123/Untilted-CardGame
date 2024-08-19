@@ -34,12 +34,7 @@ public class Player : MonoBehaviour, IPlayer
         damageComponent = GetComponent<DamageComponent>();
         energyComponent = GetComponent<EnergyComponent>();
 
-        //Inject values
-        choiceComponent.currentChoice = GameChoice.Rock;
-        activeLoadoutComponent.InitializeComponent(this, statsConfig);
-        healthComponent.InitializeComponent(statsConfig);
-        damageComponent.InitializeComponent(statsConfig);
-        energyComponent.InitializeComponent(statsConfig);
+        LoadComponents();
     }
 
     protected virtual void Start()
@@ -50,6 +45,16 @@ public class Player : MonoBehaviour, IPlayer
     protected virtual void Update()
     {
 
+    }
+
+    public void LoadComponents()
+    {
+        //Inject values
+        choiceComponent.currentChoice = GameChoice.Rock;
+        activeLoadoutComponent.InitializeComponent(this, statsConfig);
+        healthComponent.InitializeComponent(statsConfig);
+        damageComponent.InitializeComponent(statsConfig);
+        energyComponent.InitializeComponent(statsConfig);
     }
 
     //overriden by AIPlayer, HumanPlayer is set by turn system manager/GameManager

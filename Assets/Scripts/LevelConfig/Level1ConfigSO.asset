@@ -13,12 +13,16 @@ MonoBehaviour:
   m_Name: Level1ConfigSO
   m_EditorClassIdentifier: 
   humanPlayer:
-    StatsConfig: {fileID: 11400000, guid: 46b404202d4889b4eb3d741afff23fd1, type: 2}
+    StatsConfig: {fileID: 11400000, guid: 43b053e5d44da56449eb66cacadcbc05, type: 2}
     AiModule: {fileID: 0}
     playerType: 0
+    upgradesEquipped: []
   aiPlayer:
     StatsConfig: {fileID: 11400000, guid: af6be0f4975e2934aa9f5499aeb816ae, type: 2}
     AiModule: {fileID: 11400000, guid: a269275dbd8b89749a655335d86d606f, type: 2}
     playerType: 1
+    upgradesEquipped:
+    - {fileID: 11400000, guid: 4b53ea2d60c1977429763639837f549b, type: 2}
+    - {fileID: 11400000, guid: 18d759f3d231e29409cab080507da93f, type: 2}
   levelName: Level 1
   levelImage: {fileID: 21300000, guid: 90d8f0b52ca666f489993cf0eb55f92e, type: 3}

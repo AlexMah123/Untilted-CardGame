@@ -8,7 +8,7 @@ public class TurnSystemManager : MonoBehaviour
     public static TurnSystemManager Instance;
 
     private Player HumanPlayer { get => GameManager.Instance.humanPlayer; }
-    private Player AiPlayer { get => GameManager.Instance.humanPlayer; }
+    private Player AiPlayer { get => GameManager.Instance.computerPlayer; }
 
     //Current values of the game.
     [HideInInspector]
@@ -63,8 +63,7 @@ public class TurnSystemManager : MonoBehaviour
         }
 
         //the actual start of the game
-        currentPlayer = HumanPlayer;
-        ChangeTurn(playerTurn);
+        HandleStartNewTurn();
     }
 
     void Update()

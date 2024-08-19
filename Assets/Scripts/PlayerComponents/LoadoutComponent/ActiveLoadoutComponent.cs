@@ -67,10 +67,17 @@ public class ActiveLoadoutComponent : MonoBehaviour
         return upgradeSlots;
     }
 
-    public void AddToLoadout(UpgradeDefinitionSO upgrade)
+    public void AddUpgradeToLoadout(UpgradeDefinitionSO upgrade)
     {
         upgradeSlots.Add(upgrade);
     }
+
+    public void AddUpgradeToLoadout(UpgradeType upgradeType)
+    {
+        var createdUpgrade = UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradeType);
+        upgradeSlots.Add(createdUpgrade);
+    }
+
 
     #region Debug
     [ContextMenu("Debug/Debug Attached Player")]

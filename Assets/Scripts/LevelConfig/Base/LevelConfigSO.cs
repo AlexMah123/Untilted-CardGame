@@ -6,10 +6,10 @@ using UnityEngine;
 public class LevelConfigSO : ScriptableObject
 {
     [Header("Human Player")]
-    [SerializeField] PlayerData humanPlayer;
+    public PlayerData humanPlayer;
 
     [Header("Ai Player")]
-    [SerializeField] PlayerData aiPlayer;
+    public PlayerData aiPlayer;
 
     [Header("UI Data")]
     public string levelName;

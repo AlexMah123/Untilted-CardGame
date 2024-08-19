@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum GameResult
@@ -11,13 +12,17 @@ public enum GameResult
     Draw
 }
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, ISavableData
 {
     public static GameManager Instance;
 
-    [Header("Game Configs")]
-    public Player humanPlayer;
-    public Player aiPlayer;
+    [Header("Player Objects")]
+    public GameObject humanPlayerObj;
+    public GameObject aiPlayerObj;
+
+    [Header("Player Data")]
+    [HideInInspector] public Player humanPlayer;
+    [HideInInspector] public AIPlayer computerPlayer;
 
     //declaration of events
     public event Action OnClearCardHandEvent;
@@ -52,7 +57,6 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
-
     }
 
     private void Start()
@@ -62,11 +66,6 @@ public class GameManager : MonoBehaviour
         {
             BindConfirmCardChoiceEvent();
         }
-    }
-
-    public void CreatePlayers()
-    {
-        //#TODO: Have a function to reload the levels and create players?.
     }
 
     public void HandleConfirmCardChoice(ChoiceCardUI cardUI)
@@ -79,20 +78,17 @@ public class GameManager : MonoBehaviour
 
     public void PlayRound()
     {
-        aiPlayer.ChoiceComponent.currentChoice = aiPlayer.GetChoice();
+        computerPlayer.ChoiceComponent.currentChoice = computerPlayer.GetChoice();
 
-        //if player is an ai player, update its Ai Module
-        if(aiPlayer.GetComponent<AIPlayer>())
-        {
-            aiPlayer.GetComponent<AIPlayer>().aiModuleConfig.UpdateAIModule(humanPlayer.ChoiceComponent.currentChoice);
-        }
+        //ai player update its Ai Module
+        computerPlayer.aiModuleConfig.UpdateAIModule(humanPlayer.ChoiceComponent.currentChoice);
 
         //#DEBUG
         Debug.Log($"Human Player has selected {humanPlayer.ChoiceComponent.currentChoice}");
-        Debug.Log($"AI Player has selected {aiPlayer.ChoiceComponent.currentChoice}");
+        Debug.Log($"AI Player has selected {computerPlayer.ChoiceComponent.currentChoice}");
 
         //get the result based on the played choice, then evaluate them (broadcast all the neccesary events)
-        var roundResult = GameUtilsLibrary.GetGameResult(humanPlayer.ChoiceComponent.currentChoice, aiPlayer.ChoiceComponent.currentChoice);
+        var roundResult = GameUtilsLibrary.GetGameResult(humanPlayer.ChoiceComponent.currentChoice, computerPlayer.ChoiceComponent.currentChoice);
         EvaluateResults(roundResult);
 
         //After results, reset the turns
@@ -118,6 +114,49 @@ public class GameManager : MonoBehaviour
 
 
     #region Internal Functions
+    private void LoadPlayersData(GameData data)
+    {
+        if(LevelDataManager.Instance.currentSelectedLevelSO == null)
+        {
+            throw new NullReferenceException("LevelDataManager does not have a levelSO selected");
+        }
+
+        //load from LevelDataManager
+        var humanPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.humanPlayer;
+        var computerPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.aiPlayer;
+
+        //cached
+        humanPlayer = humanPlayerObj.GetComponent<Player>();
+        computerPlayer = aiPlayerObj.GetComponent<AIPlayer>();
+
+        if (humanPlayer == null || computerPlayer == null)
+        {
+            Debug.LogError(
+                (humanPlayer == null ? "human player is null. " : "") +
+                (computerPlayer == null ? "Ai player is null. " : "")
+            );
+        }
+
+        //#TODO: technically load from save file
+        humanPlayer.statsConfig = LevelDataManager.Instance.currentSelectedLevelSO.humanPlayer.StatsConfig;
+
+        foreach(UpgradeType upgradeType in data.playerEquippedUpgrades)
+        {
+            humanPlayer.ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeType);
+        }
+        humanPlayer.LoadComponents();
+
+        //=======================================================================================================
+        computerPlayer.statsConfig = computerPlayerData.StatsConfig;
+        computerPlayer.aiModuleConfig = computerPlayerData.AiModule;
+
+        foreach(UpgradeDefinitionSO upgradeSO in computerPlayerData.upgradesEquipped)
+        {
+            computerPlayer.ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeSO);
+        }
+
+        computerPlayer.LoadComponents();
+    }
 
     private void EvaluateResults(GameResult roundResult)
     {
@@ -126,12 +165,12 @@ public class GameManager : MonoBehaviour
         {
             case GameResult.Win:
                 //human player deal dmg to opposing player
-                humanPlayer.DamageComponent.DealDamage(aiPlayer, humanPlayer.DamageComponent.damageAmount);
+                humanPlayer.DamageComponent.DealDamage(computerPlayer, humanPlayer.DamageComponent.damageAmount);
                 break;
 
             case GameResult.Lose:
                 //aiPlayer player deal dmg to human player
-                aiPlayer.DamageComponent.DealDamage(humanPlayer, aiPlayer.DamageComponent.damageAmount);
+                computerPlayer.DamageComponent.DealDamage(humanPlayer, computerPlayer.DamageComponent.damageAmount);
                 break;
 
             case GameResult.Draw:
@@ -140,6 +179,17 @@ public class GameManager : MonoBehaviour
         }
 
         //#TODO: Check players healths
+        if(humanPlayer.HealthComponent.healthAmount <= 0)
+        {
+            //#DEBUG
+            Debug.Log("Player has lost");
+        }
+
+        if (computerPlayer.HealthComponent.healthAmount <= 0)
+        {
+            //#DEBUG
+            Debug.Log("Player has won");
+        }
 
         //#DEBUG
         Debug.Log($"Human Player has {roundResult}");
@@ -151,6 +201,22 @@ public class GameManager : MonoBehaviour
         EditorUtilsLibrary.ClearLogConsole();
     }
 #endif
+
+    #endregion
+
+    #region SavableData Interface
+    public void LoadData(GameData data)
+    {
+        //#DEBUG
+        Debug.Log($"Currently loaded: {LevelDataManager.Instance.currentSelectedLevelSO.levelName}");
+
+        LoadPlayersData(data);
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        //mark when level is complete
+    }
 
     #endregion
 
