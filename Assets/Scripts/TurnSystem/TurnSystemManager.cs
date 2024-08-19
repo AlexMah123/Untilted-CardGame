@@ -62,6 +62,7 @@ public class TurnSystemManager : MonoBehaviour
             BindStartNewTurnEvent();
         }
 
+        //the actual start of the game
         currentPlayer = HumanPlayer;
         ChangeTurn(playerTurn);
     }

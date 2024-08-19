@@ -14,9 +14,9 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
 
     private void OnEnable()
     {
-        LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>();
+        LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
 
-        foreach (var loadoutCard in loadoutCards)
+        foreach (LoadoutCardUI loadoutCard in loadoutCards)
         {
             loadoutCard.OnCardRemovedEvent += HandleCardRemoved;
         }
@@ -26,9 +26,9 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
     {
         if(activeLoadoutParent != null)
         {
-            LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>();
+            LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
 
-            foreach (var loadoutCard in loadoutCards)
+            foreach (LoadoutCardUI loadoutCard in loadoutCards)
             {
                 if(loadoutCard != null)
                 {
@@ -36,7 +36,6 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
                 }
             }
         }
-
     }
 
     private void Start()
@@ -76,7 +75,7 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
     {
         var activeLoadoutGOList = GetAllActiveLoadoutGO();
 
-        foreach (var loadoutGO in activeLoadoutGOList)
+        foreach (GameObject loadoutGO in activeLoadoutGOList)
         {
             loadoutGO.SetActive(false);
         }
@@ -88,7 +87,7 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
     {
         var activeLoadoutGOList = GetAllActiveLoadoutGO();
 
-        foreach(var loadoutGO in activeLoadoutGOList)
+        foreach(GameObject loadoutGO in activeLoadoutGOList)
         {
             if(!loadoutGO.activeSelf)
             {

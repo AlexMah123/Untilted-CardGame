@@ -22,8 +22,8 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     protected Transform originalParent;
 
     //Components
-    protected RectTransform rectTransform;
-    protected Image cardImage;
+    [SerializeField] protected RectTransform rectTransform;
+    [SerializeField] protected Image cardImage;
     protected Canvas canvas;
 
     //events
@@ -31,8 +31,6 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
-        cardImage = GetComponent<Image>();
         canvas = transform.root.GetComponent<Canvas>();
 
         //cache the scale and starting height of cards.

@@ -94,6 +94,8 @@ MonoBehaviour:
   hoveredEnlargedScale: 1
   shouldEnlargeOnHover: 0
   shouldReorderToTop: 0
+  rectTransform: {fileID: 7084182591955085186}
+  cardImage: {fileID: 8790829373188093239}
 --- !u!114 &-6051437279966621883
 MonoBehaviour:
   m_ObjectHideFlags: 0

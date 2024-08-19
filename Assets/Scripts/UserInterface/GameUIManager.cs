@@ -67,10 +67,4 @@ public class GameUIManager : MonoBehaviour
             GameplayGroup.SetActive(true);
         }
     }
-
-    public void ExitToMainMenu()
-    {
-        SceneLoader.Load(Scene.MENU);
-    }
-
 }

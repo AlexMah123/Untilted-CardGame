@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class SettingsManager : MonoBehaviour
 {
-    //#TODO: Settings
+    //#TODO: graphic Settings?
 }

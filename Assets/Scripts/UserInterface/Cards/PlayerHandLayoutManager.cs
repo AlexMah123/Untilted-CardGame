@@ -78,7 +78,6 @@ public class PlayerHandLayoutManager : MonoBehaviour
         cardUIPrefabExtent = (choiceCardFactory.choiceCardUIPrefab.GetComponent<RectTransform>().rect.width / 2) + gapBetweenCards;
     }
 
-
     private void Start()
     {
         //To avoid racing condition

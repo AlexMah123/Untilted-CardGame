@@ -6,23 +6,23 @@ using UnityEngine;
 
 public enum GameChoice
 {
-    ROCK,
-    PAPER,
-    SCISSOR
+    Rock,
+    Paper,
+    Scissor
 }
 
 public class ChoiceComponent : MonoBehaviour
 {
     [Header("Runtime Values")]
-    public GameChoice currentChoice = GameChoice.ROCK;
+    public GameChoice currentChoice = GameChoice.Rock;
 
     //events
     public event Action OnSealChoiceEvent;
 
     public Dictionary<GameChoice, bool> choicesAvailable = new Dictionary<GameChoice, bool> {
-        { GameChoice.ROCK, true },
-        { GameChoice.PAPER, true },
-        { GameChoice.SCISSOR, true },
+        { GameChoice.Rock, true },
+        { GameChoice.Paper, true },
+        { GameChoice.Scissor, true },
     };
 
     public bool IsChoiceAvailable(GameChoice choice)
@@ -62,19 +62,19 @@ public class ChoiceComponent : MonoBehaviour
     [ContextMenu("ChoiceComponent/SealRock")]
     public void SealRock()
     {
-        SealChoice(GameChoice.ROCK);
+        SealChoice(GameChoice.Rock);
     }
 
     [ContextMenu("ChoiceComponent/SealPaper")]
     public void SealPaper()
     {
-        SealChoice(GameChoice.PAPER);
+        SealChoice(GameChoice.Paper);
     }
 
     [ContextMenu("ChoiceComponent/SealScissor")]
     public void SealScissor()
     {
-        SealChoice(GameChoice.SCISSOR);
+        SealChoice(GameChoice.Scissor);
     }
 #endif
 }

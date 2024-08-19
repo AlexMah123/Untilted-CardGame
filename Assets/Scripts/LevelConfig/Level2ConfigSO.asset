@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75013c4bc7c9d2b43b07733bb6561070, type: 3}
+  m_Name: Level2ConfigSO
+  m_EditorClassIdentifier: 
+  humanPlayer:
+    StatsConfig: {fileID: 11400000, guid: 46b404202d4889b4eb3d741afff23fd1, type: 2}
+    AiModule: {fileID: 0}
+    playerType: 0
+  aiPlayer:
+    StatsConfig: {fileID: 11400000, guid: af6be0f4975e2934aa9f5499aeb816ae, type: 2}
+    AiModule: {fileID: 11400000, guid: f12b92243688d8240b0391a685f61c97, type: 2}
+    playerType: 1
+  levelName: Level 2
+  levelImage: {fileID: 21300000, guid: 90d8f0b52ca666f489993cf0eb55f92e, type: 3}

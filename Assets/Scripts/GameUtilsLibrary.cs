@@ -6,21 +6,21 @@ public static class GameUtilsLibrary
 {
     public static GameResult GetGameResult(GameChoice humanPlayerChoice, GameChoice aiPlayerChoice)
     {
-        var result = GameResult.NONE;
+        var result = GameResult.None;
 
         if (humanPlayerChoice == aiPlayerChoice)
         {
-            result = GameResult.DRAW;
+            result = GameResult.Draw;
         }
-        else if (humanPlayerChoice == GameChoice.ROCK && aiPlayerChoice == GameChoice.SCISSOR ||
-                humanPlayerChoice == GameChoice.PAPER && aiPlayerChoice == GameChoice.ROCK ||
-                humanPlayerChoice == GameChoice.SCISSOR && aiPlayerChoice == GameChoice.PAPER)
+        else if (humanPlayerChoice == GameChoice.Rock && aiPlayerChoice == GameChoice.Scissor ||
+                humanPlayerChoice == GameChoice.Paper && aiPlayerChoice == GameChoice.Rock ||
+                humanPlayerChoice == GameChoice.Scissor && aiPlayerChoice == GameChoice.Paper)
         {
-            result = GameResult.WIN;
+            result = GameResult.Win;
         }
         else
         {
-            result = GameResult.LOSE;
+            result = GameResult.Lose;
         }
 
         return result;

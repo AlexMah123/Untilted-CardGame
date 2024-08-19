@@ -29,16 +29,16 @@ public class ChoiceCardUIFactory : MonoBehaviour
 
         switch (creationInfo.gameChoice)
         {
-            case GameChoice.ROCK:
+            case GameChoice.Rock:
                 imageComponent.sprite = rockChoice;
 
                 break;
 
-            case GameChoice.PAPER:
+            case GameChoice.Paper:
                 imageComponent.sprite = paperChoice;
                 break;
 
-            case GameChoice.SCISSOR:
+            case GameChoice.Scissor:
                 imageComponent.sprite = scissorChoice;
                 break;
         }

@@ -8,19 +8,19 @@ public class MarkovModel : AIDecision
     //transition matrix
     private Dictionary<GameChoice, Dictionary<GameChoice, int>> transitionMatrix = new Dictionary<GameChoice, Dictionary<GameChoice, int>>()
     {
-        { GameChoice.ROCK, new Dictionary<GameChoice, int>{ {GameChoice.ROCK, 0}, {GameChoice.PAPER, 0}, {GameChoice.SCISSOR, 0} } },
-        { GameChoice.PAPER, new Dictionary<GameChoice, int>{ {GameChoice.ROCK, 0}, {GameChoice.PAPER, 0}, {GameChoice.SCISSOR, 0} } },
-        { GameChoice.SCISSOR, new Dictionary<GameChoice, int>{ {GameChoice.ROCK, 0}, {GameChoice.PAPER, 0}, {GameChoice.SCISSOR, 0} } },
+        { GameChoice.Rock, new Dictionary<GameChoice, int>{ {GameChoice.Rock, 0}, {GameChoice.Paper, 0}, {GameChoice.Scissor, 0} } },
+        { GameChoice.Paper, new Dictionary<GameChoice, int>{ {GameChoice.Rock, 0}, {GameChoice.Paper, 0}, {GameChoice.Scissor, 0} } },
+        { GameChoice.Scissor, new Dictionary<GameChoice, int>{ {GameChoice.Rock, 0}, {GameChoice.Paper, 0}, {GameChoice.Scissor, 0} } },
     };
 
     //assumed last move by opponent
-    private GameChoice opponentLastChoice = GameChoice.PAPER;
+    private GameChoice opponentLastChoice = GameChoice.Paper;
 
     public override GameChoice MakeDecision()
     {
         //defaulted values
-        GameChoice aiDecision = GameChoice.ROCK;
-        GameChoice predictedMoveByOpponent = GameChoice.ROCK;
+        GameChoice aiDecision = GameChoice.Rock;
+        GameChoice predictedMoveByOpponent = GameChoice.Rock;
 
         //if its the first time playing, return a random move
         if (!transitionMatrix.ContainsKey(opponentLastChoice)) return RandomChoice(); ;
@@ -58,9 +58,9 @@ public class MarkovModel : AIDecision
     {
         transitionMatrix = new Dictionary<GameChoice, Dictionary<GameChoice, int>>()
         {
-            { GameChoice.ROCK, new Dictionary<GameChoice, int>{ {GameChoice.ROCK, 0}, {GameChoice.PAPER, 0}, {GameChoice.SCISSOR, 0} } },
-            { GameChoice.PAPER, new Dictionary<GameChoice, int>{ {GameChoice.ROCK, 0}, {GameChoice.PAPER, 0}, {GameChoice.SCISSOR, 0} } },
-            { GameChoice.SCISSOR, new Dictionary<GameChoice, int>{ {GameChoice.ROCK, 0}, {GameChoice.PAPER, 0}, {GameChoice.SCISSOR, 0} } },
+            { GameChoice.Rock, new Dictionary<GameChoice, int>{ {GameChoice.Rock, 0}, {GameChoice.Paper, 0}, {GameChoice.Scissor, 0} } },
+            { GameChoice.Paper, new Dictionary<GameChoice, int>{ {GameChoice.Rock, 0}, {GameChoice.Paper, 0}, {GameChoice.Scissor, 0} } },
+            { GameChoice.Scissor, new Dictionary<GameChoice, int>{ {GameChoice.Rock, 0}, {GameChoice.Paper, 0}, {GameChoice.Scissor, 0} } },
         };
     }
 

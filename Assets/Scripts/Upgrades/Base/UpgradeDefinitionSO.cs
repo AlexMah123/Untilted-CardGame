@@ -16,7 +16,22 @@ public abstract class UpgradeDefinitionSO : ScriptableObject
 
     [Header("Gameplay Configs")]
     public bool isActivatable;
-    public UPGRADE_TYPE upgradeType;
+    public UpgradeType upgradeType;
+
+    public override bool Equals(object obj)
+    {
+        if(obj is UpgradeDefinitionSO other)
+        {
+            return upgradeType == other.upgradeType;
+        }
+
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return upgradeType.GetHashCode();
+    }
 
     public virtual void ApplyPassiveEffect(IPlayer player)
     {

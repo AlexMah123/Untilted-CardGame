@@ -6,15 +6,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public struct LoadoutCardGOInfo
-{
-    public LoadoutCardGOInfo(UpgradeDefinitionSO _upgradeSO)
-    {
-        upgradeSO = _upgradeSO;
-    }
-
-    public UpgradeDefinitionSO upgradeSO;
-}
 
 [RequireComponent(typeof(InspectComponent))]
 public class LoadoutCardGO : MonoBehaviour
@@ -34,8 +25,8 @@ public class LoadoutCardGO : MonoBehaviour
     public LoadoutCardGOInfo cardInfo;
 
     //private
-    private Vector2 originalCardScale;
-    private int originalSortingOrder;
+    private Vector3 originalCardScale;
+    private int originalSortingOrder = 0;
 
     //events
     public event Action OnCardEndInteractEvent;

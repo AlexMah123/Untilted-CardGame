@@ -35,7 +35,7 @@ public class Player : MonoBehaviour, IPlayer
         energyComponent = GetComponent<EnergyComponent>();
 
         //Inject values
-        choiceComponent.currentChoice = GameChoice.ROCK;
+        choiceComponent.currentChoice = GameChoice.Rock;
         activeLoadoutComponent.InitializeComponent(this, statsConfig);
         healthComponent.InitializeComponent(statsConfig);
         damageComponent.InitializeComponent(statsConfig);

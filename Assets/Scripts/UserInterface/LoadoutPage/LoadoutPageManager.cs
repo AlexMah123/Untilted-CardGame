@@ -64,7 +64,10 @@ public class LoadoutPageManager : MonoBehaviour
 
     public void UpdateButtonState()
     {
+        //null check since this is called multiple times in different timing, could be before things are initialized.
+        if (LoadoutLayoutManager.Instance.cachedLoadoutData.totalUpgradesInGame == null) return;
+
         previousButton.interactable = (currentPageIndex > 0);
-        nextButton.interactable = ((currentPageIndex + 1) * LoadoutLayoutManager.Instance.displayAmountPerPage) < LoadoutLayoutManager.Instance.loadoutData.totalUpgrades.Count;
+        nextButton.interactable = ((currentPageIndex + 1) * LoadoutLayoutManager.Instance.displayAmountPerPage) < LoadoutLayoutManager.Instance.cachedLoadoutData.totalUpgradesInGame.Count;
     }
 }

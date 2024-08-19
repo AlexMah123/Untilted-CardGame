@@ -91,6 +91,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoveredOffset: {x: 0, y: 50, z: 0}
   hoveredEnlargedScale: 1.5
+  shouldEnlargeOnHover: 1
+  shouldReorderToTop: 1
+  rectTransform: {fileID: 7084182591955085186}
+  cardImage: {fileID: 8790829373188093239}
   sealedEffectImage: {fileID: 7834394703662872710}
   gameChoice: 0
   PlayableColor: {r: 1, g: 1, b: 1, a: 1}
