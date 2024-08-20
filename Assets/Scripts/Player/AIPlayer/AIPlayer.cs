@@ -13,7 +13,13 @@ public class AIPlayer : Player
         aiModuleConfig.InitializeAIConfig(ChoiceComponent);
         //ChoiceComponent.SealChoice(GameChoice.ROCK);
         //ChoiceComponent.SealChoice(GameChoice.PAPER);
+    }
 
+    public override void LoadComponents()
+    {
+        base.LoadComponents();
+
+        aiModuleConfig.InitializeAIConfig(ChoiceComponent);
     }
 
     public override GameChoice GetChoice()

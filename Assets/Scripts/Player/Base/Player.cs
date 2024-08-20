@@ -47,7 +47,8 @@ public class Player : MonoBehaviour, IPlayer
 
     }
 
-    public void LoadComponents()
+    //override if neccessary
+    public virtual void LoadComponents()
     {
         //Inject values
         choiceComponent.currentChoice = GameChoice.Rock;
