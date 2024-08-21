@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -17,7 +16,7 @@ public class ChoiceComponent : MonoBehaviour
     public GameChoice currentChoice = GameChoice.Rock;
 
     //events
-    public event Action OnSealChoiceEvent;
+    public event Action OnChoiceSealed;
 
     public Dictionary<GameChoice, bool> choicesAvailable = new Dictionary<GameChoice, bool> {
         { GameChoice.Rock, true },
@@ -35,7 +34,7 @@ public class ChoiceComponent : MonoBehaviour
         choicesAvailable[choice] = false;
 
         //broadcast event to PlayerHandUIManager to update
-        OnSealChoiceEvent?.Invoke();
+        OnChoiceSealed?.Invoke();
     }
 
     [ContextMenu("ChoiceComponent/ResetChoices")]
@@ -48,7 +47,7 @@ public class ChoiceComponent : MonoBehaviour
         }
 
         //broadcast event to PlayerHandUIManager to update
-        OnSealChoiceEvent?.Invoke();
+        OnChoiceSealed?.Invoke();
     }
 
     public List<GameChoice> FetchAllChoicesAvailable()

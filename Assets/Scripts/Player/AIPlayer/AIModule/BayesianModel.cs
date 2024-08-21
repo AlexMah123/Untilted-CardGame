@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Enemy/Decision/BayesianModelSO")]
@@ -39,7 +37,7 @@ public class BayesianModel : AIDecision
         {
             predictedMoveByOpponent = GameChoice.Rock;
         }
-        else if(paperProbability >= rockProbability && paperProbability >= scissorsProbability)
+        else if (paperProbability >= rockProbability && paperProbability >= scissorsProbability)
         {
             predictedMoveByOpponent = GameChoice.Paper;
         }

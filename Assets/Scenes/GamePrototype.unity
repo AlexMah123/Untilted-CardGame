@@ -2973,10 +2973,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adc9002e6ce87924fa7b5d0b40d19324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  humanPlayerObj: {fileID: 1824892699}
-  aiPlayerObj: {fileID: 1344209819}
   humanPlayer: {fileID: 1824892700}
-  aiPlayer: {fileID: 1344209820}
+  computerPlayer: {fileID: 1344209820}
 --- !u!1 &1673003935
 GameObject:
   m_ObjectHideFlags: 0

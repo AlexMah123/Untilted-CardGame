@@ -1,16 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Rendering.Universal;
 using UnityEngine;
-using UnityEngine.UI;
 
 public abstract class UpgradeDefinitionSO : ScriptableObject
 {
     [Header("User Interface Configs")]
     public Sprite upgradeSprite;
     public string upgradeName;
-    
+
     [Multiline]
     public string upgradeDescription;
 
@@ -20,7 +15,7 @@ public abstract class UpgradeDefinitionSO : ScriptableObject
 
     public override bool Equals(object obj)
     {
-        if(obj is UpgradeDefinitionSO other)
+        if (obj is UpgradeDefinitionSO other)
         {
             return upgradeType == other.upgradeType;
         }

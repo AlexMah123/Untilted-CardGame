@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-using UnityEngine.AI;
 
 [RequireComponent(typeof(ChoiceComponent), typeof(ActiveLoadoutComponent))]
 [RequireComponent(typeof(HealthComponent), typeof(DamageComponent), typeof(EnergyComponent))]
-public class Player : MonoBehaviour, IPlayer
+public class Player : MonoBehaviour, IPlayer, ISavableData
 {
     //inherited components from IPlayer
     public ChoiceComponent ChoiceComponent { get => choiceComponent; }
@@ -24,6 +22,8 @@ public class Player : MonoBehaviour, IPlayer
     private DamageComponent damageComponent;
     private EnergyComponent energyComponent;
 
+    //Interface
+    public event Action OnSaveDataLoaded;
 
     #region Overrides
     protected virtual void Awake()
@@ -63,5 +63,39 @@ public class Player : MonoBehaviour, IPlayer
     {
         return ChoiceComponent.currentChoice;
     }
+
+    public virtual void LoadData(GameData data)
+    {
+        if (LevelDataManager.Instance.currentSelectedLevelSO == null)
+        {
+            throw new NullReferenceException("LevelDataManager does not have a levelSO selected");
+        }
+
+        LoadPlayerData(data);
+
+        OnSaveDataLoaded?.Invoke();
+    }
+
+    public virtual void SaveData(ref GameData data)
+    {
+
+    }
     #endregion
+
+    //override to have their own implementation of loadData
+    protected virtual void LoadPlayerData(GameData data)
+    {
+        //load from LevelDataManager
+        var humanPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.humanPlayer;
+
+        //#TODO: technically load from save file
+        statsConfig = humanPlayerData.StatsConfig;
+
+        foreach (UpgradeType upgradeType in data.playerEquippedUpgrades)
+        {
+            ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeType);
+        }
+
+        LoadComponents();
+    }
 }

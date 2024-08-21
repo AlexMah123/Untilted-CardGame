@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnergyComponent : MonoBehaviour
@@ -9,7 +7,7 @@ public class EnergyComponent : MonoBehaviour
     public int energyAmount;
 
     //declaration of events
-    public event Action<int> OnEnergyModifiedEvent;
+    public event Action<int> OnEnergyModified;
 
     public void InitializeComponent(PlayerStatsSO referencedStats)
     {
@@ -32,7 +30,7 @@ public class EnergyComponent : MonoBehaviour
         energyAmount += value;
 
         //#TODO: broadcast event to PlayerHUD/EnemyHUD
-        OnEnergyModifiedEvent?.Invoke(energyAmount);
+        OnEnergyModified?.Invoke(energyAmount);
     }
     #endregion
 }

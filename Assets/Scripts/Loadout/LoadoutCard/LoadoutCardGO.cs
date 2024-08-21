@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 
 [RequireComponent(typeof(InspectComponent))]
@@ -29,8 +26,8 @@ public class LoadoutCardGO : MonoBehaviour
     private int originalSortingOrder = 0;
 
     //events
-    public event Action OnCardEndInteractEvent;
-    public event Action<LoadoutCardGOInfo> OnCardSelectedEvent;
+    public event Action OnCardInteractEnd;
+    public event Action<LoadoutCardGOInfo> OnCardSelected;
 
     public bool IsLocked
     {
@@ -68,7 +65,7 @@ public class LoadoutCardGO : MonoBehaviour
                 ResetCardState();
 
                 //binded primarily to LoadoutLayoutManager
-                OnCardSelectedEvent?.Invoke(cardInfo);
+                OnCardSelected?.Invoke(cardInfo);
             }
         }
     }
@@ -91,7 +88,7 @@ public class LoadoutCardGO : MonoBehaviour
 
     public void InitialiseLoadoutGO(LoadoutCardGOInfo loadoutCardInfo, bool isLocked)
     {
-        if(loadoutCardInfo.upgradeSO != null)
+        if (loadoutCardInfo.upgradeSO != null)
         {
             cardInfo.upgradeSO = loadoutCardInfo.upgradeSO;
             cardSpriteRenderer.sprite = cardInfo.upgradeSO.upgradeSprite;
@@ -136,7 +133,7 @@ public class LoadoutCardGO : MonoBehaviour
         lockedSpriteRenderer.sortingOrder = originalSortingOrder + 1;
 
         //bind if needed to. 
-        OnCardEndInteractEvent?.Invoke();
+        OnCardInteractEnd?.Invoke();
     }
 
     protected bool IsPointerOverGameObject()

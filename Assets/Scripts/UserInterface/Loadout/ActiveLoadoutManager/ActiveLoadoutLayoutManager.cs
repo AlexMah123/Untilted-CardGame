@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,9 +7,9 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
     public GameObject activeLoadoutParent;
     public LoadoutLayoutManager loadoutLayoutManager;
 
-    public event Action OnActiveLoadoutUpdatedEvent;
+    public event Action OnLoadoutUpdated;
 
-    public event Action<LoadoutCardGOInfo> OnActiveLoadoutRemovedEvent;
+    public event Action<LoadoutCardGOInfo> OnLoadoutRemoved;
 
     private void OnEnable()
     {
@@ -18,21 +17,21 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
 
         foreach (LoadoutCardUI loadoutCard in loadoutCards)
         {
-            loadoutCard.OnCardRemovedEvent += HandleCardRemoved;
+            loadoutCard.OnCardRemoved += HandleCardRemoved;
         }
     }
 
     private void OnDisable()
     {
-        if(activeLoadoutParent != null)
+        if (activeLoadoutParent != null)
         {
             LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
 
             foreach (LoadoutCardUI loadoutCard in loadoutCards)
             {
-                if(loadoutCard != null)
+                if (loadoutCard != null)
                 {
-                    loadoutCard.OnCardRemovedEvent -= HandleCardRemoved;
+                    loadoutCard.OnCardRemoved -= HandleCardRemoved;
                 }
             }
         }
@@ -66,8 +65,8 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
 
     public void HandleCardRemoved(LoadoutCardGOInfo loadoutCardInfo)
     {
-        OnActiveLoadoutRemovedEvent?.Invoke(loadoutCardInfo);
-        OnActiveLoadoutUpdatedEvent?.Invoke();
+        OnLoadoutRemoved?.Invoke(loadoutCardInfo);
+        OnLoadoutUpdated?.Invoke();
     }
 
     #region Internal methods
@@ -80,16 +79,16 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
             loadoutGO.SetActive(false);
         }
 
-        OnActiveLoadoutUpdatedEvent?.Invoke();
+        OnLoadoutUpdated?.Invoke();
     }
 
     private GameObject GetFirstInactiveLoadout()
     {
         var activeLoadoutGOList = GetAllActiveLoadoutGO();
 
-        foreach(GameObject loadoutGO in activeLoadoutGOList)
+        foreach (GameObject loadoutGO in activeLoadoutGOList)
         {
-            if(!loadoutGO.activeSelf)
+            if (!loadoutGO.activeSelf)
             {
                 return loadoutGO;
             }
@@ -110,6 +109,6 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
         return loadoutGO;
     }
 
-    
+
     #endregion
 }

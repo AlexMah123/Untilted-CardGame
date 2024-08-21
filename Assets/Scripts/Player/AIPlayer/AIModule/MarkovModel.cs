@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,7 +34,7 @@ public class MarkovModel : AIDecision
         //loop through the dictionary based on the last thrown move and find the highest probability
         foreach (var move in opponentNextMoveProbabilityDict)
         {
-            if(move.Value > opponentMostThrownMove)
+            if (move.Value > opponentMostThrownMove)
             {
                 predictedMoveByOpponent = move.Key;
                 opponentMostThrownMove = move.Value;
@@ -66,7 +65,7 @@ public class MarkovModel : AIDecision
 
     public override void UpdateAIModule(GameChoice opponentChoice)
     {
-        if(transitionMatrix.ContainsKey(opponentLastChoice) && transitionMatrix[opponentLastChoice].ContainsKey(opponentChoice))
+        if (transitionMatrix.ContainsKey(opponentLastChoice) && transitionMatrix[opponentLastChoice].ContainsKey(opponentChoice))
         {
             transitionMatrix[opponentLastChoice][opponentChoice]++;
         }

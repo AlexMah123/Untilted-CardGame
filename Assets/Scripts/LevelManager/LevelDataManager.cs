@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelDataManager : MonoBehaviour
 {
     public static LevelDataManager Instance;
-    
+
     public LevelConfigSO currentSelectedLevelSO;
 
     [Header("Level Completion Data")]
@@ -14,7 +13,7 @@ public class LevelDataManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }

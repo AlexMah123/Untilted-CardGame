@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +13,7 @@ public class LevelDataHandler : MonoBehaviour
 
     private void Start()
     {
-        if(levelConfig != null)
+        if (levelConfig != null)
         {
             thumbnailImage.sprite = levelConfig.levelImage;
             levelNameText.text = levelConfig.levelName;
@@ -24,7 +22,7 @@ public class LevelDataHandler : MonoBehaviour
         {
             throw new MissingReferenceException($"Level Config Data is missing from {gameObject}");
         }
-        
+
     }
 
     public void SelectLevel()

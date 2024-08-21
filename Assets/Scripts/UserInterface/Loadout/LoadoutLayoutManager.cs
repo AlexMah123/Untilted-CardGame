@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(LoadoutCardFactory))]
@@ -33,7 +30,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     private LoadoutCardFactory upgradeCardFactory;
 
     //event
-    public event Action<UpgradeDefinitionSO> OnLoadoutSelectedEvent;
+    public event Action<UpgradeDefinitionSO> OnLoadoutSelected;
     public event Action<UpgradeDefinitionSO> OnEquippedLoadoutRemoved;
 
     //flag
@@ -53,7 +50,7 @@ public class LoadoutLayoutManager : MonoBehaviour
             BindOnLoadoutPageUpdatedEvent();
         }
 
-        if(!isActiveLoadoutRemovedEventBinded)
+        if (!isActiveLoadoutRemovedEventBinded)
         {
             BindOnActiveLoadoutRemoveEvent();
         }
@@ -80,7 +77,7 @@ public class LoadoutLayoutManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
@@ -95,7 +92,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     private void Start()
     {
         //avoid racing condition
-        if(!isInitializeLoadoutEventBinded)
+        if (!isInitializeLoadoutEventBinded)
         {
             BindOnInitializeLoadoutEvent();
         }
@@ -148,7 +145,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     #region Internal methods
     private void RequestLoadoutGO()
     {
-        for(int i = 0; i < displayAmountPerPage; i++)
+        for (int i = 0; i < displayAmountPerPage; i++)
         {
             LoadoutCardCreationInfo creationInfo = new(spawnContainer);
             GameObject card = upgradeCardFactory.CreateUpgradeCard(creationInfo);
@@ -232,7 +229,7 @@ public class LoadoutLayoutManager : MonoBehaviour
 
         for (int i = 0; i < cardSlots.Count; i++)
         {
-            if(i < endIndex - startIndex)
+            if (i < endIndex - startIndex)
             {
                 //compare if unlockedupgrade contains the total upgrade
                 var upgrade = cachedLoadoutData.totalUpgradesInGame[startIndex + i];
@@ -255,10 +252,10 @@ public class LoadoutLayoutManager : MonoBehaviour
         //update the activeloadoutlayout
         bool success = ActiveLoadoutLayoutManager.AddUpgrade(selectedUpgrade);
 
-        if(success)
+        if (success)
         {
             //broadcast event to LoadoutManager to update the data (remove and add from totalupgrades and equipped)
-            OnLoadoutSelectedEvent?.Invoke(selectedUpgrade);
+            OnLoadoutSelected?.Invoke(selectedUpgrade);
 
             UpdateCardSlots(loadoutPageIndex);
 
@@ -273,7 +270,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     {
         foreach (var card in cardUIList)
         {
-            card.OnCardEndInteractEvent += HandleOnCardEndInteract;
+            card.OnCardInteractEnd += HandleOnCardEndInteract;
         }
     }
 
@@ -281,7 +278,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     {
         foreach (var card in cardUIList)
         {
-            card.OnCardEndInteractEvent -= HandleOnCardEndInteract;
+            card.OnCardInteractEnd -= HandleOnCardEndInteract;
         }
     }
 
@@ -293,16 +290,16 @@ public class LoadoutLayoutManager : MonoBehaviour
     {
         if (ActiveLoadoutLayoutManager)
         {
-            ActiveLoadoutLayoutManager.OnActiveLoadoutRemovedEvent += HandleOnActiveLoadoutRemoved;
+            ActiveLoadoutLayoutManager.OnLoadoutRemoved += HandleOnActiveLoadoutRemoved;
             isActiveLoadoutRemovedEventBinded = true;
         }
     }
 
     public void UnbindOnActiveLoadoutRemoveEvent()
     {
-        if(ActiveLoadoutLayoutManager)
+        if (ActiveLoadoutLayoutManager)
         {
-            ActiveLoadoutLayoutManager.OnActiveLoadoutRemovedEvent -= HandleOnActiveLoadoutRemoved;
+            ActiveLoadoutLayoutManager.OnLoadoutRemoved -= HandleOnActiveLoadoutRemoved;
             isActiveLoadoutRemovedEventBinded = false;
         }
     }
@@ -315,7 +312,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     {
         foreach (var card in cardSlots)
         {
-            card.OnCardSelectedEvent += HandleOnCardSelected;
+            card.OnCardSelected += HandleOnCardSelected;
         }
     }
 
@@ -323,7 +320,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     {
         foreach (var card in cardSlots)
         {
-            card.OnCardSelectedEvent -= HandleOnCardSelected;
+            card.OnCardSelected -= HandleOnCardSelected;
         }
     }
 
@@ -333,9 +330,9 @@ public class LoadoutLayoutManager : MonoBehaviour
     #region Bind LoadoutPageUpdate Event
     public void BindOnLoadoutPageUpdatedEvent()
     {
-        if(LoadoutPageManager.Instance != null)
+        if (LoadoutPageManager.Instance != null)
         {
-            LoadoutPageManager.Instance.OnLoadoutPageUpdatedEvent += HandleOnPageUpdated;
+            LoadoutPageManager.Instance.OnLoadoutPageUpdated += HandleOnPageUpdated;
             isLoadoutPageUpdatedEventBinded = true;
         }
     }
@@ -344,7 +341,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     {
         if (LoadoutPageManager.Instance != null)
         {
-            LoadoutPageManager.Instance.OnLoadoutPageUpdatedEvent -= HandleOnPageUpdated;
+            LoadoutPageManager.Instance.OnLoadoutPageUpdated -= HandleOnPageUpdated;
             isLoadoutPageUpdatedEventBinded = false;
         }
     }
@@ -353,9 +350,9 @@ public class LoadoutLayoutManager : MonoBehaviour
     #region Bind LoadoutInitialize Event
     public void BindOnInitializeLoadoutEvent()
     {
-        if(LoadoutManager.Instance != null)
+        if (LoadoutManager.Instance != null)
         {
-            LoadoutManager.Instance.OnInitializeLoadoutEvent += HandleOnInitializeLayout;
+            LoadoutManager.Instance.OnInitializeLoadout += HandleOnInitializeLayout;
             isInitializeLoadoutEventBinded = true;
         }
     }
@@ -364,7 +361,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     {
         if (LoadoutManager.Instance != null)
         {
-            LoadoutManager.Instance.OnInitializeLoadoutEvent -= HandleOnInitializeLayout;
+            LoadoutManager.Instance.OnInitializeLoadout -= HandleOnInitializeLayout;
             isInitializeLoadoutEventBinded = false;
         }
     }

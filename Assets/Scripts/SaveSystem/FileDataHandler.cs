@@ -1,7 +1,5 @@
 using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -22,9 +20,9 @@ public class FileDataHandler
 
         GameData loadedData = null;
 
-        if(File.Exists(fullPath))
+        if (File.Exists(fullPath))
         {
-            try 
+            try
             {
                 string dataToLoad = "";
 
@@ -71,7 +69,7 @@ public class FileDataHandler
             }
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Debug.LogError("Error occured when trying to save data to file:" + fullPath + "\n" + e);
         }

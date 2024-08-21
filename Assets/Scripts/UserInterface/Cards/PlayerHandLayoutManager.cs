@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(ChoiceCardUIFactory))]
 public class PlayerHandLayoutManager : MonoBehaviour
@@ -34,17 +30,17 @@ public class PlayerHandLayoutManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if(!isOnChangeTurnEventBinded)
+        if (!isOnChangeTurnEventBinded)
         {
             BindChangeTurnEvent();
         }
 
-        if(!isOnClearHandEventBinded)
+        if (!isOnClearHandEventBinded)
         {
             BindClearCardHandEvent();
         }
 
-        if(!isOnSealChoiceEventBinded)
+        if (!isOnSealChoiceEventBinded)
         {
             BindSealChoiceEvent();
         }
@@ -57,12 +53,12 @@ public class PlayerHandLayoutManager : MonoBehaviour
             UnbindChangeTurnEvent();
         }
 
-        if(isOnClearHandEventBinded)
+        if (isOnClearHandEventBinded)
         {
             UnbindClearCardHandEvent();
         }
 
-        if(isOnSealChoiceEventBinded)
+        if (isOnSealChoiceEventBinded)
         {
             UnbindSealChoiceEvent();
         }
@@ -86,12 +82,12 @@ public class PlayerHandLayoutManager : MonoBehaviour
             BindClearCardHandEvent();
         }
 
-        if(!isOnChangeTurnEventBinded)
+        if (!isOnChangeTurnEventBinded)
         {
             BindChangeTurnEvent();
         }
 
-        if(!isOnSealChoiceEventBinded)
+        if (!isOnSealChoiceEventBinded)
         {
             BindSealChoiceEvent();
         }
@@ -119,10 +115,10 @@ public class PlayerHandLayoutManager : MonoBehaviour
     {
         if (currentTurn != null)
         {
-            currentTurn.OnPlayerStartTurnEvent -= HandleOnPlayerStartTurn;
+            currentTurn.OnPlayerTurnStart -= HandleOnPlayerStartTurn;
         }
 
-        newTurn.OnPlayerStartTurnEvent += HandleOnPlayerStartTurn;
+        newTurn.OnPlayerTurnStart += HandleOnPlayerStartTurn;
     }
 
     public void HandleOnSealChoice()
@@ -163,7 +159,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
             ChoiceCardUI cardUI = cardUIGO.GetComponent<ChoiceCardUI>();
 
             //Initiailise the UI's values
-            if(player.GetComponent<AIPlayer>())
+            if (player.GetComponent<AIPlayer>())
             {
                 cardUI.InitialiseCard(choice.Key, choice.Value, isInteractable: false);
             }
@@ -195,8 +191,8 @@ public class PlayerHandLayoutManager : MonoBehaviour
         float startAngleOfHand = totalAngleOfHand / 2f;
 
         //alignment calculation
-        float startPositionX = isEvenNum 
-            ? (spawnRectTransform.rect.width / 2f) - ((halfOfTotalCards) * cardUIPrefabExtent) + (cardUIPrefabExtent / 2) 
+        float startPositionX = isEvenNum
+            ? (spawnRectTransform.rect.width / 2f) - ((halfOfTotalCards) * cardUIPrefabExtent) + (cardUIPrefabExtent / 2)
             : (spawnRectTransform.rect.width / 2f) - (halfOfTotalCards * cardUIPrefabExtent);
 
         int runningCount = 0;
@@ -208,7 +204,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
             float currentAngle = startAngleOfHand - (anglePerCard * runningCount);
 
             //we have to increment by 1 to skip the center.
-            if(runningCount > halfOfTotalCards)
+            if (runningCount > halfOfTotalCards)
             {
                 currentAngle = startAngleOfHand - (anglePerCard * (runningCount + 1));
             }
@@ -259,7 +255,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
     {
         foreach (var card in cardUIList)
         {
-            card.OnCardEndInteractEvent += HandleOnCardEndInteract;
+            card.OnCardInteractEnd += HandleOnCardEndInteract;
         }
     }
 
@@ -267,7 +263,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
     {
         foreach (var card in cardUIList)
         {
-            card.OnCardEndInteractEvent -= HandleOnCardEndInteract;
+            card.OnCardInteractEnd -= HandleOnCardEndInteract;
         }
     }
 
@@ -279,7 +275,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.OnClearCardHandEvent += HandleOnClearCardHand;
+            GameManager.Instance.OnClearCardInHand += HandleOnClearCardHand;
             isOnClearHandEventBinded = true;
         }
     }
@@ -288,7 +284,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.OnClearCardHandEvent -= HandleOnClearCardHand;
+            GameManager.Instance.OnClearCardInHand -= HandleOnClearCardHand;
             isOnClearHandEventBinded = false;
         }
 
@@ -321,9 +317,9 @@ public class PlayerHandLayoutManager : MonoBehaviour
     #region Bind SealChoice Delegate
     private void BindSealChoiceEvent()
     {
-        if(attachedPlayer && attachedPlayer.ChoiceComponent)
+        if (attachedPlayer && attachedPlayer.ChoiceComponent)
         {
-            attachedPlayer.ChoiceComponent.OnSealChoiceEvent += HandleOnSealChoice;
+            attachedPlayer.ChoiceComponent.OnChoiceSealed += HandleOnSealChoice;
             isOnSealChoiceEventBinded = true;
         }
     }
@@ -332,7 +328,7 @@ public class PlayerHandLayoutManager : MonoBehaviour
     {
         if (attachedPlayer && attachedPlayer.ChoiceComponent)
         {
-            attachedPlayer.ChoiceComponent.OnSealChoiceEvent += HandleOnSealChoice;
+            attachedPlayer.ChoiceComponent.OnChoiceSealed += HandleOnSealChoice;
             isOnSealChoiceEventBinded = false;
         }
     }

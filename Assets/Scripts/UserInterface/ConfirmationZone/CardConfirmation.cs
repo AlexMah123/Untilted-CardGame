@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,11 +6,11 @@ public class CardConfirmation : MonoBehaviour, IDropHandler
 {
     public static CardConfirmation Instance;
 
-    public event Action<ChoiceCardUI> OnConfirmCardChoiceEvent;
+    public event Action<ChoiceCardUI> OnConfirmCardChoice;
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
@@ -30,7 +28,7 @@ public class CardConfirmation : MonoBehaviour, IDropHandler
             ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
 
             //broadcast event, primarily binded to GameManager
-            OnConfirmCardChoiceEvent?.Invoke(confirmedCardUI);
+            OnConfirmCardChoice?.Invoke(confirmedCardUI);
         }
     }
 }

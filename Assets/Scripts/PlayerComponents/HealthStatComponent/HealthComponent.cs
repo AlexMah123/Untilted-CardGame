@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HealthComponent : MonoBehaviour
@@ -9,7 +7,7 @@ public class HealthComponent : MonoBehaviour
     public int healthAmount;
 
     //declaration of events
-    public event Action<int> OnHealthModifiedEvent;
+    public event Action<int> OnHealthModified;
 
     public void InitializeComponent(PlayerStatsSO referencedStats)
     {
@@ -31,7 +29,7 @@ public class HealthComponent : MonoBehaviour
     {
         healthAmount += value;
 
-        OnHealthModifiedEvent?.Invoke(healthAmount);
+        OnHealthModified?.Invoke(healthAmount);
     }
     #endregion
 }

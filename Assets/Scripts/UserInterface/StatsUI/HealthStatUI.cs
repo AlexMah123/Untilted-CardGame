@@ -1,18 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class HealthStatUI : MonoBehaviour
 {
     public Player attachedPlayer;
-    [SerializeField] TextMeshProUGUI healthText;    
-    
+    [SerializeField] TextMeshProUGUI healthText;
+
     private void Start()
     {
-        if(attachedPlayer != null)
+        if (attachedPlayer != null)
         {
-            attachedPlayer.HealthComponent.OnHealthModifiedEvent += HandleOnHealthModified;
+            attachedPlayer.HealthComponent.OnHealthModified += HandleOnHealthModified;
         }
         else
         {

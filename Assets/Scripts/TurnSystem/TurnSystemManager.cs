@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TurnSystemManager : MonoBehaviour
 {
     public static TurnSystemManager Instance;
 
+    //#TODO: currently not in use, used when enemy has their own turn
     private Player HumanPlayer { get => GameManager.Instance.humanPlayer; }
     private Player AiPlayer { get => GameManager.Instance.computerPlayer; }
 
@@ -22,24 +21,34 @@ public class TurnSystemManager : MonoBehaviour
     public event Action<TurnSystemManager, Turn, Turn> OnChangedTurnEvent;
 
     //flag
-    private bool isStartNewTurnEventBinded = false;
+    private bool isTurnHasCompletedEventBinded = false;
+    private bool isAllDataLoadedEventBinded = false;
 
     private void OnEnable()
     {
-        if (!isStartNewTurnEventBinded)
+        if (!isTurnHasCompletedEventBinded)
         {
-            BindStartNewTurnEvent();
+            BindTurnHasCompletedEvent();
+        }
+
+        if (!isAllDataLoadedEventBinded)
+        {
+            BindAllDataLoadedEvent();
         }
     }
 
     private void OnDisable()
     {
-        if(isStartNewTurnEventBinded)
+        if (isTurnHasCompletedEventBinded)
         {
             UnbindStartNewTurnEvent();
         }
-    }
 
+        if (isAllDataLoadedEventBinded)
+        {
+            UnbindAllDataLoadedEvent();
+        }
+    }
 
     private void Awake()
     {
@@ -57,13 +66,17 @@ public class TurnSystemManager : MonoBehaviour
     void Start()
     {
         //To avoid racing condition
-        if (!isStartNewTurnEventBinded)
+        if (!isTurnHasCompletedEventBinded)
         {
-            BindStartNewTurnEvent();
+            BindTurnHasCompletedEvent();
         }
 
-        //the actual start of the game
-        HandleStartNewTurn();
+        if (!isAllDataLoadedEventBinded)
+        {
+            BindAllDataLoadedEvent();
+        }
+
+        currentPlayer = HumanPlayer;
     }
 
     void Update()
@@ -74,14 +87,20 @@ public class TurnSystemManager : MonoBehaviour
         }
     }
 
-    public void HandleStartNewTurn()
+    public void HandleTurnHasCompleted()
     {
         ChangeTurn(playerTurn);
     }
 
     public void ChangeTurn(Turn newTurn)
     {
-        if(currentTurn != null)
+        if (currentPlayer == null)
+        {
+            Debug.LogError("current player is not assigned");
+            return;
+        }
+
+        if (currentTurn != null)
         {
             currentTurn.OnEndTurn(currentPlayer);
         }
@@ -97,12 +116,12 @@ public class TurnSystemManager : MonoBehaviour
 
     #region Bind StartNewTurnEvent
 
-    private void BindStartNewTurnEvent()
+    private void BindTurnHasCompletedEvent()
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.OnStartNewTurnEvent += HandleStartNewTurn;
-            isStartNewTurnEventBinded = true;
+            GameManager.Instance.OnTurnCompleted += HandleTurnHasCompleted;
+            isTurnHasCompletedEventBinded = true;
         }
     }
 
@@ -110,8 +129,27 @@ public class TurnSystemManager : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.OnStartNewTurnEvent -= HandleStartNewTurn;
-            isStartNewTurnEventBinded = false;
+            GameManager.Instance.OnTurnCompleted -= HandleTurnHasCompleted;
+            isTurnHasCompletedEventBinded = false;
+        }
+    }
+    #endregion
+
+    #region BindAllDataLoadedEvent
+    private void BindAllDataLoadedEvent()
+    {
+        if (SaveSystemManager.Instance != null)
+        {
+            SaveSystemManager.Instance.OnAllSaveDataLoaded += HandleTurnHasCompleted;
+            isAllDataLoadedEventBinded = true;
+        }
+    }
+    private void UnbindAllDataLoadedEvent()
+    {
+        if (SaveSystemManager.Instance != null)
+        {
+            SaveSystemManager.Instance.OnAllSaveDataLoaded -= HandleTurnHasCompleted;
+            isAllDataLoadedEventBinded = false;
         }
     }
     #endregion

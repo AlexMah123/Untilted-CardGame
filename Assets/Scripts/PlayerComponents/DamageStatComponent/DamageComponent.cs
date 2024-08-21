@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DamageComponent : MonoBehaviour
@@ -9,7 +7,7 @@ public class DamageComponent : MonoBehaviour
     public int damageAmount;
 
     //declaration of events
-    public event Action<int> OnDamageModifiedEvent;
+    public event Action<int> OnDamageModified;
 
     public void InitializeComponent(PlayerStatsSO referencedStats)
     {
@@ -37,7 +35,7 @@ public class DamageComponent : MonoBehaviour
         damageAmount += value;
 
         //#TODO: broadcast event to total stats display
-        OnDamageModifiedEvent?.Invoke(damageAmount);
+        OnDamageModified?.Invoke(damageAmount);
     }
     #endregion
 }

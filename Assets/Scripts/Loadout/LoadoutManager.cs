@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -18,7 +16,10 @@ public class LoadoutManager : MonoBehaviour, ISavableData
     public HashSet<UpgradeDefinitionSO> cachedUpgradesUnlocked = new();
     public HashSet<UpgradeDefinitionSO> cachedEquippedUpgrades = new();
 
-    public event Action<LoadoutData> OnInitializeLoadoutEvent;
+    public event Action<LoadoutData> OnInitializeLoadout;
+
+    //Interface
+    public event Action OnSaveDataLoaded;
 
     //flag
     private bool isLoadoutSelectedEventBinded = false;
@@ -26,25 +27,25 @@ public class LoadoutManager : MonoBehaviour, ISavableData
 
     private void OnEnable()
     {
-        if(!isLoadoutSelectedEventBinded)
+        if (!isLoadoutSelectedEventBinded)
         {
             BindLoadoutSelectedEvent();
         }
 
         if (!isEquippedLoadoutRemovedEvent)
         {
-           BindEquippedLoadoutRemovedEvent();
+            BindEquippedLoadoutRemovedEvent();
         }
     }
 
     private void OnDisable()
     {
-        if(isLoadoutSelectedEventBinded)
+        if (isLoadoutSelectedEventBinded)
         {
             UnbindLoadoutSelectedEvent();
         }
 
-        if(isEquippedLoadoutRemovedEvent)
+        if (isEquippedLoadoutRemovedEvent)
         {
             UnbindEquippedLoadoutRemovedEvent();
         }
@@ -52,7 +53,7 @@ public class LoadoutManager : MonoBehaviour, ISavableData
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
@@ -85,7 +86,7 @@ public class LoadoutManager : MonoBehaviour, ISavableData
     {
         LoadoutData loadoutData = new LoadoutData(totalUpgrades, cachedUpgradesUnlocked, cachedEquippedUpgrades);
 
-        OnInitializeLoadoutEvent?.Invoke(loadoutData);
+        OnInitializeLoadout?.Invoke(loadoutData);
     }
 
     public void HandleSelectedUpgradeEquipped(UpgradeDefinitionSO addedUpgradeSO)
@@ -123,13 +124,15 @@ public class LoadoutManager : MonoBehaviour, ISavableData
         }
 
         cachedEquippedUpgrades.Clear();
-        foreach(UpgradeType upgradesEquipped in data.playerEquippedUpgrades)
+        foreach (UpgradeType upgradesEquipped in data.playerEquippedUpgrades)
         {
             cachedEquippedUpgrades.Add(UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradesEquipped));
         }
 
         //#DEBUG
         //Debug.Log($"game data is loaded");
+
+        OnSaveDataLoaded?.Invoke();
     }
 
     public void SaveData(ref GameData data)
@@ -163,7 +166,7 @@ public class LoadoutManager : MonoBehaviour, ISavableData
     {
         if (LoadoutLayoutManager.Instance != null)
         {
-            LoadoutLayoutManager.Instance.OnLoadoutSelectedEvent += HandleSelectedUpgradeEquipped;
+            LoadoutLayoutManager.Instance.OnLoadoutSelected += HandleSelectedUpgradeEquipped;
             isLoadoutSelectedEventBinded = true;
         }
     }
@@ -172,7 +175,7 @@ public class LoadoutManager : MonoBehaviour, ISavableData
     {
         if (LoadoutLayoutManager.Instance != null)
         {
-            LoadoutLayoutManager.Instance.OnLoadoutSelectedEvent -= HandleSelectedUpgradeEquipped;
+            LoadoutLayoutManager.Instance.OnLoadoutSelected -= HandleSelectedUpgradeEquipped;
             isLoadoutSelectedEventBinded = false;
         }
     }

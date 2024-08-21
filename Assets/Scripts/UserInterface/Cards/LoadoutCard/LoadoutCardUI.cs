@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,7 +7,7 @@ public class LoadoutCardUI : CardUI, IPointerClickHandler
 {
     public LoadoutCardGOInfo cardInfo;
 
-    public event Action<LoadoutCardGOInfo> OnCardRemovedEvent;
+    public event Action<LoadoutCardGOInfo> OnCardRemoved;
 
     public override void OnPointerEnter(PointerEventData eventData)
     {
@@ -26,7 +24,7 @@ public class LoadoutCardUI : CardUI, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            OnCardRemovedEvent?.Invoke(cardInfo);
+            OnCardRemoved?.Invoke(cardInfo);
             gameObject.SetActive(false);
         }
 
@@ -42,5 +40,5 @@ public class LoadoutCardUI : CardUI, IPointerClickHandler
         cardImage.sprite = cardInfo.upgradeSO.upgradeSprite;
     }
 
-    
+
 }

@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
@@ -27,7 +23,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     protected Canvas canvas;
 
     //events
-    public event Action OnCardEndInteractEvent;
+    public event Action OnCardInteractEnd;
 
     private void Awake()
     {
@@ -62,8 +58,8 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         //move the offset then scale up
 
         rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x + hoveredOffset.x, rectTransform.anchoredPosition3D.y + hoveredOffset.y, rectTransform.anchoredPosition3D.z + hoveredOffset.z);
-        
-        if(shouldEnlargeOnHover)
+
+        if (shouldEnlargeOnHover)
         {
             transform.localScale = originalCardScale * hoveredEnlargedScale;
         }
@@ -71,7 +67,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         transform.localEulerAngles = Vector3.zero;
 
 
-        if(shouldReorderToTop)
+        if (shouldReorderToTop)
         {
             transform.SetAsLastSibling();
         }
@@ -93,6 +89,6 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
 
         //primarily binded to PlayerHandUIManager
-        OnCardEndInteractEvent?.Invoke();
+        OnCardInteractEnd?.Invoke();
     }
 }

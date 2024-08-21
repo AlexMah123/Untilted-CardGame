@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum GameResult
@@ -16,21 +13,20 @@ public class GameManager : MonoBehaviour, ISavableData
 {
     public static GameManager Instance;
 
-    [Header("Player Objects")]
-    public GameObject humanPlayerObj;
-    public GameObject aiPlayerObj;
-
     [Header("Player Data")]
-    [HideInInspector] public Player humanPlayer;
-    [HideInInspector] public AIPlayer computerPlayer;
+    public Player humanPlayer;
+    public AIPlayer computerPlayer;
 
     //declaration of events
-    public event Action OnClearCardHandEvent;
-    public event Action OnStartNewTurnEvent;
-  
+    public event Action OnClearCardInHand;
+    public event Action OnTurnCompleted;
+
+    //Interface
+    public event Action OnSaveDataLoaded;
+
     //flag
     private bool isConfirmCardEventBinded = false;
-    
+
     private void OnEnable()
     {
         if (!isConfirmCardEventBinded)
@@ -40,7 +36,7 @@ public class GameManager : MonoBehaviour, ISavableData
     }
     private void OnDisable()
     {
-        if(isConfirmCardEventBinded)
+        if (isConfirmCardEventBinded)
         {
             UnbindConfirmCardChoiceEvent();
         }
@@ -49,7 +45,7 @@ public class GameManager : MonoBehaviour, ISavableData
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
@@ -70,6 +66,12 @@ public class GameManager : MonoBehaviour, ISavableData
 
     public void HandleConfirmCardChoice(ChoiceCardUI cardUI)
     {
+        if (humanPlayer == null)
+        {
+            Debug.LogError("player reference not attached");
+            return;
+        }
+
         humanPlayer.ChoiceComponent.currentChoice = cardUI.gameChoice;
 
         //trigger resolution of the round
@@ -78,90 +80,54 @@ public class GameManager : MonoBehaviour, ISavableData
 
     public void PlayRound()
     {
-        computerPlayer.ChoiceComponent.currentChoice = computerPlayer.GetChoice();
+        if (computerPlayer == null)
+        {
+            Debug.LogError("ai player reference not attached");
+            return;
+        }
+
+        ChoiceComponent humanPlayerChoice = humanPlayer.ChoiceComponent;
+        ChoiceComponent computerPlayerChoice = computerPlayer.ChoiceComponent;
 
         //ai player update its Ai Module
-        computerPlayer.aiModuleConfig.UpdateAIModule(humanPlayer.ChoiceComponent.currentChoice);
+        computerPlayerChoice.currentChoice = computerPlayer.GetChoice();
+        computerPlayer.aiModuleConfig.UpdateAIModule(humanPlayerChoice.currentChoice);
 
         //#DEBUG
-        Debug.Log($"Human Player has selected {humanPlayer.ChoiceComponent.currentChoice}");
-        Debug.Log($"AI Player has selected {computerPlayer.ChoiceComponent.currentChoice}");
+        Debug.Log($"Human Player has selected {humanPlayerChoice.currentChoice}");
+        Debug.Log($"AI Player has selected {computerPlayerChoice.currentChoice}");
 
         //get the result based on the played choice, then evaluate them (broadcast all the neccesary events)
-        var roundResult = GameUtilsLibrary.GetGameResult(humanPlayer.ChoiceComponent.currentChoice, computerPlayer.ChoiceComponent.currentChoice);
+        var roundResult = GameUtilsLibrary.GetGameResult(humanPlayerChoice.currentChoice, computerPlayerChoice.currentChoice);
         EvaluateResults(roundResult);
 
         //After results, reset the turns
         //broadcast event, primarily binded to PlayerHandUIManager
-        OnClearCardHandEvent?.Invoke();
+        OnClearCardInHand?.Invoke();
 
         //#TODO: add some sort of delay between rounds for animation?
         //broadcast event, primarily binded to TurnSystemManager
-        OnStartNewTurnEvent?.Invoke();
+        OnTurnCompleted?.Invoke();
 
 #if UNITY_EDITOR
         //TESTING
         Invoke(nameof(ClearEditorLog), 3f);
 #endif
-        
+
     }
 
     [ContextMenu("GameManager/Clear Round")]
     public void ClearRound()
     {
-        OnClearCardHandEvent?.Invoke();
+        OnClearCardInHand?.Invoke();
     }
 
 
     #region Internal Functions
-    private void LoadPlayersData(GameData data)
-    {
-        if(LevelDataManager.Instance.currentSelectedLevelSO == null)
-        {
-            throw new NullReferenceException("LevelDataManager does not have a levelSO selected");
-        }
-
-        //load from LevelDataManager
-        var humanPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.humanPlayer;
-        var computerPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.aiPlayer;
-
-        //cached
-        humanPlayer = humanPlayerObj.GetComponent<Player>();
-        computerPlayer = aiPlayerObj.GetComponent<AIPlayer>();
-
-        if (humanPlayer == null || computerPlayer == null)
-        {
-            Debug.LogError(
-                (humanPlayer == null ? "human player is null. " : "") +
-                (computerPlayer == null ? "Ai player is null. " : "")
-            );
-        }
-
-        //#TODO: technically load from save file
-        humanPlayer.statsConfig = LevelDataManager.Instance.currentSelectedLevelSO.humanPlayer.StatsConfig;
-
-        foreach(UpgradeType upgradeType in data.playerEquippedUpgrades)
-        {
-            humanPlayer.ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeType);
-        }
-        humanPlayer.LoadComponents();
-
-        //=======================================================================================================
-        computerPlayer.statsConfig = computerPlayerData.StatsConfig;
-        computerPlayer.aiModuleConfig = computerPlayerData.AiModule;
-
-        foreach(UpgradeDefinitionSO upgradeSO in computerPlayerData.upgradesEquipped)
-        {
-            computerPlayer.ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeSO);
-        }
-
-        computerPlayer.LoadComponents();
-    }
-
     private void EvaluateResults(GameResult roundResult)
     {
         //#TODO: call the players win lose draw conditions
-        switch(roundResult)
+        switch (roundResult)
         {
             case GameResult.Win:
                 //human player deal dmg to opposing player
@@ -179,7 +145,7 @@ public class GameManager : MonoBehaviour, ISavableData
         }
 
         //#TODO: Check players healths
-        if(humanPlayer.HealthComponent.healthAmount <= 0)
+        if (humanPlayer.HealthComponent.healthAmount <= 0)
         {
             //#DEBUG
             Debug.Log("Player has lost");
@@ -210,7 +176,7 @@ public class GameManager : MonoBehaviour, ISavableData
         //#DEBUG
         Debug.Log($"Currently loaded: {LevelDataManager.Instance.currentSelectedLevelSO.levelName}");
 
-        LoadPlayersData(data);
+        OnSaveDataLoaded?.Invoke();
     }
 
     public void SaveData(ref GameData data)
@@ -225,7 +191,7 @@ public class GameManager : MonoBehaviour, ISavableData
     {
         if (CardConfirmation.Instance != null)
         {
-            CardConfirmation.Instance.OnConfirmCardChoiceEvent += HandleConfirmCardChoice;
+            CardConfirmation.Instance.OnConfirmCardChoice += HandleConfirmCardChoice;
             isConfirmCardEventBinded = true;
         }
     }
@@ -234,10 +200,10 @@ public class GameManager : MonoBehaviour, ISavableData
     {
         if (CardConfirmation.Instance != null)
         {
-            CardConfirmation.Instance.OnConfirmCardChoiceEvent -= HandleConfirmCardChoice;
+            CardConfirmation.Instance.OnConfirmCardChoice -= HandleConfirmCardChoice;
             isConfirmCardEventBinded = false;
         }
-            
+
     }
     #endregion
 

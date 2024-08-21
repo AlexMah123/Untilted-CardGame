@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +15,7 @@ public enum SceneType
 }
 
 public enum Transition
-{ 
+{
     CrossFade,
     CircleWipe,
 }
@@ -32,7 +31,7 @@ public class SceneTransitionManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance != null && Instance == this)
+        if (Instance != null && Instance == this)
         {
             Destroy(gameObject);
         }
@@ -67,7 +66,7 @@ public class SceneTransitionManager : MonoBehaviour
             TimeManager.ResumeTime();
         }
 
-        if(sceneType == SceneType.Exit)
+        if (sceneType == SceneType.Exit)
         {
             Application.Quit();
 

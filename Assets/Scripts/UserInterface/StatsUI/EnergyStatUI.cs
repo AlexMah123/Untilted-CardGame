@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -12,7 +10,7 @@ public class EnergyStatUI : MonoBehaviour
     {
         if (attachedPlayer != null)
         {
-            attachedPlayer.EnergyComponent.OnEnergyModifiedEvent += HandleOnEnergyModified;
+            attachedPlayer.EnergyComponent.OnEnergyModified += HandleOnEnergyModified;
         }
         else
         {

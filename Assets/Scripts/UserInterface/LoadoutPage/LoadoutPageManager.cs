@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,25 +13,25 @@ public class LoadoutPageManager : MonoBehaviour
 
     private int currentPageIndex = 0;
 
-    public event Action<int> OnLoadoutPageUpdatedEvent;
+    public event Action<int> OnLoadoutPageUpdated;
 
     private void OnEnable()
     {
-        activeLoadoutLayoutManager.OnActiveLoadoutUpdatedEvent += UpdateButtonState;
+        activeLoadoutLayoutManager.OnLoadoutUpdated += UpdateButtonState;
     }
 
     private void OnDisable()
     {
-        activeLoadoutLayoutManager.OnActiveLoadoutUpdatedEvent -= UpdateButtonState;
+        activeLoadoutLayoutManager.OnLoadoutUpdated -= UpdateButtonState;
     }
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
-        else 
+        else
         {
             Instance = this;
         }
@@ -50,7 +48,7 @@ public class LoadoutPageManager : MonoBehaviour
         UpdateButtonState();
 
         //primarily binded to LoadoutLayoutManager
-        OnLoadoutPageUpdatedEvent?.Invoke(currentPageIndex);
+        OnLoadoutPageUpdated?.Invoke(currentPageIndex);
     }
 
     public void NextPage()
@@ -59,7 +57,7 @@ public class LoadoutPageManager : MonoBehaviour
         UpdateButtonState();
 
         //primarily binded to LoadoutLayoutManager
-        OnLoadoutPageUpdatedEvent?.Invoke(currentPageIndex);
+        OnLoadoutPageUpdated?.Invoke(currentPageIndex);
     }
 
     public void UpdateButtonState()

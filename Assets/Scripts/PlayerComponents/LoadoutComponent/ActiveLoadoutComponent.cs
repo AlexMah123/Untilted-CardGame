@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,7 +27,7 @@ public class ActiveLoadoutComponent : MonoBehaviour
     [ContextMenu("ActiveLoadout/Apply Passive Effect")]
     public void ApplyPassiveEffects()
     {
-        foreach(UpgradeDefinitionSO upgrade in upgradeSlots)
+        foreach (UpgradeDefinitionSO upgrade in upgradeSlots)
         {
             upgrade.ApplyPassiveEffect(attachedPlayer);
         }

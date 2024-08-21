@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +25,7 @@ public class InspectUpgradeUI : MonoBehaviour
 
     private void OnDisable()
     {
-        if(isOnCardInspectEventBinded)
+        if (isOnCardInspectEventBinded)
         {
             UnbindOnCardInspectEvent();
         }
@@ -56,13 +53,13 @@ public class InspectUpgradeUI : MonoBehaviour
 
     public void BindOnCardInspectEvent()
     {
-        InspectComponent.OnCardInspectedEvent += HandleCardInspected;
+        InspectComponent.OnCardInspected += HandleCardInspected;
         isOnCardInspectEventBinded = true;
     }
 
     public void UnbindOnCardInspectEvent()
     {
-        InspectComponent.OnCardInspectedEvent -= HandleCardInspected;
+        InspectComponent.OnCardInspected -= HandleCardInspected;
         isOnCardInspectEventBinded = false;
     }
 }

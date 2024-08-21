@@ -1,13 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
 
 public abstract class Turn
 {
     protected TurnSystemManager controller;
-    public event Action<Player> OnPlayerStartTurnEvent;
+    public event Action<Player> OnPlayerTurnStart;
 
     #region Ran on every phase
     public void OnStartTurn(TurnSystemManager turnController, Player currentPlayer)
@@ -17,7 +13,7 @@ public abstract class Turn
         OnStart(currentPlayer);
 
         //broadcast event, primarily binded to PlayerHandUIManager
-        OnPlayerStartTurnEvent?.Invoke(currentPlayer);
+        OnPlayerTurnStart?.Invoke(currentPlayer);
     }
 
     public void OnUpdateTurn(Player currentPlayer)

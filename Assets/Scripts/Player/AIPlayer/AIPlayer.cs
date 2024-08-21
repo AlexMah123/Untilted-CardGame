@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AIPlayer : Player
@@ -24,11 +22,27 @@ public class AIPlayer : Player
 
     public override GameChoice GetChoice()
     {
-        if(aiModuleConfig == null)
+        if (aiModuleConfig == null)
         {
             throw new MissingComponentException("AI Module is not assigned");
         }
 
         return aiModuleConfig.MakeDecision();
     }
+
+    protected override void LoadPlayerData(GameData data)
+    {
+        var computerPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.aiPlayer;
+
+        statsConfig = computerPlayerData.StatsConfig;
+        aiModuleConfig = computerPlayerData.AiModule;
+
+        foreach (UpgradeDefinitionSO upgradeSO in computerPlayerData.upgradesEquipped)
+        {
+            ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeSO);
+        }
+
+        LoadComponents();
+    }
+
 }

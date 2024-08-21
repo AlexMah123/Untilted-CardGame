@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public static class PlayerDecisionLibrary 
+public static class PlayerDecisionLibrary
 {
     public static GameChoice GetRandomGameChoice()
     {
@@ -15,12 +13,12 @@ public static class PlayerDecisionLibrary
     {
         switch (predictedMoveByOpponent)
         {
-            case GameChoice.Rock:           return GameChoice.Paper;
-            case GameChoice.Paper:          return GameChoice.Scissor;
-            case GameChoice.Scissor:        return GameChoice.Rock;
+            case GameChoice.Rock: return GameChoice.Paper;
+            case GameChoice.Paper: return GameChoice.Scissor;
+            case GameChoice.Scissor: return GameChoice.Rock;
 
             //shouldnt happen
-            default:                        return GameChoice.Rock;
+            default: return GameChoice.Rock;
         }
     }
 
