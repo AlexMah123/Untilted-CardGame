@@ -14,7 +14,7 @@ public class SaveSystemManager : MonoBehaviour
     private GameData gameData;
     private FileDataHandler dataHandler;
 
-    private List<ISavableData> savableDataObjects;
+    private List<ISavableData> savableDataObjectsInScene;
     private int objectsToLoadCount;
     private int objectsLoadedCount;
 
@@ -52,8 +52,8 @@ public class SaveSystemManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        //#TODO: Consider not saving on exit, control the saving
-        SaveGame();
+        //Consider not saving on exit, control the saving
+        //SaveGame();
     }
 
     public void HandleSceneLoaded(Scene arg0, LoadSceneMode mode)
@@ -69,8 +69,10 @@ public class SaveSystemManager : MonoBehaviour
 
     public void SaveGame()
     {
+        QueryAllSavableObjects();
+
         //retrieve data to other objects that implement interface in scene
-        foreach (ISavableData savableDataObj in savableDataObjects)
+        foreach (ISavableData savableDataObj in savableDataObjectsInScene)
         {
             savableDataObj.SaveData(ref gameData);
         }
@@ -91,7 +93,7 @@ public class SaveSystemManager : MonoBehaviour
         }
 
         //push all the loaded data to other objects that implement interface in scene
-        foreach (ISavableData savableDataObj in savableDataObjects)
+        foreach (ISavableData savableDataObj in savableDataObjectsInScene)
         {
             savableDataObj.OnSaveDataLoaded += HandleDataLoaded;
             savableDataObj.LoadData(gameData);
@@ -103,10 +105,10 @@ public class SaveSystemManager : MonoBehaviour
     private void BootstrapSaveData()
     {
         //query for all objects that implement ISavableData, and Load to them.
-        savableDataObjects = QueryAllSavableObjects();
+        QueryAllSavableObjects();
 
         // Reset counters
-        objectsToLoadCount = savableDataObjects.Count;
+        objectsToLoadCount = savableDataObjectsInScene.Count;
         objectsLoadedCount = 0;
 
         LoadGame();
@@ -121,7 +123,7 @@ public class SaveSystemManager : MonoBehaviour
             //#DEBUG
             Debug.Log("Finshed loading all data");
 
-            foreach (ISavableData savableDataObj in savableDataObjects)
+            foreach (ISavableData savableDataObj in savableDataObjectsInScene)
             {
                 savableDataObj.OnSaveDataLoaded -= HandleDataLoaded;
             }
@@ -135,11 +137,11 @@ public class SaveSystemManager : MonoBehaviour
         OnAllSaveDataLoaded?.Invoke();
     }
 
-    private List<ISavableData> QueryAllSavableObjects()
+    private void QueryAllSavableObjects()
     {
-        IEnumerable<ISavableData> savableDataObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISavableData>();
+        IEnumerable<ISavableData> allSavableDataObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISavableData>();
 
-        return new(savableDataObjects);
+        savableDataObjectsInScene = new(allSavableDataObjects);
     }
     #endregion
 }

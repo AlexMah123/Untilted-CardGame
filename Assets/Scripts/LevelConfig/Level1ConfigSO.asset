@@ -18,7 +18,7 @@ MonoBehaviour:
     playerType: 0
     upgradesEquipped: []
   aiPlayer:
-    StatsConfig: {fileID: 11400000, guid: af6be0f4975e2934aa9f5499aeb816ae, type: 2}
+    StatsConfig: {fileID: 11400000, guid: c444568b120687f45a684a2a5c2e7edf, type: 2}
     AiModule: {fileID: 11400000, guid: a269275dbd8b89749a655335d86d606f, type: 2}
     playerType: 1
     upgradesEquipped:

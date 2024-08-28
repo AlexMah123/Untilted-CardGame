@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour, ISavableData
     //declaration of events
     public event Action OnClearCardInHand;
     public event Action OnTurnCompleted;
+    public event Action<GameResult> OnLevelCompleted;
 
     //Interface
     public event Action OnSaveDataLoaded;
@@ -126,7 +127,7 @@ public class GameManager : MonoBehaviour, ISavableData
     #region Internal Functions
     private void EvaluateResults(GameResult roundResult)
     {
-        //#TODO: call the players win lose draw conditions
+        // #TODO: call the players win lose draw conditions
         switch (roundResult)
         {
             case GameResult.Win:
@@ -149,12 +150,18 @@ public class GameManager : MonoBehaviour, ISavableData
         {
             //#DEBUG
             Debug.Log("Player has lost");
+
+            OnLevelCompleted?.Invoke(GameResult.Lose);
         }
 
         if (computerPlayer.HealthComponent.healthAmount <= 0)
         {
             //#DEBUG
             Debug.Log("Player has won");
+
+            //#TODO: add reward popup
+            //#TODO: Save Game. Save completed level
+            OnLevelCompleted?.Invoke(GameResult.Win);
         }
 
         //#DEBUG
@@ -181,7 +188,7 @@ public class GameManager : MonoBehaviour, ISavableData
 
     public void SaveData(ref GameData data)
     {
-        //mark when level is complete
+        //#TODO: mark when level is complete
     }
 
     #endregion

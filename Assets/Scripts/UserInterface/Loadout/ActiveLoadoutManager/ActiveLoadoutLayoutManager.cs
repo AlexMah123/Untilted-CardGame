@@ -11,6 +11,8 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
 
     public event Action<LoadoutCardGOInfo> OnLoadoutRemoved;
 
+    //#TODO: Add limit/checking of equippable amount for loadout
+
     private void OnEnable()
     {
         LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
