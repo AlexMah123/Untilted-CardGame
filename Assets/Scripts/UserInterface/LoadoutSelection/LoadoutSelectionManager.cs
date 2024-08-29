@@ -4,12 +4,12 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(LoadoutCardFactory))]
-public class LoadoutLayoutManager : MonoBehaviour
+public class LoadoutSelectionManager : MonoBehaviour
 {
-    public static LoadoutLayoutManager Instance;
+    public static LoadoutSelectionManager Instance;
 
-    [Header("ActiveLoadoutLayoutManager")]
-    public ActiveLoadoutLayoutManager ActiveLoadoutLayoutManager;
+    [Header("EquippedLoadoutSelectionManager")]
+    public EquippedLoadoutSelectionManager EquippedLoadoutSelectionManager;
 
     [Header("Layout Config")]
     public Transform spawnContainer;
@@ -172,7 +172,7 @@ public class LoadoutLayoutManager : MonoBehaviour
         //update the layout buttons on the first page
         UpdateCardSlots(0);
 
-        LoadoutPageManager.Instance.UpdateButtonState();
+        LoadoutSelectionPageManager.Instance.UpdateButtonState();
 
         InitializeEquippedUpgrades();
     }
@@ -250,7 +250,7 @@ public class LoadoutLayoutManager : MonoBehaviour
     private void AddToActiveCardSlots(UpgradeDefinitionSO selectedUpgrade)
     {
         //update the activeloadoutlayout
-        bool success = ActiveLoadoutLayoutManager.AddUpgrade(selectedUpgrade);
+        bool success = EquippedLoadoutSelectionManager.AddUpgrade(selectedUpgrade);
 
         if (success)
         {
@@ -260,7 +260,7 @@ public class LoadoutLayoutManager : MonoBehaviour
             UpdateCardSlots(loadoutPageIndex);
 
             //temp, updates the button state
-            LoadoutPageManager.Instance.UpdateButtonState();
+            LoadoutSelectionPageManager.Instance.UpdateButtonState();
         }
     }
     #endregion
@@ -288,18 +288,18 @@ public class LoadoutLayoutManager : MonoBehaviour
 
     public void BindOnActiveLoadoutRemoveEvent()
     {
-        if (ActiveLoadoutLayoutManager)
+        if (EquippedLoadoutSelectionManager)
         {
-            ActiveLoadoutLayoutManager.OnLoadoutRemoved += HandleOnActiveLoadoutRemoved;
+            EquippedLoadoutSelectionManager.OnLoadoutRemoved += HandleOnActiveLoadoutRemoved;
             isActiveLoadoutRemovedEventBinded = true;
         }
     }
 
     public void UnbindOnActiveLoadoutRemoveEvent()
     {
-        if (ActiveLoadoutLayoutManager)
+        if (EquippedLoadoutSelectionManager)
         {
-            ActiveLoadoutLayoutManager.OnLoadoutRemoved -= HandleOnActiveLoadoutRemoved;
+            EquippedLoadoutSelectionManager.OnLoadoutRemoved -= HandleOnActiveLoadoutRemoved;
             isActiveLoadoutRemovedEventBinded = false;
         }
     }
@@ -330,18 +330,18 @@ public class LoadoutLayoutManager : MonoBehaviour
     #region Bind LoadoutPageUpdate Event
     public void BindOnLoadoutPageUpdatedEvent()
     {
-        if (LoadoutPageManager.Instance != null)
+        if (LoadoutSelectionPageManager.Instance != null)
         {
-            LoadoutPageManager.Instance.OnLoadoutPageUpdated += HandleOnPageUpdated;
+            LoadoutSelectionPageManager.Instance.OnLoadoutPageUpdated += HandleOnPageUpdated;
             isLoadoutPageUpdatedEventBinded = true;
         }
     }
 
     public void UnbindOnLoadoutPageUpdatedEvent()
     {
-        if (LoadoutPageManager.Instance != null)
+        if (LoadoutSelectionPageManager.Instance != null)
         {
-            LoadoutPageManager.Instance.OnLoadoutPageUpdated -= HandleOnPageUpdated;
+            LoadoutSelectionPageManager.Instance.OnLoadoutPageUpdated -= HandleOnPageUpdated;
             isLoadoutPageUpdatedEventBinded = false;
         }
     }

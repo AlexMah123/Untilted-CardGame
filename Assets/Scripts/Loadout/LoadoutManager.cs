@@ -164,18 +164,18 @@ public class LoadoutManager : MonoBehaviour, ISavableData
     #region Bind LoadoutSelectedEvent
     private void BindLoadoutSelectedEvent()
     {
-        if (LoadoutLayoutManager.Instance != null)
+        if (LoadoutSelectionManager.Instance != null)
         {
-            LoadoutLayoutManager.Instance.OnLoadoutSelected += HandleSelectedUpgradeEquipped;
+            LoadoutSelectionManager.Instance.OnLoadoutSelected += HandleSelectedUpgradeEquipped;
             isLoadoutSelectedEventBinded = true;
         }
     }
 
     private void UnbindLoadoutSelectedEvent()
     {
-        if (LoadoutLayoutManager.Instance != null)
+        if (LoadoutSelectionManager.Instance != null)
         {
-            LoadoutLayoutManager.Instance.OnLoadoutSelected -= HandleSelectedUpgradeEquipped;
+            LoadoutSelectionManager.Instance.OnLoadoutSelected -= HandleSelectedUpgradeEquipped;
             isLoadoutSelectedEventBinded = false;
         }
     }
@@ -185,18 +185,18 @@ public class LoadoutManager : MonoBehaviour, ISavableData
     #region Bind EquippedLoadoutRemovedEvent
     private void BindEquippedLoadoutRemovedEvent()
     {
-        if (LoadoutLayoutManager.Instance != null)
+        if (LoadoutSelectionManager.Instance != null)
         {
-            LoadoutLayoutManager.Instance.OnEquippedLoadoutRemoved += HandleEquippedUpgradeRemoved;
+            LoadoutSelectionManager.Instance.OnEquippedLoadoutRemoved += HandleEquippedUpgradeRemoved;
             isEquippedLoadoutRemovedEvent = true;
         }
     }
 
     private void UnbindEquippedLoadoutRemovedEvent()
     {
-        if (LoadoutLayoutManager.Instance != null)
+        if (LoadoutSelectionManager.Instance != null)
         {
-            LoadoutLayoutManager.Instance.OnEquippedLoadoutRemoved -= HandleEquippedUpgradeRemoved;
+            LoadoutSelectionManager.Instance.OnEquippedLoadoutRemoved -= HandleEquippedUpgradeRemoved;
             isEquippedLoadoutRemovedEvent = true;
         }
     }

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActiveLoadoutLayoutManager : MonoBehaviour
+public class EquippedLoadoutSelectionManager : MonoBehaviour
 {
-    public GameObject activeLoadoutParent;
-    public LoadoutLayoutManager loadoutLayoutManager;
+    public GameObject equippedLoadoutParent;
+    public LoadoutSelectionManager loadoutLayoutManager;
 
     public event Action OnLoadoutUpdated;
 
@@ -15,25 +15,25 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
 
     private void OnEnable()
     {
-        LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
+        LoadoutCardUI[] loadoutCards = equippedLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
 
         foreach (LoadoutCardUI loadoutCard in loadoutCards)
         {
-            loadoutCard.OnCardRemoved += HandleCardRemoved;
+            loadoutCard.OnCardClicked += HandleCardRemoved;
         }
     }
 
     private void OnDisable()
     {
-        if (activeLoadoutParent != null)
+        if (equippedLoadoutParent != null)
         {
-            LoadoutCardUI[] loadoutCards = activeLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
+            LoadoutCardUI[] loadoutCards = equippedLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
 
             foreach (LoadoutCardUI loadoutCard in loadoutCards)
             {
                 if (loadoutCard != null)
                 {
-                    loadoutCard.OnCardRemoved -= HandleCardRemoved;
+                    loadoutCard.OnCardClicked -= HandleCardRemoved;
                 }
             }
         }
@@ -103,7 +103,7 @@ public class ActiveLoadoutLayoutManager : MonoBehaviour
     {
         List<GameObject> loadoutGO = new();
 
-        foreach (Transform child in activeLoadoutParent.transform)
+        foreach (Transform child in equippedLoadoutParent.transform)
         {
             loadoutGO.Add(child.gameObject);
         }

@@ -87,6 +87,7 @@ public class TurnSystemManager : MonoBehaviour
         }
     }
 
+    [ContextMenu("TurnSystemManager/StartRound")]
     public void HandleTurnHasCompleted()
     {
         ChangeTurn(playerTurn);

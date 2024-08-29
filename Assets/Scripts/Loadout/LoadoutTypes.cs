@@ -17,6 +17,7 @@ public struct LoadoutData
 }
 
 
+[Serializable]
 public struct LoadoutCardGOInfo
 {
     public LoadoutCardGOInfo(UpgradeDefinitionSO _upgradeSO)

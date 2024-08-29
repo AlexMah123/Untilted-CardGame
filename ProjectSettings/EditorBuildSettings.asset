@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/GamePrototype.unity
     guid: a91a646d8d384914cbcd9d980bce2277
   - enabled: 1
-    path: Assets/Scenes/UpgradeLoadout.unity
+    path: Assets/Scenes/LoadoutSelection.unity
     guid: 9c661f3b5a8c5ba4791b21baf18dc3f1
   m_configObjects: {}

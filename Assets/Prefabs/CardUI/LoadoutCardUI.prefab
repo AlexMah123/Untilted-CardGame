@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8790829373188093239}
   - component: {fileID: 6516805988425230667}
   - component: {fileID: -6051437279966621883}
+  - component: {fileID: 8570749019239431753}
   m_Layer: 5
   m_Name: LoadoutCardUI
   m_TagString: Untagged
@@ -96,6 +97,10 @@ MonoBehaviour:
   shouldReorderToTop: 0
   rectTransform: {fileID: 7084182591955085186}
   cardImage: {fileID: 8790829373188093239}
+  cardInfo:
+    upgradeSO: {fileID: 0}
+  shouldDisableOnClick: 1
+  shouldDisplayOutline: 1
 --- !u!114 &-6051437279966621883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,6 +113,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c28411fb925d364da2216410e38cff6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8570749019239431753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130793156531348567}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 0.8534628, b: 0, a: 1}
+  m_EffectDistance: {x: 15, y: -15}
+  m_UseGraphicAlpha: 1
 --- !u!1 &8038382709288226848
 GameObject:
   m_ObjectHideFlags: 0

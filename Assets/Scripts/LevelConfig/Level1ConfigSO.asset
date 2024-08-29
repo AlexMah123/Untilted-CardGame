@@ -22,7 +22,7 @@ MonoBehaviour:
     AiModule: {fileID: 11400000, guid: a269275dbd8b89749a655335d86d606f, type: 2}
     playerType: 1
     upgradesEquipped:
-    - {fileID: 11400000, guid: 4b53ea2d60c1977429763639837f549b, type: 2}
-    - {fileID: 11400000, guid: 18d759f3d231e29409cab080507da93f, type: 2}
+    - {fileID: 11400000, guid: 8bd03fc3483eca441a7186a89a55dfa8, type: 2}
+    - {fileID: 11400000, guid: 3901b0d870b5cf54abdcd5024c214d87, type: 2}
   levelName: Level 1
   levelImage: {fileID: 21300000, guid: 90d8f0b52ca666f489993cf0eb55f92e, type: 3}
