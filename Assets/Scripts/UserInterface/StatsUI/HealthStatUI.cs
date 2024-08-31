@@ -6,6 +6,14 @@ public class HealthStatUI : MonoBehaviour
     public Player attachedPlayer;
     [SerializeField] TextMeshProUGUI healthText;
 
+    private void OnDisable()
+    {
+        if (attachedPlayer != null)
+        {
+            attachedPlayer.HealthComponent.OnHealthModified -= HandleOnHealthModified;
+        }
+    }
+
     private void Start()
     {
         if (attachedPlayer != null)

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public enum GameResult
@@ -41,8 +42,9 @@ public class GameManager : MonoBehaviour, ISavableData
         {
             UnbindConfirmCardChoiceEvent();
         }
-    }
 
+        UnbindPlayersHealthZeroEvent();
+    }
 
     private void Awake()
     {
@@ -63,6 +65,8 @@ public class GameManager : MonoBehaviour, ISavableData
         {
             BindConfirmCardChoiceEvent();
         }
+
+        BindPlayersHealthZeroEvent();
     }
 
     public void HandleConfirmCardChoice(ChoiceCardUI cardUI)
@@ -77,6 +81,48 @@ public class GameManager : MonoBehaviour, ISavableData
 
         //trigger resolution of the round
         PlayRound();
+    }
+    private void HandleOnHumanPlayerLose()
+    {
+        //#DEBUG
+        Debug.Log("Player has lost");
+
+        OnLevelCompleted?.Invoke(GameResult.Lose);
+    }
+
+    private void HandleOnComputerPlayerLose()
+    {
+        //#DEBUG
+        Debug.Log("Player has won");
+
+        //#TODO: add reward popup
+
+        SaveSystemManager.Instance.SaveGame();
+        OnLevelCompleted?.Invoke(GameResult.Win);
+    }
+
+    #region Internal Functions
+    private void UpdateLevelCompletionStatus(ref GameData data)
+    {
+        if (LevelDataManager.Instance.currentSelectedLevelSO == null) return;
+
+        var currentLevel = LevelDataManager.Instance.currentSelectedLevelSO;
+
+        var completedLevelData = data.levelCompletionData.FirstOrDefault(level => level.levelName == currentLevel.levelName);
+
+        if(completedLevelData != null)
+        {
+            completedLevelData.isCompleted = true;
+        }
+        else
+        {
+            data.levelCompletionData.Add(new LevelCompletionData
+            {
+                levelName = currentLevel.levelName,
+                isCompleted = true
+            });
+        }
+
     }
 
     public void PlayRound()
@@ -112,7 +158,7 @@ public class GameManager : MonoBehaviour, ISavableData
 
 #if UNITY_EDITOR
         //TESTING
-        Invoke(nameof(ClearEditorLog), 3f);
+        //Invoke(nameof(ClearEditorLog), 3f);
 #endif
 
     }
@@ -123,8 +169,6 @@ public class GameManager : MonoBehaviour, ISavableData
         OnClearCardInHand?.Invoke();
     }
 
-
-    #region Internal Functions
     private void EvaluateResults(GameResult roundResult)
     {
         // #TODO: call the players win lose draw conditions
@@ -143,25 +187,6 @@ public class GameManager : MonoBehaviour, ISavableData
             case GameResult.Draw:
                 //do nothing
                 break;
-        }
-
-        //#TODO: Check players healths
-        if (humanPlayer.HealthComponent.healthAmount <= 0)
-        {
-            //#DEBUG
-            Debug.Log("Player has lost");
-
-            OnLevelCompleted?.Invoke(GameResult.Lose);
-        }
-
-        if (computerPlayer.HealthComponent.healthAmount <= 0)
-        {
-            //#DEBUG
-            Debug.Log("Player has won");
-
-            //#TODO: add reward popup
-            //#TODO: Save Game. Save completed level
-            OnLevelCompleted?.Invoke(GameResult.Win);
         }
 
         //#DEBUG
@@ -189,8 +214,10 @@ public class GameManager : MonoBehaviour, ISavableData
     public void SaveData(ref GameData data)
     {
         //#TODO: mark when level is complete
-    }
 
+        UpdateLevelCompletionStatus(ref data);
+
+    }
     #endregion
 
     #region Bind CardConfirmation event
@@ -214,5 +241,32 @@ public class GameManager : MonoBehaviour, ISavableData
     }
     #endregion
 
+    #region Bind PlayerHealthZero Event
+    private void BindPlayersHealthZeroEvent()
+    {
+        if(humanPlayer)
+        {
+            humanPlayer.HealthComponent.OnHealthZero += HandleOnHumanPlayerLose;
+        }
 
+        if(computerPlayer)
+        {
+            computerPlayer.HealthComponent.OnHealthZero += HandleOnComputerPlayerLose;
+        }
+    }
+
+    private void UnbindPlayersHealthZeroEvent()
+    {
+        if (humanPlayer)
+        {
+            humanPlayer.HealthComponent.OnHealthZero -= HandleOnHumanPlayerLose;
+        }
+
+        if (computerPlayer)
+        {
+            computerPlayer.HealthComponent.OnHealthZero -= HandleOnComputerPlayerLose;
+        }
+    }
+
+    #endregion
 }

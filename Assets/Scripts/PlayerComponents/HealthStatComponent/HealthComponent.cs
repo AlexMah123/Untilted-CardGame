@@ -8,6 +8,7 @@ public class HealthComponent : MonoBehaviour
 
     //declaration of events
     public event Action<int> OnHealthModified;
+    public event Action OnHealthZero;
 
     public void InitializeComponent(PlayerStatsSO referencedStats)
     {
@@ -29,7 +30,15 @@ public class HealthComponent : MonoBehaviour
     {
         healthAmount += value;
 
+        healthAmount = Math.Max(healthAmount, 0);
+
         OnHealthModified?.Invoke(healthAmount);
+
+        if(healthAmount <= 0)
+        {
+            OnHealthZero?.Invoke();
+        }
+
     }
     #endregion
 }

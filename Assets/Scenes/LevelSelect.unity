@@ -1197,11 +1197,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentSelectedLevelSO: {fileID: 0}
   totalLevels:
-  - levelConfig: {fileID: 11400000, guid: 40b3ce25bae93a14fadca35cec0d46f2, type: 2}
+  - levelName: Level 1
     isCompleted: 0
-  - levelConfig: {fileID: 11400000, guid: 5da15982790e9e641a9f962768d5c7f0, type: 2}
+  - levelName: Level 2
     isCompleted: 0
-  - levelConfig: {fileID: 11400000, guid: 1f2bd17c06399fa46ad2aecc46ca309e, type: 2}
+  - levelName: Level 3
     isCompleted: 0
 --- !u!4 &1799242544
 Transform:
