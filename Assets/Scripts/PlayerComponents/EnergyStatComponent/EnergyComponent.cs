@@ -16,16 +16,16 @@ public class EnergyComponent : MonoBehaviour
 
     public void IncreaseEnergy(int value)
     {
-        ModifyDamageAmount(value);
+        ModifyStaminaAmount(value);
     }
 
     public void DecreaseEnergy(int value)
     {
-        ModifyDamageAmount(-1 * value);
+        ModifyStaminaAmount(-1 * value);
     }
 
     #region Internal Function
-    private void ModifyDamageAmount(int value)
+    private void ModifyStaminaAmount(int value)
     {
         energyAmount += value;
 
