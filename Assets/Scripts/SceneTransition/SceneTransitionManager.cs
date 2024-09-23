@@ -12,6 +12,7 @@ public enum SceneType
     LevelSelect,
     Game,
     Loadout,
+    Reward
 }
 
 public enum Transition
@@ -47,16 +48,16 @@ public class SceneTransitionManager : MonoBehaviour
         transitions = transitionsContainer.GetComponentsInChildren<SceneTransition>();
     }
 
-    public void LoadScene(SceneType scene, Transition transitionType)
+    public void LoadScene(SceneType scene, Transition transitionType, bool isAdditive = false)
     {
         //early return to prevent spamming
         if (isTransitioning) return;
 
         SFXManager.Instance.PlaySoundFXClip("SceneTransition", transform);
-        StartCoroutine(LoadSceneAsync(scene, transitionType));
+        StartCoroutine(LoadSceneAsync(scene, transitionType, isAdditive));
     }
 
-    private IEnumerator LoadSceneAsync(SceneType sceneType, Transition transitionType)
+    private IEnumerator LoadSceneAsync(SceneType sceneType, Transition transitionType, bool isAdditive)
     {
         //set flag to true
         isTransitioning = true;
@@ -80,9 +81,18 @@ public class SceneTransitionManager : MonoBehaviour
 
         //get the correct sceneObject
         SceneTransition transition = transitions.First(t => t.transitionType == transitionType);
+        AsyncOperation scene;
 
-        //load scene
-        AsyncOperation scene = SceneManager.LoadSceneAsync((int)sceneType);
+        if (isAdditive)
+        {
+            scene = SceneManager.LoadSceneAsync((int)sceneType, LoadSceneMode.Additive);
+        }
+        else
+        {
+            //load scene normally
+            scene = SceneManager.LoadSceneAsync((int)sceneType);
+        }
+
         scene.allowSceneActivation = false;
 
         //play animation to transition into new scene
@@ -98,4 +108,6 @@ public class SceneTransitionManager : MonoBehaviour
         //reset flag
         isTransitioning = false;
     }
+
+
 }

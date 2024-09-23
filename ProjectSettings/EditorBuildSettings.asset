@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoadoutSelection.unity
     guid: 9c661f3b5a8c5ba4791b21baf18dc3f1
+  - enabled: 1
+    path: Assets/Scenes/RewardScene.unity
+    guid: cbb5f1cbf9e3596438a2aae9735dfca6
   m_configObjects: {}

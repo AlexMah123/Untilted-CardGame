@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Level/LevelConfigSO")]
@@ -13,4 +14,7 @@ public class LevelConfigSO : ScriptableObject
     [Header("UI Data")]
     public string levelName;
     public Sprite levelImage;
+
+    [Header("Reward Data")]
+    public List<UpgradeDefinitionSO> rewardList;
 }

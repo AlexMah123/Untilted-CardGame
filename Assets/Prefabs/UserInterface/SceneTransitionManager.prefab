@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transitionType: 0
   crossFade: {fileID: 6520649870294560904}
+  durationOfTransition: 0.5
 --- !u!1 &7044549681853127635
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,6 +363,7 @@ MonoBehaviour:
   circleWipe: {fileID: 3643874499906080576}
   circle: {fileID: 6903089127497458680}
   distance: 2500
+  durationOfTransition: 0.5
 --- !u!1 &9038339873314724184
 GameObject:
   m_ObjectHideFlags: 0

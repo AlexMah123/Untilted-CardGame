@@ -5,6 +5,7 @@ public class SceneTransitionHandler : MonoBehaviour
 {
     public SceneType sceneToTransition;
     public Transition transitionType;
+    public bool isAdditive = false;
 
     private Coroutine coroutine;
 
@@ -22,7 +23,7 @@ public class SceneTransitionHandler : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(duration);
 
-        SceneTransitionManager.Instance.LoadScene(sceneToTransition, transitionType);
+        SceneTransitionManager.Instance.LoadScene(sceneToTransition, transitionType, isAdditive);
         coroutine = null;
     }
 }

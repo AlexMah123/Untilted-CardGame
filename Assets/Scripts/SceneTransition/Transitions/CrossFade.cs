@@ -6,12 +6,13 @@ using UnityEngine;
 public class CrossFade : SceneTransition
 {
     [SerializeField] CanvasGroup crossFade;
+    [SerializeField] float durationOfTransition = 1f;
 
     public override IEnumerator AnimateTransitionIn()
     {
         crossFade.blocksRaycasts = true;
 
-        var tweener = crossFade.DOFade(1f, 1f);
+        var tweener = crossFade.DOFade(1f, durationOfTransition);
         yield return tweener.WaitForCompletion();
     }
 
@@ -19,7 +20,7 @@ public class CrossFade : SceneTransition
     {
         crossFade.blocksRaycasts = false;
 
-        var tweener = crossFade.DOFade(0f, 1f);
+        var tweener = crossFade.DOFade(0f, durationOfTransition);
         yield return tweener.WaitForCompletion();
     }
 }

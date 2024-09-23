@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using static System.TimeZoneInfo;
 
 public enum GameResult
 {
@@ -17,6 +18,9 @@ public class GameManager : MonoBehaviour, ISavableData
     [Header("Player Data")]
     public Player humanPlayer;
     public AIPlayer computerPlayer;
+
+    [Header("GameManager Config")]
+    [SerializeField] Transition rewardTransitionType;
 
     //declaration of events
     public event Action OnClearCardInHand;
@@ -95,16 +99,20 @@ public class GameManager : MonoBehaviour, ISavableData
         //#DEBUG
         Debug.Log("Player has won");
 
-        //#TODO: add reward popup
-
-        SaveSystemManager.Instance.SaveGame();
         OnLevelCompleted?.Invoke(GameResult.Win);
+
+        //save game
+        SaveSystemManager.Instance.SaveGame();
     }
 
     #region Internal Functions
     private void UpdateLevelCompletionStatus(ref GameData data)
     {
-        if (LevelDataManager.Instance.currentSelectedLevelSO == null) return;
+        if (LevelDataManager.Instance.currentSelectedLevelSO == null) 
+        {
+            Debug.LogWarning("LevelManager does not exist, currentSelectedLevelSO is null");
+            return; 
+        }
 
         var currentLevel = LevelDataManager.Instance.currentSelectedLevelSO;
 
@@ -158,7 +166,7 @@ public class GameManager : MonoBehaviour, ISavableData
 
 #if UNITY_EDITOR
         //TESTING
-        //Invoke(nameof(ClearEditorLog), 3f);
+        Invoke(nameof(ClearEditorLog), 3f);
 #endif
 
     }
@@ -213,8 +221,6 @@ public class GameManager : MonoBehaviour, ISavableData
 
     public void SaveData(ref GameData data)
     {
-        //#TODO: mark when level is complete
-
         UpdateLevelCompletionStatus(ref data);
 
     }

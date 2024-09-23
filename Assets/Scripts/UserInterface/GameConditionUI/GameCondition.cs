@@ -12,6 +12,7 @@ public class GameCondition : MonoBehaviour
     [SerializeField] GameObject parentPanel;
     [SerializeField] Image conditionImage;
     [SerializeField] GameObject levelSelectButton;
+    [SerializeField] GameObject rewardButton;
 
     private void OnDisable()
     {
@@ -26,6 +27,8 @@ public class GameCondition : MonoBehaviour
 
     public void DisplayImage(GameResult gameResult)
     {
+        //#TODO: add win lose sound sfx
+
         parentPanel.SetActive(true);
 
         switch(gameResult)
@@ -33,11 +36,15 @@ public class GameCondition : MonoBehaviour
             case GameResult.Win:
                 conditionImage.sprite = winScreen;
                 levelSelectButton.SetActive(false);
+                rewardButton.SetActive(true);
+
                 break;
 
             case GameResult.Lose:
                 conditionImage.sprite = loseScreen;
                 levelSelectButton.SetActive(true);
+                rewardButton.SetActive(false);
+
                 break;
 
             default:
