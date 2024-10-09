@@ -15,6 +15,7 @@ public enum UpgradeType
     TheLovers,
     TheSun,
     TheWheelOfFortune,
+    TheMoon
 }
 
 public class UpgradeSOFactory : MonoBehaviour
@@ -40,7 +41,7 @@ public class UpgradeSOFactory : MonoBehaviour
     {
         UpgradeDefinitionSO queriedSO = Instance.totalPossibleUpgrade.upgradeList.FirstOrDefault(x => x.upgradeType == upgradeEnum);
 
-        if (!queriedSO) throw new MissingReferenceException("Tried to get a reference to a non existing upgradeSO");
+        if (!queriedSO) throw new MissingReferenceException($"Tried to get a reference to a non existing upgradeSO: {upgradeEnum.ToString()}");
 
 
         UpgradeDefinitionSO newSO = Instantiate(queriedSO);

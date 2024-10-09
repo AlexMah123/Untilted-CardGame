@@ -75,4 +75,25 @@ public class FileDataHandler
         }
     }
 
+    public void ClearData()
+    {
+        string fullPath = Path.Combine(dataDirectoryPath, dataFileName);
+
+        try
+        {
+            if(File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
+            else
+            {
+                Debug.LogWarning("File does not exist");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error occured when trying to clear save data from file:" + fullPath + "\n" + e);
+        }
+    }
+
 }

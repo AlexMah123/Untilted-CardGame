@@ -50,13 +50,7 @@ public class SaveSystemManager : MonoBehaviour
         BootstrapSaveData();
     }
 
-    private void OnApplicationQuit()
-    {
-        //Consider not saving on exit, control the saving
-        //SaveGame();
-    }
-
-    public void HandleSceneLoaded(Scene arg0, LoadSceneMode mode)
+    private void HandleSceneLoaded(Scene arg0, LoadSceneMode mode)
     {
         BootstrapSaveData();
     }
@@ -99,6 +93,13 @@ public class SaveSystemManager : MonoBehaviour
             savableDataObj.LoadData(gameData);
         }
     }
+    
+    [ContextMenu("SaveSysten/ClearSaveData")]
+    public void ClearSaveData()
+    {
+        dataHandler.ClearData();
+    }
+    
     #endregion
 
     #region Internal Methods
@@ -121,7 +122,7 @@ public class SaveSystemManager : MonoBehaviour
         if (objectsLoadedCount >= objectsToLoadCount)
         {
             //#DEBUG
-            Debug.Log("Finshed loading all data");
+            //Debug.Log("Finished loading all data");
 
             foreach (ISavableData savableDataObj in savableDataObjectsInScene)
             {

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd6098d0cf12a064d966ac031dec9a5a, type: 3}
   m_Name: TheMoon
   m_EditorClassIdentifier: 
-  upgradeImage: {fileID: 0}
+  upgradeSprite: {fileID: 21300000, guid: ac7f49f4a504c3b46b23256a64f31922, type: 3}
   upgradeName: The Moon
-  upgradeDefinition: 
+  upgradeDescription: 
   isActivatable: 0
+  upgradeType: 12
