@@ -18,7 +18,7 @@ public class ActiveLoadoutComponent : MonoBehaviour
         }
     }
 
-    public void InitializeComponent(Player refPlayer, PlayerStatsSO referencedStats)
+    public void InitializeComponent(Player refPlayer, PlayerStats referencedStats)
     {
         attachedPlayer = refPlayer;
         maxLimitOfLoadout = referencedStats.cardSlots;

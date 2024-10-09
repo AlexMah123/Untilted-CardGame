@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3053e95e8bf355949bf4ee1a838ca1e5, type: 3}
   m_Name: TheSun
   m_EditorClassIdentifier: 
-  upgradeSprite: {fileID: 21300000, guid: ce18716f0c856074da24ca2da37a5f77, type: 3}
+  upgradeSprite: {fileID: 21300000, guid: 61d59303452576844b6819dc9693436d, type: 3}
   upgradeName: The Sun
-  upgradeDefinition: 
+  upgradeDescription: 
   isActivatable: 0
   upgradeType: 10

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c724ea79e2431e641b0f685724f6bd76, type: 3}
   m_Name: TheDevil
   m_EditorClassIdentifier: 
-  upgradeSprite: {fileID: 21300000, guid: 4c0a9809b447a5f4abdc3ab3fe0bfe47, type: 3}
+  upgradeSprite: {fileID: 21300000, guid: 32afbe9af6a123f408068db85af2d928, type: 3}
   upgradeName: The Devil
-  upgradeDefinition: 
+  upgradeDescription: 
   isActivatable: 0
   upgradeType: 4

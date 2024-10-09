@@ -1,19 +1,23 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(ChoiceComponent), typeof(ActiveLoadoutComponent))]
 [RequireComponent(typeof(HealthComponent), typeof(DamageComponent), typeof(EnergyComponent))]
 public class Player : MonoBehaviour, IPlayer, ISavableData
 {
     //inherited components from IPlayer
-    public ChoiceComponent ChoiceComponent { get => choiceComponent; }
-    public ActiveLoadoutComponent ActiveLoadoutComponent { get => activeLoadoutComponent; }
-    public HealthComponent HealthComponent { get => healthComponent; }
-    public DamageComponent DamageComponent { get => damageComponent; }
-    public EnergyComponent EnergyComponent { get => energyComponent; }
+    public ChoiceComponent ChoiceComponent => choiceComponent;
+    public ActiveLoadoutComponent ActiveLoadoutComponent => activeLoadoutComponent;
+    public HealthComponent HealthComponent => healthComponent;
+    public DamageComponent DamageComponent => damageComponent;
+    public EnergyComponent EnergyComponent => energyComponent;
 
     [Header("Player Stats Config")]
-    public PlayerStatsSO statsConfig;
+    public PlayerStatsSO baseStatsConfig;
+
+    public PlayerStats upgradeStats = new();
+    public PlayerStats currentStats = new();
 
     //local variables
     private ChoiceComponent choiceComponent;
@@ -33,13 +37,11 @@ public class Player : MonoBehaviour, IPlayer, ISavableData
         healthComponent = GetComponent<HealthComponent>();
         damageComponent = GetComponent<DamageComponent>();
         energyComponent = GetComponent<EnergyComponent>();
-
-        LoadComponents();
     }
 
     protected virtual void Start()
     {
-
+        LoadComponents();
     }
 
     protected virtual void Update()
@@ -47,15 +49,17 @@ public class Player : MonoBehaviour, IPlayer, ISavableData
 
     }
 
-    //override if neccessary
+    //override if necessary
     public virtual void LoadComponents()
     {
+        UpdateCurrentStats();
+        
         //Inject values
         choiceComponent.currentChoice = GameChoice.Rock;
-        activeLoadoutComponent.InitializeComponent(this, statsConfig);
-        healthComponent.InitializeComponent(statsConfig);
-        damageComponent.InitializeComponent(statsConfig);
-        energyComponent.InitializeComponent(statsConfig);
+        activeLoadoutComponent.InitializeComponent(this, currentStats);
+        healthComponent.InitializeComponent(currentStats);
+        damageComponent.InitializeComponent(currentStats);
+        energyComponent.InitializeComponent(currentStats);
     }
 
     //overriden by AIPlayer, HumanPlayer is set by turn system manager/GameManager
@@ -85,17 +89,14 @@ public class Player : MonoBehaviour, IPlayer, ISavableData
     //override to have their own implementation of loadData
     protected virtual void LoadPlayerData(GameData data)
     {
-        //load from LevelDataManager
-        var humanPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.humanPlayer;
+        //implement in child class
+    }
 
-        //#TODO: technically load from save file
-        statsConfig = humanPlayerData.StatsConfig;
-
-        foreach (UpgradeType upgradeType in data.playerEquippedUpgrades)
-        {
-            ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeType);
-        }
-
-        LoadComponents();
+    public void UpdateCurrentStats()
+    {
+        currentStats.health = baseStatsConfig.health + upgradeStats.health;
+        currentStats.damage = baseStatsConfig.damage + upgradeStats.damage;
+        currentStats.cardSlots = baseStatsConfig.cardSlots + upgradeStats.cardSlots;
+        currentStats.energy = baseStatsConfig.energy + upgradeStats.energy;
     }
 }

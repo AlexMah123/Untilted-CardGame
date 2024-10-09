@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca9b894208632b247b05b6c6fbc8b326, type: 3}
   m_Name: TheWheelOfFortune
   m_EditorClassIdentifier: 
-  upgradeSprite: {fileID: 21300000, guid: efdaad4b37eff0446b20cc7d2111b1be, type: 3}
+  upgradeSprite: {fileID: 21300000, guid: ae82006bda21fe54d83cfd281bc59f06, type: 3}
   upgradeName: The Wheel Of Fortune
-  upgradeDefinition: 
+  upgradeDescription: 
   isActivatable: 0
   upgradeType: 11

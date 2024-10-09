@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 
 [Serializable]
 public struct PlayerData
 {
-    public PlayerStatsSO StatsConfig;
+    public PlayerStatsSO baseStatsConfig;
     public AIDecision AiModule;
     public PlayerType playerType;
 

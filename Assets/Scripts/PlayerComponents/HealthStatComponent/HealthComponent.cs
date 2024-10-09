@@ -10,9 +10,11 @@ public class HealthComponent : MonoBehaviour
     public event Action<int> OnHealthModified;
     public event Action OnHealthZero;
 
-    public void InitializeComponent(PlayerStatsSO referencedStats)
+    public void InitializeComponent(PlayerStats referencedStats)
     {
         healthAmount = referencedStats.health;
+        
+        OnHealthModified?.Invoke(healthAmount);
     }
 
     public void IncreaseHealth(int value)

@@ -9,9 +9,11 @@ public class EnergyComponent : MonoBehaviour
     //declaration of events
     public event Action<int> OnEnergyModified;
 
-    public void InitializeComponent(PlayerStatsSO referencedStats)
+    public void InitializeComponent(PlayerStats referencedStats)
     {
         energyAmount = referencedStats.energy;
+        
+        OnEnergyModified?.Invoke(energyAmount);
     }
 
     public void IncreaseEnergy(int value)

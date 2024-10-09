@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75013c4bc7c9d2b43b07733bb6561070, type: 3}
+  m_Name: TestLevelConfig
+  m_EditorClassIdentifier: 
+  humanPlayer:
+    baseStatsConfig: {fileID: 11400000, guid: 43b053e5d44da56449eb66cacadcbc05, type: 2}
+    AiModule: {fileID: 0}
+    playerType: 0
+    upgradesEquipped: []
+  aiPlayer:
+    baseStatsConfig: {fileID: 11400000, guid: c444568b120687f45a684a2a5c2e7edf, type: 2}
+    AiModule: {fileID: 11400000, guid: 827fa0f581f37bf4680a4e6a7df3e03f, type: 2}
+    playerType: 1
+    upgradesEquipped:
+    - {fileID: 11400000, guid: 8bd03fc3483eca441a7186a89a55dfa8, type: 2}
+    - {fileID: 11400000, guid: 3901b0d870b5cf54abdcd5024c214d87, type: 2}
+  levelName: Level 1
+  levelImage: {fileID: 21300000, guid: 90d8f0b52ca666f489993cf0eb55f92e, type: 3}
+  rewardList:
+  - {fileID: 11400000, guid: ada56775d7dd05e4797a0c60c6901094, type: 2}
+  - {fileID: 11400000, guid: 5b427f2ce81795a4f803cc8a7e5d7e75, type: 2}
+  - {fileID: 11400000, guid: e0e67e4e3b463684081980d0a49524f2, type: 2}
+  - {fileID: 11400000, guid: d0260919b124dd549816950349f0ae10, type: 2}
+  - {fileID: 11400000, guid: 4715a156ca2274448a0fc521c1341d23, type: 2}
+  - {fileID: 11400000, guid: 4b53ea2d60c1977429763639837f549b, type: 2}
+  rewardStats:
+    health: 2
+    damage: 0
+    cardSlots: 0
+    energy: 0

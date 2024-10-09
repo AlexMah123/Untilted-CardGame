@@ -3,16 +3,7 @@ using UnityEngine;
 public class AIPlayer : Player
 {
     public AIDecision aiModuleConfig;
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        aiModuleConfig.InitializeAIConfig(ChoiceComponent);
-        //ChoiceComponent.SealChoice(GameChoice.ROCK);
-        //ChoiceComponent.SealChoice(GameChoice.PAPER);
-    }
-
+    
     public override void LoadComponents()
     {
         base.LoadComponents();
@@ -34,15 +25,14 @@ public class AIPlayer : Player
     {
         var computerPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.aiPlayer;
 
-        statsConfig = computerPlayerData.StatsConfig;
+        baseStatsConfig = computerPlayerData.baseStatsConfig;
         aiModuleConfig = computerPlayerData.AiModule;
 
+        //load data from levelconfig
         foreach (UpgradeDefinitionSO upgradeSO in computerPlayerData.upgradesEquipped)
         {
             ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeSO);
         }
-
-        LoadComponents();
     }
 
 }

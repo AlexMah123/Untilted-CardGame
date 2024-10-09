@@ -9,9 +9,11 @@ public class DamageComponent : MonoBehaviour
     //declaration of events
     public event Action<int> OnDamageModified;
 
-    public void InitializeComponent(PlayerStatsSO referencedStats)
+    public void InitializeComponent(PlayerStats referencedStats)
     {
         damageAmount = referencedStats.damage;
+        
+        OnDamageModified?.Invoke(damageAmount);
     }
 
     public void IncreaseDamage(int value)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class RewardSystemManager : MonoBehaviour, ISavableData
@@ -11,16 +12,17 @@ public class RewardSystemManager : MonoBehaviour, ISavableData
 
     [Header("Reward Display Config")] [SerializeField]
     RectTransform rewardContainer;
-
     [SerializeField] RectTransform content;
     [SerializeField] GridLayoutGroup gridLayout;
     [SerializeField] float rewardContainerXScale = 1.5f;
     [SerializeField] float rewardContainerYScale = 1f;
 
 
-    [Header("Runtime Data")] [SerializeField]
-    List<UpgradeDefinitionSO> upgradeRewardList;
-
+    [Header("Runtime Data")]
+    [SerializeField] List<UpgradeDefinitionSO> upgradeRewardList;
+    [SerializeField] PlayerStats playerRewardStats;
+    
+    //cached
     List<LoadoutCardUI> rewardUIList;
 
     //ISavableData
@@ -36,7 +38,8 @@ public class RewardSystemManager : MonoBehaviour, ISavableData
 
         //Based on the level, there is a set rewardList
         upgradeRewardList = LevelDataManager.Instance.currentSelectedLevelSO.rewardList;
-
+        playerRewardStats = LevelDataManager.Instance.currentSelectedLevelSO.rewardStats;
+        
         InitializeRewardContainer();
         UpdateRewardDisplay();
 
@@ -61,7 +64,7 @@ public class RewardSystemManager : MonoBehaviour, ISavableData
         //based on rewardList, display that many reward UI
         foreach (var upgrade in upgradeRewardList)
         {
-            LoadoutCardUI rewardUI = GetReward();
+            LoadoutCardUI rewardUI = GetAvailableRewardUI();
 
             if (rewardUI)
             {
@@ -79,7 +82,7 @@ public class RewardSystemManager : MonoBehaviour, ISavableData
         AdjustRewardContainerSize(upgradeRewardList.Count);
     }
 
-    private LoadoutCardUI GetReward()
+    private LoadoutCardUI GetAvailableRewardUI()
     {
         LoadoutCardUI availableRewardUI = rewardUIList.FirstOrDefault(x => x.gameObject.activeInHierarchy == false);
         bool failedToGetExistingReward = availableRewardUI == null;
@@ -117,6 +120,7 @@ public class RewardSystemManager : MonoBehaviour, ISavableData
 
     public void LoadData(GameData data)
     {
+        
     }
 
     public void SaveData(ref GameData data)
@@ -126,9 +130,16 @@ public class RewardSystemManager : MonoBehaviour, ISavableData
 
     private void SaveUpgradesToPlayerData(ref GameData data)
     {
+        //save the cardUpgrades to the player's save data'
         foreach (var upgrades in upgradeRewardList)
         {
             data.playerUnlockedUpgrades.Add(upgrades.upgradeType);
         }
+        
+        //update the player's stats'
+        data.upgradedPlayerStats.health += playerRewardStats.health;
+        data.upgradedPlayerStats.damage += playerRewardStats.damage;
+        data.upgradedPlayerStats.cardSlots += playerRewardStats.cardSlots;
+        data.upgradedPlayerStats.energy += playerRewardStats.energy;
     }
 }
