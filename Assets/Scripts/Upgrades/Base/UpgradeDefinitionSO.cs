@@ -1,58 +1,63 @@
+using PlayerCore;
 using UnityEngine;
+using Upgrades.UpgradeFactory;
 
-public abstract class UpgradeDefinitionSO : ScriptableObject
+namespace Upgrades.Base
 {
-    [Header("User Interface Configs")]
-    public Sprite upgradeSprite;
-    public string upgradeName;
-
-    [Multiline]
-    public string upgradeDescription;
-
-    [Header("Gameplay Configs")]
-    public bool isActivatable;
-    public UpgradeType upgradeType;
-
-    public override bool Equals(object obj)
+    public abstract class UpgradeDefinitionSO : ScriptableObject
     {
-        if (obj is UpgradeDefinitionSO other)
+        [Header("User Interface Configs")]
+        public Sprite upgradeSprite;
+        public string upgradeName;
+
+        [Multiline]
+        public string upgradeDescription;
+
+        [Header("Gameplay Configs")]
+        public bool isActivatable;
+        public UpgradeType upgradeType;
+
+        public override bool Equals(object obj)
         {
-            return upgradeType == other.upgradeType;
+            if (obj is UpgradeDefinitionSO other)
+            {
+                return upgradeType == other.upgradeType;
+            }
+
+            return false;
         }
 
-        return false;
-    }
+        public override int GetHashCode()
+        {
+            return upgradeType.GetHashCode();
+        }
 
-    public override int GetHashCode()
-    {
-        return upgradeType.GetHashCode();
-    }
+        public virtual void ApplyPassiveEffect(IPlayer player)
+        {
 
-    public virtual void ApplyPassiveEffect(IPlayer player)
-    {
+        }
 
-    }
+        public virtual void ApplyActivatableEffect(IPlayer player)
+        {
+            Debug.Log($"Activating Effect of {this.GetType()}");
+        }
 
-    public virtual void ApplyActivatableEffect(IPlayer player)
-    {
-        Debug.Log($"Activating Effect of {this.GetType()}");
-    }
+        public virtual void OnWinRound(IPlayer player)
+        {
+            Debug.Log($"Applying OnWin Effect of {this.GetType()}");
 
-    public virtual void OnWinRound(IPlayer player)
-    {
-        Debug.Log($"Applying OnWin Effect of {this.GetType()}");
+        }
 
-    }
+        public virtual void OnLoseRound(IPlayer player)
+        {
+            Debug.Log($"Applying OnLose Effect of {this.GetType()}");
 
-    public virtual void OnLoseRound(IPlayer player)
-    {
-        Debug.Log($"Applying OnLose Effect of {this.GetType()}");
+        }
 
-    }
+        public virtual void OnDrawRound(IPlayer player)
+        {
+            Debug.Log($"Applying OnDraw Effect of {this.GetType()}");
 
-    public virtual void OnDrawRound(IPlayer player)
-    {
-        Debug.Log($"Applying OnDraw Effect of {this.GetType()}");
-
+        }
     }
 }

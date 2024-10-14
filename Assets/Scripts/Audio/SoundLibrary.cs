@@ -2,26 +2,29 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-[Serializable]
-public struct SoundEffect
+namespace Audio
 {
-    public string groupID;
-    public AudioClip[] clips;
-}
-
-public class SoundLibrary : MonoBehaviour
-{
-    public SoundEffect[] soundEffects;
-
-    public AudioClip GetAudioClip(string name)
+    [Serializable]
+    public struct SoundEffect
     {
-        var audioClip = soundEffects.FirstOrDefault(sfx => sfx.groupID == name);
+        public string groupID;
+        public AudioClip[] clips;
+    }
 
-        if (audioClip.Equals(default(SoundEffect)))
+    public class SoundLibrary : MonoBehaviour
+    {
+        public SoundEffect[] soundEffects;
+
+        public AudioClip GetAudioClip(string name)
         {
-            throw new NullReferenceException($"{name} clip was not found");
-        }
+            var audioClip = soundEffects.FirstOrDefault(sfx => sfx.groupID == name);
 
-        return audioClip.clips[UnityEngine.Random.Range(0, audioClip.clips.Length)];
+            if (audioClip.Equals(default(SoundEffect)))
+            {
+                throw new NullReferenceException($"{name} clip was not found");
+            }
+
+            return audioClip.clips[UnityEngine.Random.Range(0, audioClip.clips.Length)];
+        }
     }
 }

@@ -1,17 +1,23 @@
-public class PlayerTurn : Turn
+using PlayerCore.Base;
+using TurnSystem.Turns.Base;
+
+namespace TurnSystem.Turns
 {
-    protected override void OnStart(Player currentPlayer)
+    public class PlayerTurn : Turn
     {
-        //Debug.Log("Start Player Turn");
-    }
+        protected override void OnStart(Player currentPlayer)
+        {
+            //Debug.Log("Start Player Turn");
+        }
 
-    protected override void OnUpdate(Player currentPlayer)
-    {
-        //Debug.Log("Update Player Turn");
-    }
+        protected override void OnUpdate(Player currentPlayer)
+        {
+            //Debug.Log("Update Player Turn");
+        }
 
-    protected override void OnEnd(Player currentPlayer)
-    {
-        //Debug.Log("End Player Turn");
+        protected override void OnEnd(Player currentPlayer)
+        {
+            //Debug.Log("End Player Turn");
+        }
     }
 }

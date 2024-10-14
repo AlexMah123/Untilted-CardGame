@@ -1,116 +1,122 @@
 using System;
 using System.Collections.Generic;
+using LoadoutSelection;
 using UnityEngine;
+using Upgrades.Base;
+using UserInterface.Cards.LoadoutCard;
 
-public class EquippedLoadoutSelectionManager : MonoBehaviour
+namespace UserInterface.LoadoutSelection.EquippedLoadoutSelectionManager
 {
-    public GameObject equippedLoadoutParent;
-    public LoadoutSelectionManager loadoutLayoutManager;
-
-    public event Action OnLoadoutUpdated;
-
-    public event Action<LoadoutCardGOInfo> OnLoadoutRemoved;
-
-    //#TODO: Add limit/checking of equippable amount for loadout
-
-    private void OnEnable()
+    public class EquippedLoadoutSelectionManager : MonoBehaviour
     {
-        LoadoutCardUI[] loadoutCards = equippedLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
+        public GameObject equippedLoadoutParent;
+        public LoadoutSelectionManager loadoutLayoutManager;
 
-        foreach (LoadoutCardUI loadoutCard in loadoutCards)
-        {
-            loadoutCard.OnCardClicked += HandleCardRemoved;
-        }
-    }
+        public event Action OnLoadoutUpdated;
 
-    private void OnDisable()
-    {
-        if (equippedLoadoutParent != null)
+        public event Action<LoadoutCardGOInfo> OnLoadoutRemoved;
+
+        //#TODO: Add limit/checking of equippable amount for loadout
+
+        private void OnEnable()
         {
             LoadoutCardUI[] loadoutCards = equippedLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
 
             foreach (LoadoutCardUI loadoutCard in loadoutCards)
             {
-                if (loadoutCard != null)
+                loadoutCard.OnCardClicked += HandleCardRemoved;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (equippedLoadoutParent != null)
+            {
+                LoadoutCardUI[] loadoutCards = equippedLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
+
+                foreach (LoadoutCardUI loadoutCard in loadoutCards)
                 {
-                    loadoutCard.OnCardClicked -= HandleCardRemoved;
+                    if (loadoutCard != null)
+                    {
+                        loadoutCard.OnCardClicked -= HandleCardRemoved;
+                    }
                 }
             }
         }
-    }
 
-    private void Start()
-    {
-        InitializeActiveLoadout();
-    }
-
-    public bool AddUpgrade(UpgradeDefinitionSO selectedUpgrade)
-    {
-        GameObject loadoutCardGO = GetFirstInactiveLoadout();
-
-        if (loadoutCardGO)
+        private void Start()
         {
-            LoadoutCardUI loadoutCardUI = loadoutCardGO.GetComponent<LoadoutCardUI>();
+            InitializeActiveLoadout();
+        }
 
-            if (loadoutCardUI)
+        public bool AddUpgrade(UpgradeDefinitionSO selectedUpgrade)
+        {
+            GameObject loadoutCardGO = GetFirstInactiveLoadout();
+
+            if (loadoutCardGO)
             {
-                loadoutCardUI.InitializeCard(new LoadoutCardGOInfo(selectedUpgrade));
-                loadoutCardGO.SetActive(true);
+                LoadoutCardUI loadoutCardUI = loadoutCardGO.GetComponent<LoadoutCardUI>();
 
-                return true;
+                if (loadoutCardUI)
+                {
+                    loadoutCardUI.InitializeCard(new LoadoutCardGOInfo(selectedUpgrade));
+                    loadoutCardGO.SetActive(true);
+
+                    return true;
+                }
             }
+
+            //fallback defaults to false.
+            return false;
         }
 
-        //fallback defaults to false.
-        return false;
-    }
-
-    public void HandleCardRemoved(LoadoutCardGOInfo loadoutCardInfo)
-    {
-        OnLoadoutRemoved?.Invoke(loadoutCardInfo);
-        OnLoadoutUpdated?.Invoke();
-    }
-
-    #region Internal methods
-    private void InitializeActiveLoadout()
-    {
-        var activeLoadoutGOList = GetAllActiveLoadoutGO();
-
-        foreach (GameObject loadoutGO in activeLoadoutGOList)
+        public void HandleCardRemoved(LoadoutCardGOInfo loadoutCardInfo)
         {
-            loadoutGO.SetActive(false);
+            OnLoadoutRemoved?.Invoke(loadoutCardInfo);
+            OnLoadoutUpdated?.Invoke();
         }
 
-        OnLoadoutUpdated?.Invoke();
-    }
-
-    private GameObject GetFirstInactiveLoadout()
-    {
-        var activeLoadoutGOList = GetAllActiveLoadoutGO();
-
-        foreach (GameObject loadoutGO in activeLoadoutGOList)
+        #region Internal methods
+        private void InitializeActiveLoadout()
         {
-            if (!loadoutGO.activeSelf)
+            var activeLoadoutGOList = GetAllActiveLoadoutGO();
+
+            foreach (GameObject loadoutGO in activeLoadoutGOList)
             {
-                return loadoutGO;
+                loadoutGO.SetActive(false);
             }
+
+            OnLoadoutUpdated?.Invoke();
         }
 
-        return null;
-    }
-
-    private List<GameObject> GetAllActiveLoadoutGO()
-    {
-        List<GameObject> loadoutGO = new();
-
-        foreach (Transform child in equippedLoadoutParent.transform)
+        private GameObject GetFirstInactiveLoadout()
         {
-            loadoutGO.Add(child.gameObject);
+            var activeLoadoutGOList = GetAllActiveLoadoutGO();
+
+            foreach (GameObject loadoutGO in activeLoadoutGOList)
+            {
+                if (!loadoutGO.activeSelf)
+                {
+                    return loadoutGO;
+                }
+            }
+
+            return null;
         }
 
-        return loadoutGO;
+        private List<GameObject> GetAllActiveLoadoutGO()
+        {
+            List<GameObject> loadoutGO = new();
+
+            foreach (Transform child in equippedLoadoutParent.transform)
+            {
+                loadoutGO.Add(child.gameObject);
+            }
+
+            return loadoutGO;
+        }
+
+
+        #endregion
     }
-
-
-    #endregion
 }

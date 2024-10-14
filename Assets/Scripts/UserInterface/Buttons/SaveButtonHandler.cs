@@ -1,27 +1,31 @@
+using SaveSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SaveButtonHandler : MonoBehaviour
+namespace UserInterface.Buttons
 {
-    [SerializeField] private Button saveButton;
-
-    private void Start()
+    public class SaveButtonHandler : MonoBehaviour
     {
-        if (saveButton != null)
-        {
-            saveButton.onClick.AddListener(OnSaveButtonClicked);
-        }
-    }
+        [SerializeField] private Button saveButton;
 
-    private void OnSaveButtonClicked()
-    {
-        if (SaveSystemManager.Instance != null)
+        private void Start()
         {
-            SaveSystemManager.Instance.SaveGame();
+            if (saveButton != null)
+            {
+                saveButton.onClick.AddListener(OnSaveButtonClicked);
+            }
         }
-        else
+
+        private void OnSaveButtonClicked()
         {
-            Debug.LogError("SaveSystemManager instance is missing");
+            if (SaveSystemManager.Instance != null)
+            {
+                SaveSystemManager.Instance.SaveGame();
+            }
+            else
+            {
+                Debug.LogError("SaveSystemManager instance is missing");
+            }
         }
     }
 }

@@ -1,62 +1,68 @@
 using System;
+using LoadoutSelection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UserInterface.Cards.Base;
+using UserInterface.InspectUpgradeUI;
 
-[RequireComponent(typeof(InspectComponent), typeof(Outline))]
-public class LoadoutCardUI : CardUI, IPointerClickHandler
+namespace UserInterface.Cards.LoadoutCard
 {
-    [Header("Loadout Card Config")]
-    public LoadoutCardGOInfo cardInfo;
-    public bool shouldDisableOnClick = true;
-    public bool shouldDisplayOutline = true;
-
-    public event Action<LoadoutCardGOInfo> OnCardClicked;
-
-    public override void OnPointerEnter(PointerEventData eventData)
+    [RequireComponent(typeof(InspectComponent), typeof(Outline))]
+    public class LoadoutCardUI : CardUI, IPointerClickHandler
     {
-        base.OnPointerEnter(eventData);
+        [Header("Loadout Card Config")]
+        public LoadoutCardGOInfo cardInfo;
+        public bool shouldDisableOnClick = true;
+        public bool shouldDisplayOutline = true;
 
-        if(shouldDisplayOutline)
+        public event Action<LoadoutCardGOInfo> OnCardClicked;
+
+        public override void OnPointerEnter(PointerEventData eventData)
         {
-            gameObject.GetComponent<Outline>().enabled = true;
-        }
+            base.OnPointerEnter(eventData);
 
-    }
-
-    public override void OnPointerExit(PointerEventData eventData)
-    {
-        base.OnPointerExit(eventData);
-
-        if (shouldDisplayOutline)
-        {
-            gameObject.GetComponent<Outline>().enabled = false;
-        }
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            OnCardClicked?.Invoke(cardInfo);
-
-            if(shouldDisableOnClick)
+            if(shouldDisplayOutline)
             {
-                gameObject.SetActive(false);
+                gameObject.GetComponent<Outline>().enabled = true;
+            }
+
+        }
+
+        public override void OnPointerExit(PointerEventData eventData)
+        {
+            base.OnPointerExit(eventData);
+
+            if (shouldDisplayOutline)
+            {
+                gameObject.GetComponent<Outline>().enabled = false;
             }
         }
 
-        if (eventData.button == PointerEventData.InputButton.Right)
+        public void OnPointerClick(PointerEventData eventData)
         {
-            InspectComponent.InspectCard(cardInfo.upgradeSO);
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                OnCardClicked?.Invoke(cardInfo);
+
+                if(shouldDisableOnClick)
+                {
+                    gameObject.SetActive(false);
+                }
+            }
+
+            if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                InspectComponent.InspectCard(cardInfo.upgradeSO);
+            }
         }
+
+        public void InitializeCard(LoadoutCardGOInfo loadoutCardInfo)
+        {
+            cardInfo.upgradeSO = loadoutCardInfo.upgradeSO;
+            cardImage.sprite = cardInfo.upgradeSO.upgradeSprite;
+        }
+
+
     }
-
-    public void InitializeCard(LoadoutCardGOInfo loadoutCardInfo)
-    {
-        cardInfo.upgradeSO = loadoutCardInfo.upgradeSO;
-        cardImage.sprite = cardInfo.upgradeSO.upgradeSprite;
-    }
-
-
 }

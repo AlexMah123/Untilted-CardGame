@@ -1,49 +1,52 @@
 using System;
 using UnityEngine;
 
-public class SFXManager : MonoBehaviour
+namespace Audio
 {
-    public static SFXManager Instance;
-
-    [Header("Sound FX Prefab")]
-    [SerializeField] private AudioSource soundFXObject;
-
-    [Header("SFX Library")]
-    public SoundLibrary sfxLibrary;
-
-    private void Awake()
+    public class SFXManager : MonoBehaviour
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-    }
+        public static SFXManager Instance;
 
-    public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform)
-    {
-        if (audioClip == null)
+        [Header("Sound FX Prefab")]
+        [SerializeField] private AudioSource soundFXObject;
+
+        [Header("SFX Library")]
+        public SoundLibrary sfxLibrary;
+
+        private void Awake()
         {
-            throw new NullReferenceException($"{audioClip.name} is null");
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
         }
 
-        AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+        public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform)
+        {
+            if (audioClip == null)
+            {
+                throw new NullReferenceException($"{audioClip.name} is null");
+            }
 
-        audioSource.clip = audioClip;
-        audioSource.Play();
+            AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
 
-        float clipLength = audioSource.clip.length;
-        Destroy(audioSource.gameObject, clipLength);
-    }
+            audioSource.clip = audioClip;
+            audioSource.Play();
 
-    public void PlaySoundFXClip(string soundName, Transform spawnTransform)
-    {
-        var audioClip = sfxLibrary.GetAudioClip(soundName);
+            float clipLength = audioSource.clip.length;
+            Destroy(audioSource.gameObject, clipLength);
+        }
 
-        PlaySoundFXClip(audioClip, spawnTransform);
+        public void PlaySoundFXClip(string soundName, Transform spawnTransform)
+        {
+            var audioClip = sfxLibrary.GetAudioClip(soundName);
+
+            PlaySoundFXClip(audioClip, spawnTransform);
+        }
     }
 }

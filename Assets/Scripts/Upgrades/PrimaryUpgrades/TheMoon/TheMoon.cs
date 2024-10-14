@@ -1,10 +1,15 @@
+using PlayerCore;
 using UnityEngine;
+using Upgrades.Base;
 
-[CreateAssetMenu(fileName = "TheMoon", menuName = "Upgrades/UpgradeDefiniton/TheMoon")]
-public class TheMoon : UpgradeDefinitionSO
+namespace Upgrades.PrimaryUpgrades.TheMoon
 {
-    public override void ApplyPassiveEffect(IPlayer player)
+    [CreateAssetMenu(fileName = "TheMoon", menuName = "Upgrades/UpgradeDefiniton/TheMoon")]
+    public class TheMoon : UpgradeDefinitionSO
     {
+        public override void ApplyPassiveEffect(IPlayer player)
+        {
 
+        }
     }
 }

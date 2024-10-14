@@ -1,29 +1,34 @@
 using System.Collections;
+using Audio;
+using SceneTransition;
 using UnityEngine;
 
-public class SceneTransitionHandler : MonoBehaviour
+namespace UserInterface.Buttons
 {
-    public SceneType sceneToTransition;
-    public Transition transitionType;
-    public bool isAdditive = false;
-
-    private Coroutine coroutine;
-
-    public void LoadScene()
+    public class SceneTransitionHandler : MonoBehaviour
     {
-        if (coroutine != null) return;
+        public SceneType sceneToTransition;
+        public Transition transitionType;
+        public bool isAdditive = false;
 
-        var audioClip = SFXManager.Instance.sfxLibrary.GetAudioClip("ButtonClick");
-        SFXManager.Instance.PlaySoundFXClip(audioClip, transform);
+        private Coroutine coroutine;
 
-        coroutine = StartCoroutine(HandleLoadScene(audioClip.length));
-    }
+        public void LoadScene()
+        {
+            if (coroutine != null) return;
 
-    private IEnumerator HandleLoadScene(float duration)
-    {
-        yield return new WaitForSecondsRealtime(duration);
+            var audioClip = SFXManager.Instance.sfxLibrary.GetAudioClip("ButtonClick");
+            SFXManager.Instance.PlaySoundFXClip(audioClip, transform);
 
-        SceneTransitionManager.Instance.LoadScene(sceneToTransition, transitionType, isAdditive);
-        coroutine = null;
+            coroutine = StartCoroutine(HandleLoadScene(audioClip.length));
+        }
+
+        private IEnumerator HandleLoadScene(float duration)
+        {
+            yield return new WaitForSecondsRealtime(duration);
+
+            SceneTransitionManager.Instance.LoadScene(sceneToTransition, transitionType, isAdditive);
+            coroutine = null;
+        }
     }
 }

@@ -1,113 +1,117 @@
 using System;
 using System.Collections;
 using System.Linq;
+using Audio;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[Serializable]
-public enum SceneType
+namespace SceneTransition
 {
-    Exit = -1,
-    Menu,
-    LevelSelect,
-    Game,
-    Loadout,
-    Reward
-}
-
-public enum Transition
-{
-    CrossFade,
-    CircleWipe,
-}
-
-public class SceneTransitionManager : MonoBehaviour
-{
-    public static SceneTransitionManager Instance;
-
-    public GameObject transitionsContainer;
-
-    private SceneTransition[] transitions;
-    private bool isTransitioning = false;
-
-    private void Awake()
+    [Serializable]
+    public enum SceneType
     {
-        if (Instance != null && Instance == this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        Exit = -1,
+        Menu,
+        LevelSelect,
+        Game,
+        Loadout,
+        Reward
     }
 
-    private void Start()
+    public enum Transition
     {
-        transitions = transitionsContainer.GetComponentsInChildren<SceneTransition>();
+        CrossFade,
+        CircleWipe,
     }
 
-    public void LoadScene(SceneType scene, Transition transitionType, bool isAdditive = false)
+    public class SceneTransitionManager : MonoBehaviour
     {
-        //early return to prevent spamming
-        if (isTransitioning) return;
+        public static SceneTransitionManager Instance;
 
-        SFXManager.Instance.PlaySoundFXClip("SceneTransition", transform);
-        StartCoroutine(LoadSceneAsync(scene, transitionType, isAdditive));
-    }
+        public GameObject transitionsContainer;
 
-    private IEnumerator LoadSceneAsync(SceneType sceneType, Transition transitionType, bool isAdditive)
-    {
-        //set flag to true
-        isTransitioning = true;
+        private Transitions.Base.SceneTransition[] transitions;
+        private bool isTransitioning = false;
 
-        if (TimeManager.isTimePaused)
+        private void Awake()
         {
-            TimeManager.ResumeTime();
+            if (Instance != null && Instance == this)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
         }
 
-        if (sceneType == SceneType.Exit)
+        private void Start()
         {
-            Application.Quit();
+            transitions = transitionsContainer.GetComponentsInChildren<Transitions.Base.SceneTransition>();
+        }
 
-            //#DEBUG
-            Debug.Log("Quitting Game");
+        public void LoadScene(SceneType scene, Transition transitionType, bool isAdditive = false)
+        {
+            //early return to prevent spamming
+            if (isTransitioning) return;
 
-            //early reset
+            SFXManager.Instance.PlaySoundFXClip("SceneTransition", transform);
+            StartCoroutine(LoadSceneAsync(scene, transitionType, isAdditive));
+        }
+
+        private IEnumerator LoadSceneAsync(SceneType sceneType, Transition transitionType, bool isAdditive)
+        {
+            //set flag to true
+            isTransitioning = true;
+
+            if (TimeManager.isTimePaused)
+            {
+                TimeManager.ResumeTime();
+            }
+
+            if (sceneType == SceneType.Exit)
+            {
+                Application.Quit();
+
+                //#DEBUG
+                Debug.Log("Quitting Game");
+
+                //early reset
+                isTransitioning = false;
+                yield break;
+            }
+
+            //get the correct sceneObject
+            Transitions.Base.SceneTransition transition = transitions.First(t => t.transitionType == transitionType);
+            AsyncOperation scene;
+
+            if (isAdditive)
+            {
+                scene = SceneManager.LoadSceneAsync((int)sceneType, LoadSceneMode.Additive);
+            }
+            else
+            {
+                //load scene normally
+                scene = SceneManager.LoadSceneAsync((int)sceneType);
+            }
+
+            scene.allowSceneActivation = false;
+
+            //play animation to transition into new scene
+            yield return transition.AnimateTransitionIn();
+
+            //#TODO: Add progressbar?
+
+            scene.allowSceneActivation = true;
+
+            //play animation to transition out of new scene
+            yield return transition.AnimateTransitionOut();
+
+            //reset flag
             isTransitioning = false;
-            yield break;
         }
 
-        //get the correct sceneObject
-        SceneTransition transition = transitions.First(t => t.transitionType == transitionType);
-        AsyncOperation scene;
 
-        if (isAdditive)
-        {
-            scene = SceneManager.LoadSceneAsync((int)sceneType, LoadSceneMode.Additive);
-        }
-        else
-        {
-            //load scene normally
-            scene = SceneManager.LoadSceneAsync((int)sceneType);
-        }
-
-        scene.allowSceneActivation = false;
-
-        //play animation to transition into new scene
-        yield return transition.AnimateTransitionIn();
-
-        //#TODO: Add progressbar?
-
-        scene.allowSceneActivation = true;
-
-        //play animation to transition out of new scene
-        yield return transition.AnimateTransitionOut();
-
-        //reset flag
-        isTransitioning = false;
     }
-
-
 }

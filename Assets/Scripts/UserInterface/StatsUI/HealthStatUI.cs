@@ -1,36 +1,40 @@
+using PlayerCore.Base;
 using TMPro;
 using UnityEngine;
 
-public class HealthStatUI : MonoBehaviour
+namespace UserInterface.StatsUI
 {
-    public Player attachedPlayer;
-    [SerializeField] TextMeshProUGUI healthText;
-
-    private void OnDisable()
+    public class HealthStatUI : MonoBehaviour
     {
-        if (attachedPlayer != null)
-        {
-            attachedPlayer.HealthComponent.OnHealthModified -= HandleOnHealthModified;
-        }
-    }
+        public Player attachedPlayer;
+        [SerializeField] TextMeshProUGUI healthText;
 
-    private void Start()
-    {
-        if (attachedPlayer != null)
+        private void OnDisable()
         {
-            attachedPlayer.HealthComponent.OnHealthModified += HandleOnHealthModified;
-        }
-        else
-        {
-            throw new System.AccessViolationException("Attached Player is null");
+            if (attachedPlayer != null)
+            {
+                attachedPlayer.HealthComponent.OnHealthModified -= HandleOnHealthModified;
+            }
         }
 
-        //initial call to set values
-        HandleOnHealthModified(attachedPlayer.HealthComponent.healthAmount);
-    }
+        private void Start()
+        {
+            if (attachedPlayer != null)
+            {
+                attachedPlayer.HealthComponent.OnHealthModified += HandleOnHealthModified;
+            }
+            else
+            {
+                throw new System.AccessViolationException("Attached Player is null");
+            }
 
-    private void HandleOnHealthModified(int newHealth)
-    {
-        healthText.text = newHealth.ToString();
+            //initial call to set values
+            HandleOnHealthModified(attachedPlayer.HealthComponent.healthAmount);
+        }
+
+        private void HandleOnHealthModified(int newHealth)
+        {
+            healthText.text = newHealth.ToString();
+        }
     }
 }

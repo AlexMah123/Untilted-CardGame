@@ -1,10 +1,15 @@
+using PlayerCore;
 using UnityEngine;
+using Upgrades.Base;
 
-[CreateAssetMenu(fileName = "TheChariot", menuName = "Upgrades/UpgradeDefiniton/TheChariot")]
-public class TheChariot : UpgradeDefinitionSO
+namespace Upgrades.PrimaryUpgrades.TheChariot
 {
-    public override void ApplyPassiveEffect(IPlayer player)
+    [CreateAssetMenu(fileName = "TheChariot", menuName = "Upgrades/UpgradeDefiniton/TheChariot")]
+    public class TheChariot : UpgradeDefinitionSO
     {
+        public override void ApplyPassiveEffect(IPlayer player)
+        {
 
+        }
     }
 }

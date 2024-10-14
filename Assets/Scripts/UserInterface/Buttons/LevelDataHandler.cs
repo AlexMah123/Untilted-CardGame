@@ -1,32 +1,37 @@
+using LevelConfig.Base;
+using LevelManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelDataHandler : MonoBehaviour
+namespace UserInterface.Buttons
 {
-    [Header("UI Component")]
-    public Image thumbnailImage;
-    public TextMeshProUGUI levelNameText;
-
-    [Header("Level Data")]
-    public LevelConfigSO levelConfig;
-
-    private void Start()
+    public class LevelDataHandler : MonoBehaviour
     {
-        if (levelConfig != null)
+        [Header("UI Component")]
+        public Image thumbnailImage;
+        public TextMeshProUGUI levelNameText;
+
+        [Header("Level Data")]
+        public LevelConfigSO levelConfig;
+
+        private void Start()
         {
-            thumbnailImage.sprite = levelConfig.levelImage;
-            levelNameText.text = levelConfig.levelName;
-        }
-        else
-        {
-            throw new MissingReferenceException($"Level Config Data is missing from {gameObject}");
+            if (levelConfig != null)
+            {
+                thumbnailImage.sprite = levelConfig.levelImage;
+                levelNameText.text = levelConfig.levelName;
+            }
+            else
+            {
+                throw new MissingReferenceException($"Level Config Data is missing from {gameObject}");
+            }
+
         }
 
-    }
-
-    public void SelectLevel()
-    {
-        LevelDataManager.Instance.currentSelectedLevelSO = levelConfig;
+        public void SelectLevel()
+        {
+            LevelDataManager.Instance.currentSelectedLevelSO = levelConfig;
+        }
     }
 }

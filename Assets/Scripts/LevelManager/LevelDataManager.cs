@@ -1,57 +1,63 @@
 using System;
 using System.Collections.Generic;
+using LevelConfig.Base;
+using SaveSystem;
+using SaveSystem.Data;
 using UnityEngine;
 
-public class LevelDataManager : MonoBehaviour, ISavableData
+namespace LevelManager
 {
-    public static LevelDataManager Instance;
-
-    public LevelConfigSO currentSelectedLevelSO;
-
-    [Header("Level Completion Data")]
-    public List<LevelCompletionData> totalLevels;
-
-    public event Action OnSaveDataLoaded;
-
-    private void Awake()
+    public class LevelDataManager : MonoBehaviour, ISavableData
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-    }
+        public static LevelDataManager Instance;
 
+        public LevelConfigSO currentSelectedLevelSO;
 
-    public void LoadData(GameData data)
-    {
-        foreach (var savedLevel in data.levelCompletionData)
+        [Header("Level Completion Data")]
+        public List<LevelCompletionData> totalLevels;
+
+        public event Action OnSaveDataLoaded;
+
+        private void Awake()
         {
-            var levelData = totalLevels.Find(level => level.levelName == savedLevel.levelName);
-
-            if (levelData != null)
+            if (Instance != null && Instance != this)
             {
-                levelData.isCompleted = savedLevel.isCompleted;
+                Destroy(gameObject);
+            }
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
             }
         }
 
-        OnSaveDataLoaded?.Invoke();
-    }
 
-    public void SaveData(ref GameData data)
-    {
+        public void LoadData(GameData data)
+        {
+            foreach (var savedLevel in data.levelCompletionData)
+            {
+                var levelData = totalLevels.Find(level => level.levelName == savedLevel.levelName);
+
+                if (levelData != null)
+                {
+                    levelData.isCompleted = savedLevel.isCompleted;
+                }
+            }
+
+            OnSaveDataLoaded?.Invoke();
+        }
+
+        public void SaveData(ref GameData data)
+        {
         
+        }
+
     }
 
-}
-
-[Serializable]
-public class LevelCompletionData
-{
-    public string levelName;
-    public bool isCompleted;
+    [Serializable]
+    public class LevelCompletionData
+    {
+        public string levelName;
+        public bool isCompleted;
+    }
 }

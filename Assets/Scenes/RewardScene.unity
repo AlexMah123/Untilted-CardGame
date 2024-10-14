@@ -1932,7 +1932,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1783405786}
   m_Layer: 0
-  m_Name: ========UI Manager========
+  m_Name: ========UI SCRIPTS========
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2119,7 +2119,7 @@ GameObject:
   - component: {fileID: 2130616280}
   - component: {fileID: 2130616281}
   m_Layer: 0
-  m_Name: RewardDisplayManager
+  m_Name: RewardSystemController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2157,7 +2157,14 @@ MonoBehaviour:
   rewardContainer: {fileID: 2105648991}
   content: {fileID: 2045975313}
   gridLayout: {fileID: 2045975316}
+  rewardContainerXScale: 1.5
+  rewardContainerYScale: 1
   upgradeRewardList: []
+  playerRewardStats:
+    health: 0
+    damage: 0
+    cardSlots: 0
+    energy: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

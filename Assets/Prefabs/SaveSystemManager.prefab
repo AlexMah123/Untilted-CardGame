@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2442935815325556973}
   - component: {fileID: 6671726359780107801}
   m_Layer: 0
-  m_Name: SaveSystemManager
+  m_Name: SAVESYSTEMMANAGER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

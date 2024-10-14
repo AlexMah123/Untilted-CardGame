@@ -1,21 +1,27 @@
 using System;
 using System.Collections.Generic;
+using LevelManager;
+using PlayerCore;
+using Upgrades.UpgradeFactory;
 
-[Serializable]
-public class GameData
+namespace SaveSystem.Data
 {
-    public List<LevelCompletionData> levelCompletionData;
-
-    public PlayerStats upgradedPlayerStats;
-    public HashSet<UpgradeType> playerUnlockedUpgrades;
-    public HashSet<UpgradeType> playerEquippedUpgrades;
-
-    public GameData()
+    [Serializable]
+    public class GameData
     {
-        levelCompletionData = new();
+        public List<LevelCompletionData> levelCompletionData;
+
+        public PlayerStats upgradedPlayerStats;
+        public HashSet<UpgradeType> playerUnlockedUpgrades;
+        public HashSet<UpgradeType> playerEquippedUpgrades;
+
+        public GameData()
+        {
+            levelCompletionData = new();
         
-        upgradedPlayerStats = new();
-        playerUnlockedUpgrades = new();
-        playerEquippedUpgrades = new();
+            upgradedPlayerStats = new();
+            playerUnlockedUpgrades = new();
+            playerEquippedUpgrades = new();
+        }
     }
 }

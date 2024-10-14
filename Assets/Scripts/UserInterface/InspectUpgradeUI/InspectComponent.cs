@@ -1,12 +1,16 @@
 using System;
 using UnityEngine;
+using Upgrades.Base;
 
-public class InspectComponent : MonoBehaviour
+namespace UserInterface.InspectUpgradeUI
 {
-    public static event Action<UpgradeDefinitionSO> OnCardInspected;
-
-    public static void InspectCard(UpgradeDefinitionSO upgrade)
+    public class InspectComponent : MonoBehaviour
     {
-        OnCardInspected?.Invoke(upgrade);
+        public static event Action<UpgradeDefinitionSO> OnCardInspected;
+
+        public static void InspectCard(UpgradeDefinitionSO upgrade)
+        {
+            OnCardInspected?.Invoke(upgrade);
+        }
     }
 }

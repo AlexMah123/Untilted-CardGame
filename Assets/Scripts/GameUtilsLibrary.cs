@@ -1,3 +1,6 @@
+using Game;
+using PlayerComponents.ChoiceComponent;
+
 public static class GameUtilsLibrary
 {
     public static GameResult GetGameResult(GameChoice humanPlayerChoice, GameChoice aiPlayerChoice)

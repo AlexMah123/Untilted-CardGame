@@ -2,62 +2,66 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UserInterface.Cards.ChoiceCard;
 
-public class CardConfirmation : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+namespace UserInterface.ConfirmationZone
 {
-    public static CardConfirmation Instance;
-
-    public event Action<ChoiceCardUI> OnConfirmCardChoice;
-
-    private void Awake()
+    public class CardConfirmation : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
+        public static CardConfirmation Instance;
 
-    public void OnDrop(PointerEventData eventData)
-    {
-        //if its not null and it is a CardUI type
-        if (eventData.pointerDrag != null)
+        public event Action<ChoiceCardUI> OnConfirmCardChoice;
+
+        private void Awake()
         {
-            ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
-
-            //broadcast event, primarily binded to GameManager
-            OnConfirmCardChoice?.Invoke(confirmedCardUI);
-        }
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (eventData.pointerDrag != null)
-        {
-            ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
-
-            if(confirmedCardUI)
+            if (Instance != null && Instance != this)
             {
-                confirmedCardUI.GetComponent<Outline>().enabled = true;
+                Destroy(gameObject);
             }
-
-        }
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (eventData.pointerDrag != null)
-        {
-            ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
-
-            if (confirmedCardUI)
+            else
             {
-                confirmedCardUI.GetComponent<Outline>().enabled = false;
+                Instance = this;
             }
+        }
 
+        public void OnDrop(PointerEventData eventData)
+        {
+            //if its not null and it is a CardUI type
+            if (eventData.pointerDrag != null)
+            {
+                ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
+
+                //broadcast event, primarily binded to GameManager
+                OnConfirmCardChoice?.Invoke(confirmedCardUI);
+            }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (eventData.pointerDrag != null)
+            {
+                ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
+
+                if(confirmedCardUI)
+                {
+                    confirmedCardUI.GetComponent<Outline>().enabled = true;
+                }
+
+            }
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (eventData.pointerDrag != null)
+            {
+                ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
+
+                if (confirmedCardUI)
+                {
+                    confirmedCardUI.GetComponent<Outline>().enabled = false;
+                }
+
+            }
         }
     }
 }

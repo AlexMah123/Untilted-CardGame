@@ -1,8 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Upgrades.Base;
 
-[CreateAssetMenu(menuName = "Upgrades/Templates/TotalUpgradeSO")]
-public class UpgradeCollectionSO : ScriptableObject
+namespace Upgrades.UpgradeCollection
 {
-    public List<UpgradeDefinitionSO> upgradeList = new();
+    [CreateAssetMenu(menuName = "Upgrades/Templates/TotalUpgradeSO")]
+    public class UpgradeCollectionSO : ScriptableObject
+    {
+        public List<UpgradeDefinitionSO> upgradeList = new();
+    }
 }

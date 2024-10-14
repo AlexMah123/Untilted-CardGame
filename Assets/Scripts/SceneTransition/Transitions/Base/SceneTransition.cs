@@ -1,11 +1,14 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class SceneTransition : MonoBehaviour
+namespace SceneTransition.Transitions.Base
 {
-    public Transition transitionType;
+    public abstract class SceneTransition : MonoBehaviour
+    {
+        public Transition transitionType;
 
-    public abstract IEnumerator AnimateTransitionIn();
-    public abstract IEnumerator AnimateTransitionOut();
+        public abstract IEnumerator AnimateTransitionIn();
+        public abstract IEnumerator AnimateTransitionOut();
 
+    }
 }

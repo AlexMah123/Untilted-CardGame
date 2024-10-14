@@ -1,10 +1,15 @@
+using PlayerCore;
 using UnityEngine;
+using Upgrades.Base;
 
-[CreateAssetMenu(fileName = "Death", menuName = "Upgrades/UpgradeDefiniton/Death")]
-public class Death : UpgradeDefinitionSO
+namespace Upgrades.PrimaryUpgrades.Death
 {
-    public override void ApplyPassiveEffect(IPlayer player)
+    [CreateAssetMenu(fileName = "Death", menuName = "Upgrades/UpgradeDefiniton/Death")]
+    public class Death : UpgradeDefinitionSO
     {
+        public override void ApplyPassiveEffect(IPlayer player)
+        {
 
+        }
     }
 }

@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 55504047}
   - component: {fileID: 55504048}
   m_Layer: 0
-  m_Name: LoadoutSelectionManager
+  m_Name: LOADOUTSELECTIONMANAGER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -642,7 +642,7 @@ GameObject:
   m_Component:
   - component: {fileID: 441355972}
   m_Layer: 0
-  m_Name: ======ManagerObjects=====
+  m_Name: ========MANAGER=======
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1086,7 +1086,7 @@ GameObject:
   m_Component:
   - component: {fileID: 920536183}
   m_Layer: 0
-  m_Name: =======UI ManagerObjects===
+  m_Name: =======UI_SCRIPTS=======
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2213,7 +2213,7 @@ PrefabInstance:
     - target: {fileID: 1859359108680264561, guid: b7937ea43572ed144b6b8148ed53b2c3,
         type: 3}
       propertyPath: m_Name
-      value: UpgradeManager
+      value: UpgradeSOFactory
       objectReference: {fileID: 0}
     - target: {fileID: 7269391152944972836, guid: b7937ea43572ed144b6b8148ed53b2c3,
         type: 3}
@@ -2434,7 +2434,7 @@ GameObject:
   - component: {fileID: 2057736336}
   - component: {fileID: 2057736337}
   m_Layer: 0
-  m_Name: EquippedLoadoutSelectionManager
+  m_Name: EQUIPPEDLOADOUTSELECTIONMANAGER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2886,7 +2886,7 @@ PrefabInstance:
     - target: {fileID: 1204463476955268169, guid: 8b72ba2dbcee63d4691d2f86d53cd57c,
         type: 3}
       propertyPath: m_Name
-      value: InspectUIManager
+      value: InspectUpgradeUIController
       objectReference: {fileID: 0}
     - target: {fileID: 4797285179263426275, guid: 8b72ba2dbcee63d4691d2f86d53cd57c,
         type: 3}
@@ -3021,10 +3021,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3899243773553986539, guid: 92908e5eeaea4754bb7eb4f866b6d33a,
+        type: 3}
+      propertyPath: sharedProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: 48415d04791d3404392a32553b5ee2f7,
+        type: 2}
     - target: {fileID: 6840216765942479854, guid: 92908e5eeaea4754bb7eb4f866b6d33a,
         type: 3}
       propertyPath: m_Name
       value: GlobalVolume
+      objectReference: {fileID: 0}
+    - target: {fileID: 6840216765942479854, guid: 92908e5eeaea4754bb7eb4f866b6d33a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3042,7 +3053,7 @@ GameObject:
   - component: {fileID: 2725691459760987617}
   - component: {fileID: 2709264911137486043}
   m_Layer: 0
-  m_Name: LoadoutSelectionPageManager
+  m_Name: LOADOUTSELECTIONPAGEMANAGER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3055,13 +3066,13 @@ SceneRoots:
   - {fileID: 186924111}
   - {fileID: 1653807329}
   - {fileID: 512055959}
+  - {fileID: 8009201218646458823}
   - {fileID: 1301934579}
   - {fileID: 1987072133}
   - {fileID: 441355972}
   - {fileID: 925220590}
   - {fileID: 1806648494}
   - {fileID: 920536183}
-  - {fileID: 8009201218646458823}
   - {fileID: 55504046}
   - {fileID: 2057736336}
   - {fileID: 2725691459760987617}

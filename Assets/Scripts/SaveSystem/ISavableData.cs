@@ -1,9 +1,13 @@
 using System;
+using SaveSystem.Data;
 
-public interface ISavableData
+namespace SaveSystem
 {
-    event Action OnSaveDataLoaded;
+    public interface ISavableData
+    {
+        event Action OnSaveDataLoaded;
 
-    void LoadData(GameData data);
-    void SaveData(ref GameData data);
+        void LoadData(GameData data);
+        void SaveData(ref GameData data);
+    }
 }

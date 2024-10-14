@@ -1,26 +1,29 @@
-using DG.Tweening;
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 
-[RequireComponent(typeof(CanvasGroup))]
-public class CrossFade : SceneTransition
+namespace SceneTransition.Transitions
 {
-    [SerializeField] CanvasGroup crossFade;
-    [SerializeField] float durationOfTransition = 1f;
-
-    public override IEnumerator AnimateTransitionIn()
+    [RequireComponent(typeof(CanvasGroup))]
+    public class CrossFade : Base.SceneTransition
     {
-        crossFade.blocksRaycasts = true;
+        [SerializeField] CanvasGroup crossFade;
+        [SerializeField] float durationOfTransition = 1f;
 
-        var tweener = crossFade.DOFade(1f, durationOfTransition);
-        yield return tweener.WaitForCompletion();
-    }
+        public override IEnumerator AnimateTransitionIn()
+        {
+            crossFade.blocksRaycasts = true;
 
-    public override IEnumerator AnimateTransitionOut()
-    {
-        crossFade.blocksRaycasts = false;
+            var tweener = crossFade.DOFade(1f, durationOfTransition);
+            yield return tweener.WaitForCompletion();
+        }
 
-        var tweener = crossFade.DOFade(0f, durationOfTransition);
-        yield return tweener.WaitForCompletion();
+        public override IEnumerator AnimateTransitionOut()
+        {
+            crossFade.blocksRaycasts = false;
+
+            var tweener = crossFade.DOFade(0f, durationOfTransition);
+            yield return tweener.WaitForCompletion();
+        }
     }
 }

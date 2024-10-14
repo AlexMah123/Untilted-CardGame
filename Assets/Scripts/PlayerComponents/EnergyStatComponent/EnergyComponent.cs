@@ -1,38 +1,42 @@
 using System;
+using PlayerCore;
 using UnityEngine;
 
-public class EnergyComponent : MonoBehaviour
+namespace PlayerComponents.EnergyStatComponent
 {
-    [Header("Runtime Value")]
-    public int energyAmount;
-
-    //declaration of events
-    public event Action<int> OnEnergyModified;
-
-    public void InitializeComponent(PlayerStats referencedStats)
+    public class EnergyComponent : MonoBehaviour
     {
-        energyAmount = referencedStats.energy;
+        [Header("Runtime Value")]
+        public int energyAmount;
+
+        //declaration of events
+        public event Action<int> OnEnergyModified;
+
+        public void InitializeComponent(PlayerStats referencedStats)
+        {
+            energyAmount = referencedStats.energy;
         
-        OnEnergyModified?.Invoke(energyAmount);
-    }
+            OnEnergyModified?.Invoke(energyAmount);
+        }
 
-    public void IncreaseEnergy(int value)
-    {
-        ModifyEnergyAmount(value);
-    }
+        public void IncreaseEnergy(int value)
+        {
+            ModifyEnergyAmount(value);
+        }
 
-    public void DecreaseEnergy(int value)
-    {
-        ModifyEnergyAmount(-1 * value);
-    }
+        public void DecreaseEnergy(int value)
+        {
+            ModifyEnergyAmount(-1 * value);
+        }
 
-    #region Internal Function
-    private void ModifyEnergyAmount(int value)
-    {
-        energyAmount += value;
+        #region Internal Function
+        private void ModifyEnergyAmount(int value)
+        {
+            energyAmount += value;
 
-        //#TODO: broadcast event to PlayerHUD/EnemyHUD
-        OnEnergyModified?.Invoke(energyAmount);
+            //#TODO: broadcast event to PlayerHUD/EnemyHUD
+            OnEnergyModified?.Invoke(energyAmount);
+        }
+        #endregion
     }
-    #endregion
 }

@@ -1,148 +1,152 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SaveSystem.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SaveSystemManager : MonoBehaviour
+namespace SaveSystem
 {
-    public static SaveSystemManager Instance { get; private set; }
-
-    [Header("File Storage Config")]
-    [SerializeField] private string fileName;
-
-    private GameData gameData;
-    private FileDataHandler dataHandler;
-
-    private List<ISavableData> savableDataObjectsInScene;
-    private int objectsToLoadCount;
-    private int objectsLoadedCount;
-
-    public event Action OnAllSaveDataLoaded;
-
-    private void OnEnable()
+    public class SaveSystemManager : MonoBehaviour
     {
-        SceneManager.sceneLoaded += HandleSceneLoaded;
-    }
+        public static SaveSystemManager Instance { get; private set; }
 
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= HandleSceneLoaded;
-    }
+        [Header("File Storage Config")]
+        [SerializeField] private string fileName;
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
+        private GameData gameData;
+        private FileDataHandler dataHandler;
+
+        private List<ISavableData> savableDataObjectsInScene;
+        private int objectsToLoadCount;
+        private int objectsLoadedCount;
+
+        public event Action OnAllSaveDataLoaded;
+
+        private void OnEnable()
         {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += HandleSceneLoaded;
         }
 
-        dataHandler = new(Application.persistentDataPath, fileName);
-    }
-
-    private void Start()
-    {
-        BootstrapSaveData();
-    }
-
-    private void HandleSceneLoaded(Scene arg0, LoadSceneMode mode)
-    {
-        BootstrapSaveData();
-    }
-
-    #region Save System
-    private void NewGame()
-    {
-        gameData = new GameData();
-    }
-
-    public void SaveGame()
-    {
-        QueryAllSavableObjects();
-
-        //retrieve data to other objects that implement interface in scene
-        foreach (ISavableData savableDataObj in savableDataObjectsInScene)
+        private void OnDisable()
         {
-            savableDataObj.SaveData(ref gameData);
+            SceneManager.sceneLoaded -= HandleSceneLoaded;
         }
 
-        //save the data to a file using data handler
-        dataHandler.Save(gameData);
-    }
-
-    public void LoadGame()
-    {
-        //Load any save data from a file using data handler
-        gameData = dataHandler.Load();
-
-        //defaulted to create new save file if null
-        if (gameData == null)
+        private void Awake()
         {
-            NewGame();
-        }
-
-        //push all the loaded data to other objects that implement interface in scene
-        foreach (ISavableData savableDataObj in savableDataObjectsInScene)
-        {
-            savableDataObj.OnSaveDataLoaded += HandleDataLoaded;
-            savableDataObj.LoadData(gameData);
-        }
-    }
-    
-    [ContextMenu("SaveSysten/ClearSaveData")]
-    public void ClearSaveData()
-    {
-        dataHandler.ClearData();
-    }
-    
-    #endregion
-
-    #region Internal Methods
-    private void BootstrapSaveData()
-    {
-        //query for all objects that implement ISavableData, and Load to them.
-        QueryAllSavableObjects();
-
-        // Reset counters
-        objectsToLoadCount = savableDataObjectsInScene.Count;
-        objectsLoadedCount = 0;
-
-        LoadGame();
-    }
-
-    private void HandleDataLoaded()
-    {
-        objectsLoadedCount++;
-
-        if (objectsLoadedCount >= objectsToLoadCount)
-        {
-            //#DEBUG
-            //Debug.Log("Finished loading all data");
-
-            foreach (ISavableData savableDataObj in savableDataObjectsInScene)
+            if (Instance != null && Instance != this)
             {
-                savableDataObj.OnSaveDataLoaded -= HandleDataLoaded;
+                Destroy(gameObject);
+            }
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
             }
 
-            Invoke(nameof(OnAllDataLoaded), 0f);
+            dataHandler = new(Application.persistentDataPath, fileName);
         }
-    }
 
-    private void OnAllDataLoaded()
-    {
-        OnAllSaveDataLoaded?.Invoke();
-    }
+        private void Start()
+        {
+            BootstrapSaveData();
+        }
 
-    private void QueryAllSavableObjects()
-    {
-        IEnumerable<ISavableData> allSavableDataObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISavableData>();
+        private void HandleSceneLoaded(Scene arg0, LoadSceneMode mode)
+        {
+            BootstrapSaveData();
+        }
 
-        savableDataObjectsInScene = new(allSavableDataObjects);
+        #region Save System
+        private void NewGame()
+        {
+            gameData = new GameData();
+        }
+
+        public void SaveGame()
+        {
+            QueryAllSavableObjects();
+
+            //retrieve data to other objects that implement interface in scene
+            foreach (ISavableData savableDataObj in savableDataObjectsInScene)
+            {
+                savableDataObj.SaveData(ref gameData);
+            }
+
+            //save the data to a file using data handler
+            dataHandler.Save(gameData);
+        }
+
+        public void LoadGame()
+        {
+            //Load any save data from a file using data handler
+            gameData = dataHandler.Load();
+
+            //defaulted to create new save file if null
+            if (gameData == null)
+            {
+                NewGame();
+            }
+
+            //push all the loaded data to other objects that implement interface in scene
+            foreach (ISavableData savableDataObj in savableDataObjectsInScene)
+            {
+                savableDataObj.OnSaveDataLoaded += HandleDataLoaded;
+                savableDataObj.LoadData(gameData);
+            }
+        }
+    
+        [ContextMenu("SaveSysten/ClearSaveData")]
+        public void ClearSaveData()
+        {
+            dataHandler.ClearData();
+        }
+    
+        #endregion
+
+        #region Internal Methods
+        private void BootstrapSaveData()
+        {
+            //query for all objects that implement ISavableData, and Load to them.
+            QueryAllSavableObjects();
+
+            // Reset counters
+            objectsToLoadCount = savableDataObjectsInScene.Count;
+            objectsLoadedCount = 0;
+
+            LoadGame();
+        }
+
+        private void HandleDataLoaded()
+        {
+            objectsLoadedCount++;
+
+            if (objectsLoadedCount >= objectsToLoadCount)
+            {
+                //#DEBUG
+                //Debug.Log("Finished loading all data");
+
+                foreach (ISavableData savableDataObj in savableDataObjectsInScene)
+                {
+                    savableDataObj.OnSaveDataLoaded -= HandleDataLoaded;
+                }
+
+                Invoke(nameof(OnAllDataLoaded), 0f);
+            }
+        }
+
+        private void OnAllDataLoaded()
+        {
+            OnAllSaveDataLoaded?.Invoke();
+        }
+
+        private void QueryAllSavableObjects()
+        {
+            IEnumerable<ISavableData> allSavableDataObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISavableData>();
+
+            savableDataObjectsInScene = new(allSavableDataObjects);
+        }
+        #endregion
     }
-    #endregion
 }

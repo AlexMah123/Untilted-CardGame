@@ -1,99 +1,103 @@
-using Newtonsoft.Json;
 using System;
 using System.IO;
+using Newtonsoft.Json;
+using SaveSystem.Data;
 using UnityEngine;
 
-public class FileDataHandler
+namespace SaveSystem
 {
-    private string dataDirectoryPath = "";
-    private string dataFileName = "";
-
-    public FileDataHandler(string dataDirectoryPath, string dataFileName)
+    public class FileDataHandler
     {
-        this.dataDirectoryPath = dataDirectoryPath;
-        this.dataFileName = dataFileName;
-    }
+        private string dataDirectoryPath = "";
+        private string dataFileName = "";
 
-    public GameData Load()
-    {
-        string fullPath = Path.Combine(dataDirectoryPath, dataFileName);
-
-        GameData loadedData = null;
-
-        if (File.Exists(fullPath))
+        public FileDataHandler(string dataDirectoryPath, string dataFileName)
         {
+            this.dataDirectoryPath = dataDirectoryPath;
+            this.dataFileName = dataFileName;
+        }
+
+        public GameData Load()
+        {
+            string fullPath = Path.Combine(dataDirectoryPath, dataFileName);
+
+            GameData loadedData = null;
+
+            if (File.Exists(fullPath))
+            {
+                try
+                {
+                    string dataToLoad = "";
+
+                    //opens file and reads the json
+                    using (FileStream stream = new FileStream(fullPath, FileMode.Open))
+                    {
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            dataToLoad = reader.ReadToEnd();
+                        }
+                    }
+
+                    //convert json to object
+                    loadedData = JsonConvert.DeserializeObject<GameData>(dataToLoad);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("Error occured when trying to load data from file:" + fullPath + "\n" + e);
+                }
+            }
+
+            return loadedData;
+        }
+
+        public void Save(GameData data)
+        {
+            string fullPath = Path.Combine(dataDirectoryPath, dataFileName);
+
             try
             {
-                string dataToLoad = "";
+                //create file if it does not exist
+                Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
 
-                //opens file and reads the json
-                using (FileStream stream = new FileStream(fullPath, FileMode.Open))
+                //converts data to json format
+                string dataToStore = JsonConvert.SerializeObject(data, Formatting.Indented);
+
+                //create file and writes the data
+                using (FileStream stream = new FileStream(fullPath, FileMode.Create))
                 {
-                    using (StreamReader reader = new StreamReader(stream))
+                    using (StreamWriter writer = new StreamWriter(stream))
                     {
-                        dataToLoad = reader.ReadToEnd();
+                        writer.Write(dataToStore);
                     }
                 }
 
-                //convert json to object
-                loadedData = JsonConvert.DeserializeObject<GameData>(dataToLoad);
             }
             catch (Exception e)
             {
-                Debug.LogError("Error occured when trying to load data from file:" + fullPath + "\n" + e);
+                Debug.LogError("Error occured when trying to save data to file:" + fullPath + "\n" + e);
             }
         }
 
-        return loadedData;
-    }
-
-    public void Save(GameData data)
-    {
-        string fullPath = Path.Combine(dataDirectoryPath, dataFileName);
-
-        try
+        public void ClearData()
         {
-            //create file if it does not exist
-            Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+            string fullPath = Path.Combine(dataDirectoryPath, dataFileName);
 
-            //converts data to json format
-            string dataToStore = JsonConvert.SerializeObject(data, Formatting.Indented);
-
-            //create file and writes the data
-            using (FileStream stream = new FileStream(fullPath, FileMode.Create))
+            try
             {
-                using (StreamWriter writer = new StreamWriter(stream))
+                if(File.Exists(fullPath))
                 {
-                    writer.Write(dataToStore);
+                    File.Delete(fullPath);
+                }
+                else
+                {
+                    Debug.LogWarning("File does not exist");
                 }
             }
-
-        }
-        catch (Exception e)
-        {
-            Debug.LogError("Error occured when trying to save data to file:" + fullPath + "\n" + e);
-        }
-    }
-
-    public void ClearData()
-    {
-        string fullPath = Path.Combine(dataDirectoryPath, dataFileName);
-
-        try
-        {
-            if(File.Exists(fullPath))
+            catch (Exception e)
             {
-                File.Delete(fullPath);
-            }
-            else
-            {
-                Debug.LogWarning("File does not exist");
+                Debug.LogError("Error occured when trying to clear save data from file:" + fullPath + "\n" + e);
             }
         }
-        catch (Exception e)
-        {
-            Debug.LogError("Error occured when trying to clear save data from file:" + fullPath + "\n" + e);
-        }
-    }
 
+    }
 }

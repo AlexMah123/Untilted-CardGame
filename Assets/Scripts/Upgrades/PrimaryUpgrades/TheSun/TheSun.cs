@@ -1,10 +1,15 @@
+using PlayerCore;
 using UnityEngine;
+using Upgrades.Base;
 
-[CreateAssetMenu(fileName = "TheSun", menuName = "Upgrades/UpgradeDefiniton/TheSun")]
-public class TheSun : UpgradeDefinitionSO
+namespace Upgrades.PrimaryUpgrades.TheSun
 {
-    public override void ApplyPassiveEffect(IPlayer player)
+    [CreateAssetMenu(fileName = "TheSun", menuName = "Upgrades/UpgradeDefiniton/TheSun")]
+    public class TheSun : UpgradeDefinitionSO
     {
+        public override void ApplyPassiveEffect(IPlayer player)
+        {
 
+        }
     }
 }

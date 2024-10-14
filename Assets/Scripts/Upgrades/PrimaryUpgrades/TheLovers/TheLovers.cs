@@ -1,10 +1,15 @@
+using PlayerCore;
 using UnityEngine;
+using Upgrades.Base;
 
-[CreateAssetMenu(fileName = "TheLovers", menuName = "Upgrades/UpgradeDefiniton/TheLovers")]
-public class TheLovers : UpgradeDefinitionSO
+namespace Upgrades.PrimaryUpgrades.TheLovers
 {
-    public override void ApplyPassiveEffect(IPlayer player)
+    [CreateAssetMenu(fileName = "TheLovers", menuName = "Upgrades/UpgradeDefiniton/TheLovers")]
+    public class TheLovers : UpgradeDefinitionSO
     {
+        public override void ApplyPassiveEffect(IPlayer player)
+        {
 
+        }
     }
 }

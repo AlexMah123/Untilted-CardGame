@@ -1,10 +1,15 @@
+using PlayerCore;
 using UnityEngine;
+using Upgrades.Base;
 
-[CreateAssetMenu(fileName = "Justice", menuName = "Upgrades/UpgradeDefiniton/Justice")]
-public class Justice : UpgradeDefinitionSO
+namespace Upgrades.PrimaryUpgrades.Justice
 {
-    public override void ApplyPassiveEffect(IPlayer player)
+    [CreateAssetMenu(fileName = "Justice", menuName = "Upgrades/UpgradeDefiniton/Justice")]
+    public class Justice : UpgradeDefinitionSO
     {
+        public override void ApplyPassiveEffect(IPlayer player)
+        {
 
+        }
     }
 }

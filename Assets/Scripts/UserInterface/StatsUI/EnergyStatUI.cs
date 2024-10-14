@@ -1,28 +1,32 @@
+using PlayerCore.Base;
 using TMPro;
 using UnityEngine;
 
-public class EnergyStatUI : MonoBehaviour
+namespace UserInterface.StatsUI
 {
-    public Player attachedPlayer;
-    [SerializeField] TextMeshProUGUI energyText;
-
-    private void Start()
+    public class EnergyStatUI : MonoBehaviour
     {
-        if (attachedPlayer != null)
+        public Player attachedPlayer;
+        [SerializeField] TextMeshProUGUI energyText;
+
+        private void Start()
         {
-            attachedPlayer.EnergyComponent.OnEnergyModified += HandleOnEnergyModified;
-        }
-        else
-        {
-            throw new System.AccessViolationException("Attached Player is null");
+            if (attachedPlayer != null)
+            {
+                attachedPlayer.EnergyComponent.OnEnergyModified += HandleOnEnergyModified;
+            }
+            else
+            {
+                throw new System.AccessViolationException("Attached Player is null");
+            }
+
+            //initial call to set values
+            HandleOnEnergyModified(attachedPlayer.EnergyComponent.energyAmount);
         }
 
-        //initial call to set values
-        HandleOnEnergyModified(attachedPlayer.EnergyComponent.energyAmount);
-    }
-
-    private void HandleOnEnergyModified(int newHealth)
-    {
-        energyText.text = newHealth.ToString();
+        private void HandleOnEnergyModified(int newHealth)
+        {
+            energyText.text = newHealth.ToString();
+        }
     }
 }

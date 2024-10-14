@@ -1,31 +1,34 @@
-using DG.Tweening;
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CircleWipe : SceneTransition
+namespace SceneTransition.Transitions
 {
-    [SerializeField] CanvasGroup circleWipe;
-    [SerializeField] Image circle;
-    [SerializeField] float distance;
-    [SerializeField] float durationOfTransition = 1f;
-
-    public override IEnumerator AnimateTransitionIn()
+    public class CircleWipe : Base.SceneTransition
     {
-        circleWipe.blocksRaycasts = true;
+        [SerializeField] CanvasGroup circleWipe;
+        [SerializeField] Image circle;
+        [SerializeField] float distance;
+        [SerializeField] float durationOfTransition = 1f;
 
-        //resets to the left
-        circle.rectTransform.anchoredPosition = new Vector2(-distance, 0f);
+        public override IEnumerator AnimateTransitionIn()
+        {
+            circleWipe.blocksRaycasts = true;
 
-        var tweener = circle.rectTransform.DOAnchorPosX(0f, durationOfTransition);
-        yield return tweener.WaitForCompletion();
-    }
+            //resets to the left
+            circle.rectTransform.anchoredPosition = new Vector2(-distance, 0f);
 
-    public override IEnumerator AnimateTransitionOut()
-    {
-        circleWipe.blocksRaycasts = false;
+            var tweener = circle.rectTransform.DOAnchorPosX(0f, durationOfTransition);
+            yield return tweener.WaitForCompletion();
+        }
 
-        var tweener = circle.rectTransform.DOAnchorPosX(distance, durationOfTransition);
-        yield return tweener.WaitForCompletion();
+        public override IEnumerator AnimateTransitionOut()
+        {
+            circleWipe.blocksRaycasts = false;
+
+            var tweener = circle.rectTransform.DOAnchorPosX(distance, durationOfTransition);
+            yield return tweener.WaitForCompletion();
+        }
     }
 }
