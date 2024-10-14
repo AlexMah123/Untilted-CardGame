@@ -1,8 +1,9 @@
 using System;
-using LoadoutSelection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+using LoadoutSelection;
 using UserInterface.Cards.Base;
 using UserInterface.InspectUpgradeUI;
 
@@ -12,11 +13,11 @@ namespace UserInterface.Cards.LoadoutCard
     public class LoadoutCardUI : CardUI, IPointerClickHandler
     {
         [Header("Loadout Card Config")]
-        public LoadoutCardGOInfo cardInfo;
+        public FLoadoutCardObj cardInfo;
         public bool shouldDisableOnClick = true;
         public bool shouldDisplayOutline = true;
 
-        public event Action<LoadoutCardGOInfo> OnCardClicked;
+        public event Action<FLoadoutCardObj> OnCardClicked;
 
         public override void OnPointerEnter(PointerEventData eventData)
         {
@@ -57,9 +58,9 @@ namespace UserInterface.Cards.LoadoutCard
             }
         }
 
-        public void InitializeCard(LoadoutCardGOInfo loadoutCardInfo)
+        public void InitializeCard(FLoadoutCardObj fLoadoutCardInfo)
         {
-            cardInfo.upgradeSO = loadoutCardInfo.upgradeSO;
+            cardInfo.upgradeSO = fLoadoutCardInfo.upgradeSO;
             cardImage.sprite = cardInfo.upgradeSO.upgradeSprite;
         }
 

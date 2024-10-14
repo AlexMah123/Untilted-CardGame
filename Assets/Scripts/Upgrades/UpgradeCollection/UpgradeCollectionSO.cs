@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+
 using Upgrades.Base;
 
 namespace Upgrades.UpgradeCollection

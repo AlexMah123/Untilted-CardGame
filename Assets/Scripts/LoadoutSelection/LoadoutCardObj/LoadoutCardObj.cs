@@ -2,12 +2,13 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 using UserInterface.InspectUpgradeUI;
 
-namespace LoadoutSelection.LoadoutCard
+namespace LoadoutSelection.LoadoutCardObj
 {
     [RequireComponent(typeof(InspectComponent))]
-    public class LoadoutCardGO : MonoBehaviour
+    public class LoadoutCardObj : MonoBehaviour
     {
         [Header("Card Visual Configs")]
         public SpriteRenderer cardSpriteRenderer;
@@ -16,12 +17,11 @@ namespace LoadoutSelection.LoadoutCard
         public float hoveredEnlargedScale = 1.5f;
 
         //state of card
-        public Color UnlockedColor;
-        public Color LockedColor;
+        public Color lockedColor;
         public bool isLocked = false;
 
         [Header("Card Configs")]
-        public LoadoutCardGOInfo cardInfo;
+        public FLoadoutCardObj cardInfo;
 
         //private
         private Vector3 originalCardScale;
@@ -29,7 +29,7 @@ namespace LoadoutSelection.LoadoutCard
 
         //events
         public event Action OnCardInteractEnd;
-        public event Action<LoadoutCardGOInfo> OnCardSelected;
+        public event Action<FLoadoutCardObj> OnCardSelected;
 
         public bool IsLocked
         {
@@ -37,7 +37,7 @@ namespace LoadoutSelection.LoadoutCard
             set
             {
                 isLocked = value;
-                cardSpriteRenderer.color = IsLocked ? LockedColor : UnlockedColor;
+                cardSpriteRenderer.color = IsLocked ? lockedColor : Color.white;
 
                 //only change the state if its not the same as the bool
                 if (lockedSpriteRenderer.gameObject.activeSelf != isLocked)
@@ -88,11 +88,11 @@ namespace LoadoutSelection.LoadoutCard
             }
         }
 
-        public void InitialiseLoadoutGO(LoadoutCardGOInfo loadoutCardInfo, bool isLocked)
+        public void InitialiseLoadoutGO(FLoadoutCardObj fLoadoutCardInfo, bool isLocked)
         {
-            if (loadoutCardInfo.upgradeSO != null)
+            if (fLoadoutCardInfo.upgradeSO != null)
             {
-                cardInfo.upgradeSO = loadoutCardInfo.upgradeSO;
+                cardInfo.upgradeSO = fLoadoutCardInfo.upgradeSO;
                 cardSpriteRenderer.sprite = cardInfo.upgradeSO.upgradeSprite;
             }
             else

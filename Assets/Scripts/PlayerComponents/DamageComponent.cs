@@ -1,9 +1,9 @@
 using System;
-using PlayerCore;
-using PlayerCore.Base;
 using UnityEngine;
 
-namespace PlayerComponents.DamageStatComponent
+using PlayerCore;
+
+namespace PlayerComponents
 {
     public class DamageComponent : MonoBehaviour
     {

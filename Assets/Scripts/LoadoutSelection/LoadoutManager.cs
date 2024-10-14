@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PlayerCore;
+using UnityEngine;
+
 using SaveSystem;
 using SaveSystem.Data;
-using UnityEngine;
 using Upgrades.Base;
 using Upgrades.UpgradeCollection;
 using Upgrades.UpgradeFactory;
@@ -15,15 +17,21 @@ namespace LoadoutSelection
     {
         public static LoadoutManager Instance;
 
+        [Header("Loadout Configs")] 
+        [SerializeField] private PlayerStatsSO playerStats;
+        
         [Header("Total upgrades in game")]
-        [SerializeField] List<UpgradeCollectionSO> totalUpgradesInGame = new();
+        [SerializeField] private List<UpgradeCollectionSO> totalUpgradesInGame = new();
 
-        [Header("Upgrades unlocked by player")]
-        [SerializeField] private List<UpgradeDefinitionSO> totalUpgrades = new();
+        //from runtime, loaded from totalUpgradesInGame
+        private List<UpgradeDefinitionSO> totalUpgrades = new();
+
+        //from savedata
         public HashSet<UpgradeDefinitionSO> cachedUpgradesUnlocked = new();
         public HashSet<UpgradeDefinitionSO> cachedEquippedUpgrades = new();
-
-        public event Action<LoadoutData> OnInitializeLoadout;
+        public int cachedMaxSlots;
+        
+        public event Action<FLoadoutData> OnInitializeLoadout;
 
         //Interface
         public event Action OnSaveDataLoaded;
@@ -91,9 +99,9 @@ namespace LoadoutSelection
 
         void InitializeLoadoutData()
         {
-            LoadoutData loadoutData = new LoadoutData(totalUpgrades, cachedUpgradesUnlocked, cachedEquippedUpgrades);
+            FLoadoutData fLoadoutData = new FLoadoutData(totalUpgrades, cachedUpgradesUnlocked, cachedEquippedUpgrades);
 
-            OnInitializeLoadout?.Invoke(loadoutData);
+            OnInitializeLoadout?.Invoke(fLoadoutData);
         }
 
         public void HandleSelectedUpgradeEquipped(UpgradeDefinitionSO addedUpgradeSO)
@@ -123,18 +131,7 @@ namespace LoadoutSelection
         #region Savable Interface
         public void LoadData(GameData data)
         {
-            //clear when loading to overwrite
-            cachedUpgradesUnlocked.Clear();
-            foreach (UpgradeType upgradeUnlocked in data.playerUnlockedUpgrades)
-            {
-                cachedUpgradesUnlocked.Add(UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradeUnlocked));
-            }
-
-            cachedEquippedUpgrades.Clear();
-            foreach (UpgradeType upgradesEquipped in data.playerEquippedUpgrades)
-            {
-                cachedEquippedUpgrades.Add(UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradesEquipped));
-            }
+            InitializeLoadoutData(ref data);
 
             //#DEBUG
             //Debug.Log($"game data is loaded");
@@ -143,6 +140,17 @@ namespace LoadoutSelection
         }
 
         public void SaveData(ref GameData data)
+        {
+            SavePlayerUpgradeData(ref data);
+
+            //#DEBUG
+            //Debug.Log($"game data is saved");
+        }
+
+        #endregion
+
+        #region Internal Methods
+        private void SavePlayerUpgradeData(ref GameData data)
         {
             data.playerUnlockedUpgrades.Clear();
             foreach (UpgradeDefinitionSO upgradeSO in cachedUpgradesUnlocked)
@@ -155,13 +163,26 @@ namespace LoadoutSelection
             {
                 data.playerEquippedUpgrades.Add(upgradeSO.upgradeType);
             }
-
-            //#DEBUG
-            //Debug.Log($"game data is saved");
         }
-        #endregion
+        
+        private void InitializeLoadoutData(ref GameData data)
+        {
+            cachedMaxSlots = data.upgradedPlayerStats.cardSlots + playerStats.cardSlots;
+            
+            //clear when loading to overwrite
+            cachedUpgradesUnlocked.Clear();
+            foreach (UpgradeType upgradeUnlocked in data.playerUnlockedUpgrades)
+            {
+                cachedUpgradesUnlocked.Add(UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradeUnlocked));
+            }
 
-        #region Internal Methods
+            cachedEquippedUpgrades.Clear();
+            foreach (UpgradeType upgradesEquipped in data.playerEquippedUpgrades)
+            {
+                cachedEquippedUpgrades.Add(UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradesEquipped));
+            }
+        }
+        
         private void InitializeUpgradeData()
         {
             totalUpgrades = totalUpgradesInGame.SelectMany(upgradeCollection => upgradeCollection.upgradeList).ToList();

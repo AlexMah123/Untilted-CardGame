@@ -1,8 +1,4 @@
-using PlayerComponents.ChoiceComponent;
-using PlayerComponents.DamageStatComponent;
-using PlayerComponents.EnergyStatComponent;
-using PlayerComponents.HealthStatComponent;
-using PlayerComponents.LoadoutComponent;
+using PlayerComponents;
 
 namespace PlayerCore
 {

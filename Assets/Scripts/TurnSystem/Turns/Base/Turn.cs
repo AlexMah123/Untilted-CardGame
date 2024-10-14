@@ -1,5 +1,5 @@
 using System;
-using PlayerCore.Base;
+using PlayerCore;
 
 namespace TurnSystem.Turns.Base
 {

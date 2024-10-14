@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Audio
 {
     [Serializable]
-    public struct SoundEffect
+    public struct FSoundEffect
     {
         public string groupID;
         public AudioClip[] clips;
@@ -13,13 +13,13 @@ namespace Audio
 
     public class SoundLibrary : MonoBehaviour
     {
-        public SoundEffect[] soundEffects;
+        public FSoundEffect[] soundEffects;
 
         public AudioClip GetAudioClip(string name)
         {
             var audioClip = soundEffects.FirstOrDefault(sfx => sfx.groupID == name);
 
-            if (audioClip.Equals(default(SoundEffect)))
+            if (audioClip.Equals(default(FSoundEffect)))
             {
                 throw new NullReferenceException($"{name} clip was not found");
             }

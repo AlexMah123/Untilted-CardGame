@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using PlayerCore;
 using UnityEngine;
+
+using PlayerCore;
 using Upgrades.Base;
 
 namespace LevelConfig.Base
@@ -9,10 +10,10 @@ namespace LevelConfig.Base
     public class LevelConfigSO : ScriptableObject
     {
         [Header("Human Player")]
-        public PlayerData humanPlayer;
+        public FPlayerData humanFPlayer;
 
         [Header("Ai Player")]
-        public PlayerData aiPlayer;
+        public FPlayerData aiFPlayer;
 
         [Header("UI Data")]
         public string levelName;

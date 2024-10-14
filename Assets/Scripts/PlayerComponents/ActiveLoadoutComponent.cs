@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using PlayerCore;
-using PlayerCore.Base;
 using UnityEngine;
+
+using PlayerCore;
 using Upgrades.Base;
 using Upgrades.UpgradeFactory;
 
-namespace PlayerComponents.LoadoutComponent
+namespace PlayerComponents
 {
     public class ActiveLoadoutComponent : MonoBehaviour
     {

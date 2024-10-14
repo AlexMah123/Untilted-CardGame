@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LoadoutSelection;
-using LoadoutSelection.LoadoutCard;
 using UnityEngine;
+
+using LoadoutSelection;
+using LoadoutSelection.LoadoutCardObj;
 using Upgrades.Base;
 using UserInterface.Cards.Base;
-using UserInterface.LoadoutSelection.LoadoutSelectionPage;
 
 namespace UserInterface.LoadoutSelection
 {
@@ -15,8 +15,8 @@ namespace UserInterface.LoadoutSelection
     {
         public static LoadoutSelectionManager Instance;
 
-        [Header("EquippedLoadoutSelectionManager")]
-        public EquippedLoadoutSelectionManager.EquippedLoadoutSelectionManager EquippedLoadoutSelectionManager;
+        [Header("Dependencies")]
+        public EquippedLoadoutManager equippedLoadoutManager;
 
         [Header("Layout Config")]
         public Transform spawnContainer;
@@ -27,10 +27,10 @@ namespace UserInterface.LoadoutSelection
         [Header("Layout Offset Config")]
         [Tooltip("This value is relative to World Position")] public Vector3 offsetPosition;
 
-        public LoadoutData cachedLoadoutData;
+        public FLoadoutData cachedLoadoutData;
 
         //private
-        private List<LoadoutCardGO> cardSlots = new();
+        private List<LoadoutCardObj> cardDisplayList = new();
         private int loadoutPageIndex;
 
         //factory
@@ -41,9 +41,9 @@ namespace UserInterface.LoadoutSelection
         public event Action<UpgradeDefinitionSO> OnEquippedLoadoutRemoved;
 
         //flag
-        private bool isInitializeLoadoutEventBinded = false;
-        private bool isLoadoutPageUpdatedEventBinded = false;
-        private bool isActiveLoadoutRemovedEventBinded = false;
+        private bool isInitializeLoadoutEventBinded;
+        private bool isLoadoutPageUpdatedEventBinded;
+        private bool isActiveLoadoutRemovedEventBinded;
 
         private void OnEnable()
         {
@@ -117,67 +117,67 @@ namespace UserInterface.LoadoutSelection
 
 
         #region Public methods
-        public void HandleOnCardSelected(LoadoutCardGOInfo cardInfo)
+        private void HandleOnCardSelected(FLoadoutCardObj cardInfo)
         {
             AddToActiveCardSlots(cardInfo.upgradeSO);
         }
-
-        public void HandleOnInitializeLayout(LoadoutData _loadoutData)
+        
+        private void HandleOnInitializeLayout(FLoadoutData fLoadoutData)
         {
-            cachedLoadoutData = _loadoutData;
+            cachedLoadoutData = fLoadoutData;
             InitializeLayout();
         }
 
-        public void HandleOnPageUpdated(int currentPageIndex)
+        private void HandleOnPageUpdated(int currentPageIndex)
         {
             loadoutPageIndex = currentPageIndex;
-            UpdateCardSlots(loadoutPageIndex);
+            UpdateCardDisplay(loadoutPageIndex);
         }
 
-        public void HandleOnCardEndInteract()
+        private void HandleOnCardEndInteract()
         {
             ArrangeCardsInArc();
         }
 
-        public void HandleOnActiveLoadoutRemoved(LoadoutCardGOInfo removedCardInfo)
+        private void HandleOnActiveLoadoutRemoved(FLoadoutCardObj removedCardInfo)
         {
-            //broadcast event to LoadoutManager to update the data (remove and add from totalupgrades and equipped)
+            //broadcast event to LoadoutManager to update the data (remove and add from total upgrades and equipped)
             OnEquippedLoadoutRemoved?.Invoke(removedCardInfo.upgradeSO);
 
-            UpdateCardSlots(loadoutPageIndex);
+            UpdateCardDisplay(loadoutPageIndex);
         }
 
         #endregion
 
         #region Internal methods
-        private void RequestLoadoutGO()
+        private void RequestLoadoutObj()
         {
             for (int i = 0; i < displayAmountPerPage; i++)
             {
-                LoadoutCardCreationInfo creationInfo = new(spawnContainer);
-                GameObject card = upgradeCardFactory.CreateUpgradeCard(creationInfo);
-                LoadoutCardGO upgradeCard = card.GetComponent<LoadoutCardGO>();
+                FLoadoutCardCreation creation = new(spawnContainer);
+                GameObject card = upgradeCardFactory.CreateUpgradeCard(creation);
+                LoadoutCardObj upgradeCard = card.GetComponent<LoadoutCardObj>();
 
-                cardSlots.Add(upgradeCard);
+                cardDisplayList.Add(upgradeCard);
             }
 
             //bind on click
             BindOnCardSelectedEvent(GetCardSlots());
 
-            //bind on endinteract
+            //bind on end interact
             BindOnCardEndInteractEvent(GetCardSlots());
         }
 
         private void InitializeLayout()
         {
             //request creation of upgrade layout
-            RequestLoadoutGO();
+            RequestLoadoutObj();
 
             //update the layout into an arc
             ArrangeCardsInArc();
 
             //update the layout buttons on the first page
-            UpdateCardSlots(0);
+            UpdateCardDisplay(0);
 
             LoadoutSelectionPageManager.Instance.UpdateButtonState();
 
@@ -196,7 +196,7 @@ namespace UserInterface.LoadoutSelection
 
         private void ArrangeCardsInArc()
         {
-            int cardCount = cardSlots.Count;
+            int cardCount = cardDisplayList.Count;
 
             // Calculate the starting angle
             float totalAngle = (cardCount - 1) * angleBetweenCards;
@@ -212,44 +212,44 @@ namespace UserInterface.LoadoutSelection
                 float y = spawnContainer.position.y + Mathf.Sin(radian) * radiusFromCenter;
 
                 //adjust position
-                cardSlots[i].gameObject.transform.localPosition = new Vector3(x, y, 0);
-                cardSlots[i].gameObject.transform.position += new Vector3(offsetPosition.x, offsetPosition.y, offsetPosition.z);
+                cardDisplayList[i].gameObject.transform.localPosition = new Vector3(x, y, 0);
+                cardDisplayList[i].gameObject.transform.position += new Vector3(offsetPosition.x, offsetPosition.y, offsetPosition.z);
 
                 //rotate cards outwards
-                cardSlots[i].gameObject.transform.localRotation = Quaternion.Euler(0, 0, angle + 90);
+                cardDisplayList[i].gameObject.transform.localRotation = Quaternion.Euler(0, 0, angle + 90);
 
                 //set the sorting order based on creation
-                cardSlots[i].cardSpriteRenderer.sortingOrder = i;
-                cardSlots[i].lockedSpriteRenderer.sortingOrder = i + 1;
+                cardDisplayList[i].cardSpriteRenderer.sortingOrder = i;
+                cardDisplayList[i].lockedSpriteRenderer.sortingOrder = i + 1;
             }
         }
 
-        private List<LoadoutCardGO> GetCardSlots()
+        private List<LoadoutCardObj> GetCardSlots()
         {
-            return cardSlots;
+            return cardDisplayList;
         }
 
-        private void UpdateCardSlots(int pageIndex)
+        private void UpdateCardDisplay(int pageIndex)
         {
             int startIndex = pageIndex * displayAmountPerPage;
             int endIndex = Mathf.Min(startIndex + displayAmountPerPage, cachedLoadoutData.totalUpgradesInGame.Count);
 
-            for (int i = 0; i < cardSlots.Count; i++)
+            for (int i = 0; i < cardDisplayList.Count; i++)
             {
                 if (i < endIndex - startIndex)
                 {
-                    //compare if unlockedupgrade contains the total upgrade
+                    //compare if unlocked upgrade contains the total upgrade
                     var upgrade = cachedLoadoutData.totalUpgradesInGame[startIndex + i];
                     var isUnlocked = cachedLoadoutData.totalUnlockedUpgrades.Any(unlockedUpgrade => unlockedUpgrade.upgradeName == upgrade.upgradeName);
 
-                    cardSlots[i].cardSpriteRenderer.sprite = upgrade.upgradeSprite;
-                    cardSlots[i].InitialiseLoadoutGO(new LoadoutCardGOInfo(upgrade), !isUnlocked);
-                    cardSlots[i].gameObject.SetActive(true);
+                    cardDisplayList[i].cardSpriteRenderer.sprite = upgrade.upgradeSprite;
+                    cardDisplayList[i].InitialiseLoadoutGO(new FLoadoutCardObj(upgrade), !isUnlocked);
+                    cardDisplayList[i].gameObject.SetActive(true);
                 }
                 else
                 {
-                    cardSlots[i].InitialiseLoadoutGO(new LoadoutCardGOInfo(null), true);
-                    cardSlots[i].gameObject.SetActive(false);
+                    cardDisplayList[i].InitialiseLoadoutGO(new FLoadoutCardObj(null), true);
+                    cardDisplayList[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -257,14 +257,14 @@ namespace UserInterface.LoadoutSelection
         private void AddToActiveCardSlots(UpgradeDefinitionSO selectedUpgrade)
         {
             //update the activeloadoutlayout
-            bool success = EquippedLoadoutSelectionManager.AddUpgrade(selectedUpgrade);
+            bool success = equippedLoadoutManager.AddUpgrade(selectedUpgrade);
 
             if (success)
             {
-                //broadcast event to LoadoutManager to update the data (remove and add from totalupgrades and equipped)
+                //broadcast event to LoadoutManager to update the data (remove and add from total upgrades and equipped)
                 OnLoadoutSelected?.Invoke(selectedUpgrade);
 
-                UpdateCardSlots(loadoutPageIndex);
+                UpdateCardDisplay(loadoutPageIndex);
 
                 //temp, updates the button state
                 LoadoutSelectionPageManager.Instance.UpdateButtonState();
@@ -273,7 +273,7 @@ namespace UserInterface.LoadoutSelection
         #endregion
 
         #region Bind CardEndInteract Event
-        public void BindOnCardEndInteractEvent(List<LoadoutCardGO> cardUIList)
+        public void BindOnCardEndInteractEvent(List<LoadoutCardObj> cardUIList)
         {
             foreach (var card in cardUIList)
             {
@@ -295,18 +295,18 @@ namespace UserInterface.LoadoutSelection
 
         public void BindOnActiveLoadoutRemoveEvent()
         {
-            if (EquippedLoadoutSelectionManager)
+            if (equippedLoadoutManager)
             {
-                EquippedLoadoutSelectionManager.OnLoadoutRemoved += HandleOnActiveLoadoutRemoved;
+                equippedLoadoutManager.OnLoadoutRemoved += HandleOnActiveLoadoutRemoved;
                 isActiveLoadoutRemovedEventBinded = true;
             }
         }
 
         public void UnbindOnActiveLoadoutRemoveEvent()
         {
-            if (EquippedLoadoutSelectionManager)
+            if (equippedLoadoutManager)
             {
-                EquippedLoadoutSelectionManager.OnLoadoutRemoved -= HandleOnActiveLoadoutRemoved;
+                equippedLoadoutManager.OnLoadoutRemoved -= HandleOnActiveLoadoutRemoved;
                 isActiveLoadoutRemovedEventBinded = false;
             }
         }
@@ -315,17 +315,17 @@ namespace UserInterface.LoadoutSelection
 
         #region Bind LoadoutCardSelected Event
 
-        public void BindOnCardSelectedEvent(List<LoadoutCardGO> cardSlots)
+        public void BindOnCardSelectedEvent(List<LoadoutCardObj> activeCards)
         {
-            foreach (var card in cardSlots)
+            foreach (var card in activeCards)
             {
                 card.OnCardSelected += HandleOnCardSelected;
             }
         }
 
-        public void UnbindOnCardSelectedEvent(List<LoadoutCardGO> cardSlots)
+        public void UnbindOnCardSelectedEvent(List<LoadoutCardObj> activeCards)
         {
-            foreach (var card in cardSlots)
+            foreach (var card in activeCards)
             {
                 card.OnCardSelected -= HandleOnCardSelected;
             }

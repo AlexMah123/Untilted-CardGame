@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using PlayerComponents.ChoiceComponent;
-using PlayerCore.AIPlayer.AIModule.Base;
 using UnityEngine;
+
+using PlayerComponents;
+using PlayerCore.AIPlayer.AIModule.Base;
 
 namespace PlayerCore.AIPlayer.AIModule
 {

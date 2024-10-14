@@ -1,12 +1,13 @@
-﻿using PlayerComponents.ChoiceComponent;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+
+using PlayerComponents;
 
 namespace UserInterface.Cards.ChoiceCard
 {
-    public struct ChoiceCardCreationInfo
+    public struct FChoiceCardCreation
     {
-        public ChoiceCardCreationInfo(GameChoice choice, Transform spawnParent)
+        public FChoiceCardCreation(GameChoice choice, Transform spawnParent)
         {
             gameChoice = choice;
             parent = spawnParent;
@@ -23,12 +24,12 @@ namespace UserInterface.Cards.ChoiceCard
         public Sprite paperChoice;
         public Sprite scissorChoice;
 
-        public GameObject CreateCard(ChoiceCardCreationInfo creationInfo)
+        public GameObject CreateCard(FChoiceCardCreation creation)
         {
-            GameObject cardUIGO = Instantiate(choiceCardUIPrefab, creationInfo.parent);
-            Image imageComponent = cardUIGO.GetComponent<Image>();
+            GameObject cardUIObj = Instantiate(choiceCardUIPrefab, creation.parent);
+            Image imageComponent = cardUIObj.GetComponent<Image>();
 
-            switch (creationInfo.gameChoice)
+            switch (creation.gameChoice)
             {
                 case GameChoice.Rock:
                     imageComponent.sprite = rockChoice;
@@ -44,7 +45,7 @@ namespace UserInterface.Cards.ChoiceCard
                     break;
             }
 
-            return cardUIGO;
+            return cardUIObj;
         }
     }
 }

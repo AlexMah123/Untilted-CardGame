@@ -1,12 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
 using LevelConfig.Base;
 using SaveSystem;
 using SaveSystem.Data;
-using UnityEngine;
 
 namespace LevelManager
 {
+    [Serializable]
+    public class LevelCompletionData
+    {
+        public string levelName;
+        public bool isCompleted;
+    }
+    
     public class LevelDataManager : MonoBehaviour, ISavableData
     {
         public static LevelDataManager Instance;
@@ -31,7 +40,13 @@ namespace LevelManager
             }
         }
 
-
+        public bool IsLevelCompleted(string levelName)
+        {
+            return totalLevels.Any(level => level.levelName == levelName && level.isCompleted);
+        }
+        
+        
+        #region SaveInterface
         public void LoadData(GameData data)
         {
             foreach (var savedLevel in data.levelCompletionData)
@@ -51,13 +66,7 @@ namespace LevelManager
         {
         
         }
-
+        #endregion
     }
-
-    [Serializable]
-    public class LevelCompletionData
-    {
-        public string levelName;
-        public bool isCompleted;
-    }
+    
 }

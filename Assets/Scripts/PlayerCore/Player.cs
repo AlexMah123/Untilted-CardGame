@@ -1,15 +1,11 @@
 using System;
 using LevelManager;
-using PlayerComponents.ChoiceComponent;
-using PlayerComponents.DamageStatComponent;
-using PlayerComponents.EnergyStatComponent;
-using PlayerComponents.HealthStatComponent;
-using PlayerComponents.LoadoutComponent;
+using PlayerComponents;
 using SaveSystem;
 using SaveSystem.Data;
 using UnityEngine;
 
-namespace PlayerCore.Base
+namespace PlayerCore
 {
     [RequireComponent(typeof(ChoiceComponent), typeof(ActiveLoadoutComponent))]
     [RequireComponent(typeof(HealthComponent), typeof(DamageComponent), typeof(EnergyComponent))]

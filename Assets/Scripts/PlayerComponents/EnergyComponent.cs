@@ -1,8 +1,9 @@
 using System;
-using PlayerCore;
 using UnityEngine;
 
-namespace PlayerComponents.EnergyStatComponent
+using PlayerCore;
+
+namespace PlayerComponents
 {
     public class EnergyComponent : MonoBehaviour
     {

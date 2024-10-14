@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using PlayerComponents.ChoiceComponent;
+using PlayerComponents;
 
 namespace PlayerCore.AIPlayer
 {

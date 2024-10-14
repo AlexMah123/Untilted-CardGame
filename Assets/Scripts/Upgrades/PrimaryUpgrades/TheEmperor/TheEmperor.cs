@@ -1,5 +1,6 @@
-using PlayerCore;
 using UnityEngine;
+
+using PlayerCore;
 using Upgrades.Base;
 
 namespace Upgrades.PrimaryUpgrades.TheEmperor

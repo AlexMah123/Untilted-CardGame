@@ -1,4 +1,4 @@
-using PlayerCore.Base;
+using PlayerCore;
 using TurnSystem.Turns.Base;
 
 namespace TurnSystem.Turns

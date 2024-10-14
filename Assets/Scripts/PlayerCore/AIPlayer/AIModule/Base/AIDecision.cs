@@ -1,5 +1,6 @@
-using PlayerComponents.ChoiceComponent;
 using UnityEngine;
+
+using PlayerComponents;
 
 namespace PlayerCore.AIPlayer.AIModule.Base
 {

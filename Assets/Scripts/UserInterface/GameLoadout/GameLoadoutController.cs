@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+
 using LevelConfig.Base;
 using LevelManager;
 using LoadoutSelection;
 using PlayerCore;
 using SaveSystem;
 using SaveSystem.Data;
-using UnityEngine;
 using Upgrades.Base;
 using Upgrades.UpgradeFactory;
 using UserInterface.Cards.LoadoutCard;
@@ -57,7 +58,7 @@ namespace UserInterface.GameLoadout
 
         }
 
-        private void HandleActivateSkill(LoadoutCardGOInfo info)
+        private void HandleActivateSkill(FLoadoutCardObj info)
         {
             Debug.Log("Card Clicked");
         }
@@ -81,8 +82,8 @@ namespace UserInterface.GameLoadout
 
             //Enemy==============================================================================================================
 
-            PlayerData computerPlayerData = currentLevelConfig.aiPlayer;
-            List<UpgradeDefinitionSO> computerPlayerEquippedUpgradesList = computerPlayerData.upgradesEquipped;
+            FPlayerData computerFPlayerData = currentLevelConfig.aiFPlayer;
+            List<UpgradeDefinitionSO> computerPlayerEquippedUpgradesList = computerFPlayerData.upgradesEquipped;
 
             //for each upgrade equipped by enemy (level config), display it
             for (int i = 0; i < computerPlayerEquippedUpgradesList.Count; i++)

@@ -1,7 +1,6 @@
 using LevelManager;
-using PlayerComponents.ChoiceComponent;
+using PlayerComponents;
 using PlayerCore.AIPlayer.AIModule.Base;
-using PlayerCore.Base;
 using SaveSystem.Data;
 using UnityEngine;
 using Upgrades.Base;
@@ -31,10 +30,10 @@ namespace PlayerCore.AIPlayer
 
         protected override void LoadPlayerData(GameData data)
         {
-            var computerPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.aiPlayer;
+            var computerPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.aiFPlayer;
 
             baseStatsConfig = computerPlayerData.baseStatsConfig;
-            aiModuleConfig = computerPlayerData.AiModule;
+            aiModuleConfig = computerPlayerData.aiModule;
 
             //load data from levelconfig
             foreach (UpgradeDefinitionSO upgradeSO in computerPlayerData.upgradesEquipped)

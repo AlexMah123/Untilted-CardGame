@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Linq;
-using Audio;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+using Audio;
 
 namespace SceneTransition
 {

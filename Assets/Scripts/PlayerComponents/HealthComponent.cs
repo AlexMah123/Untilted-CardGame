@@ -1,8 +1,9 @@
 using System;
-using PlayerCore;
 using UnityEngine;
 
-namespace PlayerComponents.HealthStatComponent
+using PlayerCore;
+
+namespace PlayerComponents
 {
     public class HealthComponent : MonoBehaviour
     {

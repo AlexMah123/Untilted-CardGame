@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+
 using Upgrades.Base;
 
 namespace LoadoutSelection
 {
     [Serializable]
-    public struct LoadoutData
+    public struct FLoadoutData
     {
-        public LoadoutData(List<UpgradeDefinitionSO> _totalUpgrades, HashSet<UpgradeDefinitionSO> _totalUnlockedUpgrades, HashSet<UpgradeDefinitionSO> _currentActiveUpgrades)
+        public FLoadoutData(List<UpgradeDefinitionSO> _totalUpgrades, HashSet<UpgradeDefinitionSO> _totalUnlockedUpgrades, HashSet<UpgradeDefinitionSO> _currentActiveUpgrades)
         {
             totalUpgradesInGame = _totalUpgrades;
             totalUnlockedUpgrades = _totalUnlockedUpgrades;
@@ -21,13 +23,23 @@ namespace LoadoutSelection
 
 
     [Serializable]
-    public struct LoadoutCardGOInfo
+    public struct FLoadoutCardObj
     {
-        public LoadoutCardGOInfo(UpgradeDefinitionSO _upgradeSO)
+        public FLoadoutCardObj(UpgradeDefinitionSO _upgradeSO)
         {
             upgradeSO = _upgradeSO;
         }
 
         public UpgradeDefinitionSO upgradeSO;
+    }
+    
+    public struct FLoadoutCardCreation
+    {
+        public FLoadoutCardCreation(Transform spawnParent)
+        {
+            parent = spawnParent;
+        }
+
+        public Transform parent;
     }
 }

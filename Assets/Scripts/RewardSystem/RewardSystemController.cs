@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
+
 using LevelManager;
 using LoadoutSelection;
 using PlayerCore;
 using SaveSystem;
 using SaveSystem.Data;
-using UnityEngine;
-using UnityEngine.UI;
 using Upgrades.Base;
 using UserInterface.Cards.LoadoutCard;
 
@@ -77,7 +78,7 @@ namespace RewardSystem
                 if (rewardUI)
                 {
                     //populate the data 
-                    rewardUI.InitializeCard(new LoadoutCardGOInfo(upgrade));
+                    rewardUI.InitializeCard(new FLoadoutCardObj(upgrade));
                     rewardUI.gameObject.SetActive(true);
                 }
                 else

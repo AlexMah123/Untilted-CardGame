@@ -1,5 +1,4 @@
 using LevelManager;
-using PlayerCore.Base;
 using SaveSystem.Data;
 using Upgrades.UpgradeFactory;
 
@@ -10,7 +9,7 @@ namespace PlayerCore.HumanPlayer
         protected override void LoadPlayerData(GameData data)
         {
             //load from LevelDataManager
-            var humanPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.humanPlayer;
+            var humanPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.humanFPlayer;
 
             baseStatsConfig = humanPlayerData.baseStatsConfig;
         

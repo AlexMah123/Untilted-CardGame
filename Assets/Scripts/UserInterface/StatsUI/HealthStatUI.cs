@@ -1,6 +1,7 @@
-using PlayerCore.Base;
 using TMPro;
 using UnityEngine;
+
+using PlayerCore;
 
 namespace UserInterface.StatsUI
 {

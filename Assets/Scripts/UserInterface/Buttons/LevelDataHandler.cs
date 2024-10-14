@@ -1,8 +1,9 @@
-using LevelConfig.Base;
-using LevelManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+using LevelConfig.Base;
+using LevelManager;
 
 namespace UserInterface.Buttons
 {
@@ -10,7 +11,11 @@ namespace UserInterface.Buttons
     {
         [Header("UI Component")]
         public Image thumbnailImage;
+        public Image completedOverlay;
         public TextMeshProUGUI levelNameText;
+        
+        [Header("Locked Config")]
+        public Color lockedColor;
 
         [Header("Level Data")]
         public LevelConfigSO levelConfig;
@@ -21,6 +26,10 @@ namespace UserInterface.Buttons
             {
                 thumbnailImage.sprite = levelConfig.levelImage;
                 levelNameText.text = levelConfig.levelName;
+
+                bool isCompleted = LevelDataManager.Instance.IsLevelCompleted(levelConfig.levelName);
+                thumbnailImage.color = isCompleted ? lockedColor : Color.white;
+                completedOverlay.gameObject.SetActive(isCompleted);
             }
             else
             {

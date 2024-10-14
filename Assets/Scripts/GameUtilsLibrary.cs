@@ -1,5 +1,5 @@
 using Game;
-using PlayerComponents.ChoiceComponent;
+using PlayerComponents;
 
 public static class GameUtilsLibrary
 {

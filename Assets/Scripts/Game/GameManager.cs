@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
+using UnityEngine;
+
 using LevelManager;
-using PlayerComponents.ChoiceComponent;
+using PlayerComponents;
+using PlayerCore;
 using PlayerCore.AIPlayer;
-using PlayerCore.Base;
 using SaveSystem;
 using SaveSystem.Data;
 using SceneTransition;
-using UnityEngine;
 using UserInterface.Cards.ChoiceCard;
 using UserInterface.ConfirmationZone;
 

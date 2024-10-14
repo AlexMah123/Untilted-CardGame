@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using UnityEngine;
+
 using Game;
+using PlayerCore;
 using PlayerCore.AIPlayer;
-using PlayerCore.Base;
 using TurnSystem;
 using TurnSystem.Turns.Base;
-using UnityEngine;
 using UserInterface.Cards.Base;
 using UserInterface.Cards.ChoiceCard;
 
@@ -163,8 +164,8 @@ namespace UserInterface.Cards
             //create based on choices available
             foreach (var choice in player.ChoiceComponent.choicesAvailable)
             {
-                ChoiceCardCreationInfo creationInfo = new(choice.Key, spawnContainer);
-                GameObject cardUIGO = choiceCardFactory.CreateCard(creationInfo);
+                FChoiceCardCreation creation = new(choice.Key, spawnContainer);
+                GameObject cardUIGO = choiceCardFactory.CreateCard(creation);
                 ChoiceCardUI cardUI = cardUIGO.GetComponent<ChoiceCardUI>();
 
                 //Initiailise the UI's values

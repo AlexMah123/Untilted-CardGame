@@ -1,5 +1,6 @@
-using PlayerCore;
 using UnityEngine;
+
+using PlayerCore;
 using Upgrades.UpgradeFactory;
 
 namespace Upgrades.Base

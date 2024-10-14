@@ -6,10 +6,10 @@ using Upgrades.Base;
 namespace PlayerCore
 {
     [Serializable]
-    public struct PlayerData
+    public struct FPlayerData
     {
         public PlayerStatsSO baseStatsConfig;
-        public AIDecision AiModule;
+        public AIDecision aiModule;
         public PlayerType playerType;
 
         public List<UpgradeDefinitionSO> upgradesEquipped;

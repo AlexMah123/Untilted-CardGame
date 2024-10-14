@@ -1876,6 +1876,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SaveSystemManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6671726359780107801, guid: 45da8c14dd3c7ac40b4a608f8e00b8a6,
+        type: 3}
+      propertyPath: fileName
+      value: testingData.game
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
