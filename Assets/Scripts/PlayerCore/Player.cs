@@ -1,8 +1,8 @@
 using System;
-using LevelManager;
-using PlayerComponents;
-using SaveSystem;
-using SaveSystem.Data;
+using GameCore.SaveSystem;
+using GameCore.SaveSystem.Data;
+using LevelCore.LevelManager;
+using PlayerCore.PlayerComponents;
 using UnityEngine;
 
 namespace PlayerCore

@@ -1,8 +1,7 @@
+using PlayerCore.Upgrades.Base;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
-using Upgrades.Base;
 
 namespace UserInterface.InspectUpgradeUI
 {

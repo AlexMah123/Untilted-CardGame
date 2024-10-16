@@ -1,4 +1,4 @@
-using PlayerComponents;
+using PlayerCore.PlayerComponents;
 
 namespace PlayerCore
 {

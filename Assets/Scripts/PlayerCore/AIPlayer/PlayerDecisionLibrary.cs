@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using PlayerComponents;
+using PlayerCore.PlayerComponents;
 
 namespace PlayerCore.AIPlayer
 {

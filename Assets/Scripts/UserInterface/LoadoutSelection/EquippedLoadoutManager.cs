@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameCore.LoadoutSelection;
 using UnityEngine;
-
-using LoadoutSelection;
-using Upgrades.Base;
+using PlayerCore.Upgrades.Base;
 using UserInterface.Cards.LoadoutCard;
 
 namespace UserInterface.LoadoutSelection

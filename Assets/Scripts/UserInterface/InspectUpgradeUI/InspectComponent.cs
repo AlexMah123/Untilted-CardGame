@@ -1,7 +1,6 @@
 using System;
+using PlayerCore.Upgrades.Base;
 using UnityEngine;
-
-using Upgrades.Base;
 
 namespace UserInterface.InspectUpgradeUI
 {

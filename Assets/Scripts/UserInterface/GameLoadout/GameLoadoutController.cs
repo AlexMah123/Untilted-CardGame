@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameCore.LoadoutSelection;
+using GameCore.SaveSystem;
+using GameCore.SaveSystem.Data;
+using LevelCore.LevelConfig.Base;
+using LevelCore.LevelManager;
 using UnityEngine;
-
-using LevelConfig.Base;
-using LevelManager;
-using LoadoutSelection;
 using PlayerCore;
-using SaveSystem;
-using SaveSystem.Data;
-using Upgrades.Base;
-using Upgrades.UpgradeFactory;
+using PlayerCore.Upgrades.Base;
+using PlayerCore.Upgrades.UpgradeFactory;
 using UserInterface.Cards.LoadoutCard;
 
 namespace UserInterface.GameLoadout

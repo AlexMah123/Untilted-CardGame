@@ -1,9 +1,8 @@
 using System;
+using GameCore.LoadoutSelection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
-using LoadoutSelection;
 using UserInterface.Cards.Base;
 using UserInterface.InspectUpgradeUI;
 

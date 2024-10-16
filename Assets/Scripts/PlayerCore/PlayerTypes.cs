@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using PlayerCore.AIPlayer.AIModule.Base;
-using Upgrades.Base;
+using PlayerCore.Upgrades.Base;
 
 namespace PlayerCore
 {

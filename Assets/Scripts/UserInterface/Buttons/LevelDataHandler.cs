@@ -1,9 +1,8 @@
+using LevelCore.LevelConfig.Base;
+using LevelCore.LevelManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
-using LevelConfig.Base;
-using LevelManager;
 
 namespace UserInterface.Buttons
 {

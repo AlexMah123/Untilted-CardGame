@@ -1,6 +1,6 @@
-using LevelManager;
-using SaveSystem.Data;
-using Upgrades.UpgradeFactory;
+using GameCore.SaveSystem.Data;
+using LevelCore.LevelManager;
+using PlayerCore.Upgrades.UpgradeFactory;
 
 namespace PlayerCore.HumanPlayer
 {

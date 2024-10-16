@@ -1,11 +1,10 @@
 using System.Collections.Generic;
+using GameCore;
+using GameCore.TurnSystem;
+using GameCore.TurnSystem.Turns.Base;
 using UnityEngine;
-
-using Game;
 using PlayerCore;
 using PlayerCore.AIPlayer;
-using TurnSystem;
-using TurnSystem.Turns.Base;
 using UserInterface.Cards.Base;
 using UserInterface.Cards.ChoiceCard;
 

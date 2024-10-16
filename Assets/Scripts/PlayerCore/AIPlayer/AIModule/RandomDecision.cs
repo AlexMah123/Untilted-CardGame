@@ -1,7 +1,6 @@
 using UnityEngine;
-
-using PlayerComponents;
 using PlayerCore.AIPlayer.AIModule.Base;
+using PlayerCore.PlayerComponents;
 
 namespace PlayerCore.AIPlayer.AIModule
 {

@@ -1,5 +1,5 @@
-using Game;
-using PlayerComponents;
+using GameCore;
+using PlayerCore.PlayerComponents;
 
 public static class GameUtilsLibrary
 {

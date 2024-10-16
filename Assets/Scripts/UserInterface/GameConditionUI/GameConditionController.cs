@@ -1,10 +1,9 @@
 using System;
+using GameCore;
+using LevelCore.LevelManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
-using Game;
-using LevelManager;
 
 namespace UserInterface.GameConditionUI
 {

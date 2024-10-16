@@ -1,9 +1,9 @@
-using LevelManager;
-using PlayerComponents;
+using GameCore.SaveSystem.Data;
+using LevelCore.LevelManager;
 using PlayerCore.AIPlayer.AIModule.Base;
-using SaveSystem.Data;
+using PlayerCore.PlayerComponents;
+using PlayerCore.Upgrades.Base;
 using UnityEngine;
-using Upgrades.Base;
 
 namespace PlayerCore.AIPlayer
 {

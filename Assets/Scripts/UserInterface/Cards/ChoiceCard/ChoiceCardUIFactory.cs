@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿using PlayerCore.PlayerComponents;
+using UnityEngine;
 using UnityEngine.UI;
-
-using PlayerComponents;
 
 namespace UserInterface.Cards.ChoiceCard
 {
