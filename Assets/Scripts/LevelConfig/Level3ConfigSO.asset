@@ -12,16 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75013c4bc7c9d2b43b07733bb6561070, type: 3}
   m_Name: Level3ConfigSO
   m_EditorClassIdentifier: 
-  humanPlayer:
+  humanFPlayer:
     baseStatsConfig: {fileID: 11400000, guid: 46b404202d4889b4eb3d741afff23fd1, type: 2}
-    AiModule: {fileID: 0}
+    aiModule: {fileID: 0}
     playerType: 0
     upgradesEquipped: []
-  aiPlayer:
+  aiFPlayer:
     baseStatsConfig: {fileID: 11400000, guid: af6be0f4975e2934aa9f5499aeb816ae, type: 2}
-    AiModule: {fileID: 11400000, guid: e312332acb26c6e4abf984696d51c82a, type: 2}
-    playerType: 1
+    aiModule: {fileID: 11400000, guid: e312332acb26c6e4abf984696d51c82a, type: 2}
+    playerType: 0
     upgradesEquipped: []
   levelName: Level 3
   levelImage: {fileID: 21300000, guid: 90d8f0b52ca666f489993cf0eb55f92e, type: 3}
-  rewardList: []
+  rewardList:
+  - {fileID: 11400000, guid: 7a48d19317b10924aa6e308defe5cc0f, type: 2}
+  - {fileID: 11400000, guid: e0e67e4e3b463684081980d0a49524f2, type: 2}
+  rewardStats:
+    health: 0
+    damage: 0
+    cardSlots: 0
+    energy: 0
