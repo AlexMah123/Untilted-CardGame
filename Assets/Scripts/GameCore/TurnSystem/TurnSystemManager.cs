@@ -15,10 +15,12 @@ namespace GameCore.TurnSystem
         private Player HumanPlayer { get => GameManager.Instance.humanPlayer; }
         private Player AiPlayer { get => GameManager.Instance.computerPlayer; }
 
+
         //Current values of the game.
-        [HideInInspector]
+        [Header("Runtime values")]
         public Player currentPlayer;
         public Turn currentTurn;
+        public int turnCount;
 
         //declaration of possible turns
         PlayerTurn playerTurn = new PlayerTurn();
@@ -118,6 +120,7 @@ namespace GameCore.TurnSystem
             OnChangedTurnEvent?.Invoke(this, currentTurn, newTurn);
             currentTurn = newTurn;
 
+            turnCount++;
             currentTurn.OnStartTurn(this, currentPlayer);
         }
 

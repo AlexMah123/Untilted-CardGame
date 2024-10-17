@@ -9,7 +9,7 @@ using PlayerCore.AIPlayer;
 using PlayerCore.PlayerComponents;
 using UnityEngine;
 using UserInterface.Cards.ChoiceCard;
-using UserInterface.ConfirmationZone;
+using UserInterface.Gameplay;
 
 namespace GameCore
 {
@@ -116,34 +116,8 @@ namespace GameCore
         }
 
         #region Internal Functions
-        private void UpdateLevelCompletionStatus(ref GameData data)
-        {
-            if (LevelDataManager.Instance.currentSelectedLevelSO == null) 
-            {
-                Debug.LogWarning("LevelManager does not exist, currentSelectedLevelSO is null");
-                return; 
-            }
 
-            var currentLevel = LevelDataManager.Instance.currentSelectedLevelSO;
-
-            var completedLevelData = data.levelCompletionData.FirstOrDefault(level => level.levelName == currentLevel.levelName);
-
-            if(completedLevelData != null)
-            {
-                completedLevelData.isCompleted = true;
-            }
-            else
-            {
-                data.levelCompletionData.Add(new LevelCompletionData
-                {
-                    levelName = currentLevel.levelName,
-                    isCompleted = true
-                });
-            }
-
-        }
-
-        public void PlayRound()
+        private void PlayRound()
         {
             if (computerPlayer == null)
             {
@@ -178,13 +152,6 @@ namespace GameCore
             //TESTING
             Invoke(nameof(ClearEditorLog), 3f);
 #endif
-
-        }
-
-        [ContextMenu("GameManager/Clear Round")]
-        public void ClearRound()
-        {
-            OnClearCardInHand?.Invoke();
         }
 
         private void EvaluateResults(GameResult roundResult)
@@ -210,17 +177,10 @@ namespace GameCore
             //#DEBUG
             Debug.Log($"Human Player has {roundResult}");
         }
-
-#if UNITY_EDITOR
-        private void ClearEditorLog()
-        {
-            EditorUtilsLibrary.ClearLogConsole();
-        }
-#endif
-
+        
         #endregion
 
-        #region SavableData Interface
+        #region SavableData System
         public void LoadData(GameData data)
         {
             //#DEBUG
@@ -232,6 +192,33 @@ namespace GameCore
         public void SaveData(ref GameData data)
         {
             UpdateLevelCompletionStatus(ref data);
+
+        }
+        
+        private void UpdateLevelCompletionStatus(ref GameData data)
+        {
+            if (LevelDataManager.Instance.currentSelectedLevelSO == null) 
+            {
+                Debug.LogWarning("LevelManager does not exist, currentSelectedLevelSO is null");
+                return; 
+            }
+
+            var currentLevel = LevelDataManager.Instance.currentSelectedLevelSO;
+
+            var completedLevelData = data.levelCompletionData.FirstOrDefault(level => level.levelName == currentLevel.levelName);
+
+            if(completedLevelData != null)
+            {
+                completedLevelData.isCompleted = true;
+            }
+            else
+            {
+                data.levelCompletionData.Add(new LevelCompletionData
+                {
+                    levelName = currentLevel.levelName,
+                    isCompleted = true
+                });
+            }
 
         }
         #endregion
@@ -284,6 +271,21 @@ namespace GameCore
             }
         }
 
+        #endregion
+
+        #region Helper
+        [ContextMenu("GameManager/Clear Round")]
+        public void ClearRound()
+        {
+            OnClearCardInHand?.Invoke();
+        }
+        
+#if UNITY_EDITOR
+        private void ClearEditorLog()
+        {
+            EditorUtilsLibrary.ClearLogConsole();
+        }
+#endif
         #endregion
     }
 }

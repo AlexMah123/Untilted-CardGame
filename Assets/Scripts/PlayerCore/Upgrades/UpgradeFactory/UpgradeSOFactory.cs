@@ -1,6 +1,6 @@
 using System.Linq;
 using PlayerCore.Upgrades.Base;
-using PlayerCore.Upgrades.UpgradeCollection;
+using PlayerCore.Upgrades.Collection;
 using UnityEngine;
 
 namespace PlayerCore.Upgrades.UpgradeFactory

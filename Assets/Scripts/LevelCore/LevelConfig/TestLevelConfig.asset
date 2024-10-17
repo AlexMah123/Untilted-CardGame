@@ -21,7 +21,8 @@ MonoBehaviour:
     baseStatsConfig: {fileID: 11400000, guid: c444568b120687f45a684a2a5c2e7edf, type: 2}
     aiModule: {fileID: 11400000, guid: 827fa0f581f37bf4680a4e6a7df3e03f, type: 2}
     playerType: 0
-    upgradesEquipped: []
+    upgradesEquipped:
+    - {fileID: 11400000, guid: 4715a156ca2274448a0fc521c1341d23, type: 2}
   levelName: Level 1
   levelImage: {fileID: 21300000, guid: 90d8f0b52ca666f489993cf0eb55f92e, type: 3}
   rewardList:

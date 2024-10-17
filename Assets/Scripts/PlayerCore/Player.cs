@@ -1,4 +1,5 @@
 using System;
+using GameCore;
 using GameCore.SaveSystem;
 using GameCore.SaveSystem.Data;
 using LevelCore.LevelManager;
@@ -61,10 +62,11 @@ namespace PlayerCore
         
             //Inject values
             choiceComponent.currentChoice = GameChoice.Rock;
-            activeLoadoutComponent.InitializeComponent(this, currentStats);
             healthComponent.InitializeComponent(currentStats);
             damageComponent.InitializeComponent(currentStats);
             energyComponent.InitializeComponent(currentStats);
+            
+            //active component is overriden to specify
         }
 
         //overriden by AIPlayer, HumanPlayer is set by turn system manager/GameManager
@@ -73,6 +75,7 @@ namespace PlayerCore
             return ChoiceComponent.currentChoice;
         }
 
+        #region SaveSystem
         public virtual void LoadData(GameData data)
         {
             if (LevelDataManager.Instance.currentSelectedLevelSO == null)
@@ -89,14 +92,16 @@ namespace PlayerCore
         {
 
         }
-        #endregion
 
         //override to have their own implementation of loadData
         protected virtual void LoadPlayerData(GameData data)
         {
             //implement in child class
         }
+        #endregion
 
+        #endregion
+        
         public void UpdateCurrentStats()
         {
             currentStats.health = baseStatsConfig.health + upgradeStats.health;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GameCore.LoadoutSelection;
 using PlayerCore.Upgrades.Base;
 using PlayerCore.Upgrades.UpgradeFactory;
 using UnityEngine;
@@ -9,10 +10,12 @@ namespace PlayerCore.PlayerComponents
     {
         [Header("Runtime Value")]
         public int maxLimitOfLoadout;
-        public List<UpgradeDefinitionSO> upgradeSlots = new();
+        public List<UpgradeDefinitionSO> upgradeCardSlots = new();
 
         [HideInInspector]
         public Player attachedPlayer;
+
+        public Player enemyPlayer;
 
         private void Start()
         {
@@ -22,27 +25,36 @@ namespace PlayerCore.PlayerComponents
             }
         }
 
-        public void InitializeComponent(Player refPlayer, PlayerStats referencedStats)
+        public void InitializeComponent(Player refPlayer, Player enemyRef, PlayerStats referencedStats)
         {
             attachedPlayer = refPlayer;
+            enemyPlayer = enemyRef;
             maxLimitOfLoadout = referencedStats.cardSlots;
+        }
+
+        public void HandleActivateSkill(UpgradeDefinitionSO info)
+        {
+            if (upgradeCardSlots.Contains(info))
+            {
+                info.ApplyActivatableEffect(attachedPlayer, enemyPlayer);
+            }
         }
 
         [ContextMenu("ActiveLoadout/Apply Passive Effect")]
         public void ApplyPassiveEffects()
         {
-            foreach (UpgradeDefinitionSO upgrade in upgradeSlots)
+            foreach (UpgradeDefinitionSO upgrade in upgradeCardSlots)
             {
-                upgrade.ApplyPassiveEffect(attachedPlayer);
+                upgrade.ApplyPassiveEffect(attachedPlayer, enemyPlayer);
             }
         }
 
         [ContextMenu("ActiveLoadout/Apply OnWin Effect")]
         public void ApplyOnWinEffects()
         {
-            foreach (UpgradeDefinitionSO upgrade in upgradeSlots)
+            foreach (UpgradeDefinitionSO upgrade in upgradeCardSlots)
             {
-                upgrade.OnWinRound(attachedPlayer);
+                upgrade.OnWinRound(attachedPlayer, enemyPlayer);
             }
         }
 
@@ -50,35 +62,35 @@ namespace PlayerCore.PlayerComponents
         [ContextMenu("ActiveLoadout/Apply OnLose Effect")]
         public void ApplyOnLoseEffect()
         {
-            foreach (UpgradeDefinitionSO upgrade in upgradeSlots)
+            foreach (UpgradeDefinitionSO upgrade in upgradeCardSlots)
             {
-                upgrade.OnWinRound(attachedPlayer);
+                upgrade.OnLoseRound(attachedPlayer, enemyPlayer);
             }
         }
 
         [ContextMenu("ActiveLoadout/Apply OnDraw Effect")]
         public void ApplyOnDrawEffect()
         {
-            foreach (UpgradeDefinitionSO upgrade in upgradeSlots)
+            foreach (UpgradeDefinitionSO upgrade in upgradeCardSlots)
             {
-                upgrade.OnWinRound(attachedPlayer);
+                upgrade.OnDrawRound(attachedPlayer, enemyPlayer);
             }
         }
 
         public List<UpgradeDefinitionSO> FetchActiveLoadout()
         {
-            return upgradeSlots;
+            return upgradeCardSlots;
         }
 
         public void AddUpgradeToLoadout(UpgradeDefinitionSO upgrade)
         {
-            upgradeSlots.Add(upgrade);
+            upgradeCardSlots.Add(upgrade);
         }
 
         public void AddUpgradeToLoadout(UpgradeType upgradeType)
         {
             var createdUpgrade = UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradeType);
-            upgradeSlots.Add(createdUpgrade);
+            upgradeCardSlots.Add(createdUpgrade);
         }
 
 

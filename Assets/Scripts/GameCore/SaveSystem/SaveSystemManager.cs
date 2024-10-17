@@ -50,6 +50,7 @@ namespace GameCore.SaveSystem
 
         private void Start()
         {
+            Application.targetFrameRate = 60;
             BootstrapSaveData();
         }
 

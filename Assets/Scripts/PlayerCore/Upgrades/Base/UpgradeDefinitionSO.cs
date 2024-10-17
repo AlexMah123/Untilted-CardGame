@@ -31,29 +31,34 @@ namespace PlayerCore.Upgrades.Base
             return upgradeType.GetHashCode();
         }
 
-        public virtual void ApplyPassiveEffect(IPlayer player)
+        public virtual void ApplyAtStartOfGame(IPlayer attachedPlayer, IPlayer enemyPlayer)
         {
-
+            Debug.Log($"Applying Stat Effect of {this.GetType()}, {attachedPlayer}, {enemyPlayer}");
+        }
+        
+        public virtual void ApplyPassiveEffect(IPlayer attachedPlayer, IPlayer enemyPlayer)
+        {
+            Debug.Log($"Applying Passive Effect of {this.GetType()}, {attachedPlayer}, {enemyPlayer}");
         }
 
-        public virtual void ApplyActivatableEffect(IPlayer player)
+        public virtual void ApplyActivatableEffect(IPlayer attachedPlayer, IPlayer enemyPlayer)
         {
             Debug.Log($"Activating Effect of {this.GetType()}");
         }
 
-        public virtual void OnWinRound(IPlayer player)
+        public virtual void OnWinRound(IPlayer attachedPlayer, IPlayer enemyPlayer)
         {
             Debug.Log($"Applying OnWin Effect of {this.GetType()}");
 
         }
 
-        public virtual void OnLoseRound(IPlayer player)
+        public virtual void OnLoseRound(IPlayer attachedPlayer, IPlayer enemyPlayer)
         {
             Debug.Log($"Applying OnLose Effect of {this.GetType()}");
 
         }
 
-        public virtual void OnDrawRound(IPlayer player)
+        public virtual void OnDrawRound(IPlayer attachedPlayer, IPlayer enemyPlayer)
         {
             Debug.Log($"Applying OnDraw Effect of {this.GetType()}");
 

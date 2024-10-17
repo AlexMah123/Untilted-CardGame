@@ -1,3 +1,4 @@
+using GameCore;
 using GameCore.SaveSystem.Data;
 using LevelCore.LevelManager;
 using PlayerCore.Upgrades.UpgradeFactory;
@@ -6,6 +7,14 @@ namespace PlayerCore.HumanPlayer
 {
     public class HumanPlayer : Player
     {
+        public override void LoadComponents()
+        {
+            base.LoadComponents();
+            
+            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.computerPlayer, currentStats);
+        }
+
+        #region SaveSystem Override
         protected override void LoadPlayerData(GameData data)
         {
             //load from LevelDataManager
@@ -28,5 +37,7 @@ namespace PlayerCore.HumanPlayer
                 ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeType);
             }
         }
+        #endregion
+
     }
 }

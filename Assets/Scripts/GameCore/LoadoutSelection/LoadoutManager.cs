@@ -5,7 +5,7 @@ using GameCore.SaveSystem;
 using GameCore.SaveSystem.Data;
 using PlayerCore;
 using PlayerCore.Upgrades.Base;
-using PlayerCore.Upgrades.UpgradeCollection;
+using PlayerCore.Upgrades.Collection;
 using PlayerCore.Upgrades.UpgradeFactory;
 using UnityEngine;
 using UserInterface.LoadoutSelection;

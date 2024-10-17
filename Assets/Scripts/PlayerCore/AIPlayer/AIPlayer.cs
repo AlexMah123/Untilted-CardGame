@@ -1,3 +1,4 @@
+using GameCore;
 using GameCore.SaveSystem.Data;
 using LevelCore.LevelManager;
 using PlayerCore.AIPlayer.AIModule.Base;
@@ -15,6 +16,7 @@ namespace PlayerCore.AIPlayer
         {
             base.LoadComponents();
 
+            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.humanPlayer, currentStats);
             aiModuleConfig.InitializeAIConfig(ChoiceComponent);
         }
 
@@ -28,6 +30,7 @@ namespace PlayerCore.AIPlayer
             return aiModuleConfig.MakeDecision();
         }
 
+        #region SaveSystemOverride
         protected override void LoadPlayerData(GameData data)
         {
             var computerPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.aiFPlayer;
@@ -41,6 +44,7 @@ namespace PlayerCore.AIPlayer
                 ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeSO);
             }
         }
+        #endregion
 
     }
 }
