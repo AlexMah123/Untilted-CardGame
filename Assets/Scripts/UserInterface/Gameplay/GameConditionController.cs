@@ -13,7 +13,7 @@ namespace UserInterface.Gameplay
         [SerializeField] Sprite winScreen;
         [SerializeField] Sprite loseScreen;
 
-        [SerializeField] GameObject parentPanel;
+        [SerializeField] GameObject conditionPanel;
         [SerializeField] Image conditionImage;
         [SerializeField] GameObject levelSelectButton;
         [SerializeField] GameObject rewardButton;
@@ -23,8 +23,7 @@ namespace UserInterface.Gameplay
         {
             GameManager.Instance.OnLevelCompleted -= DisplayImage;
         }
-
-
+        
         private void Start()
         {
             GameManager.Instance.OnLevelCompleted += DisplayImage;
@@ -38,7 +37,7 @@ namespace UserInterface.Gameplay
         {
             //#TODO: add win lose sound sfx
 
-            parentPanel.SetActive(true);
+            conditionPanel.SetActive(true);
 
             switch(gameResult)
             {

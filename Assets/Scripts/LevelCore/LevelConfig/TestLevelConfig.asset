@@ -20,10 +20,10 @@ MonoBehaviour:
   aiFPlayer:
     baseStatsConfig: {fileID: 11400000, guid: c444568b120687f45a684a2a5c2e7edf, type: 2}
     aiModule: {fileID: 11400000, guid: 827fa0f581f37bf4680a4e6a7df3e03f, type: 2}
-    playerType: 0
+    playerType: 1
     upgradesEquipped:
     - {fileID: 11400000, guid: 4715a156ca2274448a0fc521c1341d23, type: 2}
-  levelName: Level 1
+  levelName: Testing Scene
   levelImage: {fileID: 21300000, guid: 90d8f0b52ca666f489993cf0eb55f92e, type: 3}
   rewardList:
   - {fileID: 11400000, guid: ada56775d7dd05e4797a0c60c6901094, type: 2}
@@ -33,7 +33,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4715a156ca2274448a0fc521c1341d23, type: 2}
   - {fileID: 11400000, guid: 4b53ea2d60c1977429763639837f549b, type: 2}
   rewardStats:
-    health: 2
+    health: 0
     damage: 0
     cardSlots: 0
     energy: 0

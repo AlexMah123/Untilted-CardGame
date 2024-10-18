@@ -20,13 +20,14 @@ MonoBehaviour:
   aiFPlayer:
     baseStatsConfig: {fileID: 11400000, guid: af6be0f4975e2934aa9f5499aeb816ae, type: 2}
     aiModule: {fileID: 11400000, guid: e312332acb26c6e4abf984696d51c82a, type: 2}
-    playerType: 0
-    upgradesEquipped: []
+    playerType: 1
+    upgradesEquipped:
+    - {fileID: 11400000, guid: 8bd03fc3483eca441a7186a89a55dfa8, type: 2}
+    - {fileID: 11400000, guid: 4b53ea2d60c1977429763639837f549b, type: 2}
   levelName: Level 3
   levelImage: {fileID: 21300000, guid: 90d8f0b52ca666f489993cf0eb55f92e, type: 3}
   rewardList:
-  - {fileID: 11400000, guid: 7a48d19317b10924aa6e308defe5cc0f, type: 2}
-  - {fileID: 11400000, guid: e0e67e4e3b463684081980d0a49524f2, type: 2}
+  - {fileID: 11400000, guid: ada56775d7dd05e4797a0c60c6901094, type: 2}
   rewardStats:
     health: 0
     damage: 0

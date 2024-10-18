@@ -11,6 +11,7 @@ namespace GameCore.SceneTransition
     public enum SceneType
     {
         Exit = -1,
+        Title,
         Menu,
         LevelSelect,
         Game,

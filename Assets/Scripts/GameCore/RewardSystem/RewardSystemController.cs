@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GameCore.LoadoutSelection;
@@ -18,13 +19,17 @@ namespace GameCore.RewardSystem
         [Header("RewardUI Config")] [SerializeField]
         LoadoutCardUI rewardPrefab;
 
-        [Header("Reward Display Config")] [SerializeField]
-        RectTransform rewardContainer;
-        [SerializeField] RectTransform content;
-        [SerializeField] GridLayoutGroup gridLayout;
-        [SerializeField] float rewardContainerXScale = 1.5f;
-        [SerializeField] float rewardContainerYScale = 1f;
-
+        [Header("Reward Display Ref")] 
+        [SerializeField] private RectTransform rewardContainer;
+        [SerializeField] private RectTransform content;
+        [SerializeField] private GridLayoutGroup gridLayout;
+        
+        [Header("Reward Display Config")]
+        [SerializeField] private float rewardContainerXScale = 1.5f;
+        [SerializeField] private float rewardContainerYScale = 1f;
+        [SerializeField] private bool immediateUpdate = false;
+        [SerializeField] private float rewardDisplayDelay = 0.25f;
+        [SerializeField] private float popupScale = 1.2f;
 
         [Header("Runtime Data")]
         [SerializeField] List<UpgradeDefinitionSO> upgradeRewardList;
@@ -49,7 +54,17 @@ namespace GameCore.RewardSystem
             playerRewardStats = LevelDataManager.Instance.currentSelectedLevelSO.rewardStats;
         
             InitializeRewardContainer();
-            UpdateRewardDisplay();
+
+            if (immediateUpdate)
+            {
+                UpdateRewardDisplay();
+            }
+            else
+            { 
+                StartCoroutine(ShowRewardSequantially());
+            }
+            
+            
 
             //save the rewards to the player's save data
             SaveSystemManager.Instance.SaveGame();
@@ -59,6 +74,41 @@ namespace GameCore.RewardSystem
         {
             //initialize the preset amount of rewardUI
             rewardUIList = content.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
+        }
+        
+        private IEnumerator ShowRewardSequantially()
+        {
+            yield return new WaitForSeconds(0.1f);
+            
+            // Reset all rewardUI
+            foreach (LoadoutCardUI reward in rewardUIList)
+            {
+                reward.gameObject.SetActive(false);
+            }
+
+            // Based on rewardList, display the rewards sequentially with a delay
+            foreach (var upgrade in upgradeRewardList)
+            {
+                LoadoutCardUI rewardUI = GetAvailableRewardUI();
+
+                if (rewardUI)
+                {
+                    // Populate the data
+                    rewardUI.InitializeCard(new FLoadoutCardObj(upgrade));
+                    rewardUI.gameObject.SetActive(true);
+                    rewardUI.gameObject.transform.localScale = new Vector3(popupScale, popupScale, 1);
+                    
+                    yield return new WaitForSeconds(rewardDisplayDelay); // Delay before showing the next reward
+                    rewardUI.gameObject.transform.localScale = Vector3.one;
+                }
+                else
+                {
+                    Debug.LogError("failed to create rewardUI");
+                    break;
+                }
+            }
+
+            AdjustRewardContainerSize(upgradeRewardList.Count);
         }
 
         private void UpdateRewardDisplay()
