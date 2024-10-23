@@ -178,7 +178,7 @@ namespace GameCore.RewardSystem
 
         public void LoadData(GameData data)
         {
-        
+            OnSaveDataLoaded?.Invoke();
         }
 
         public void SaveData(ref GameData data)

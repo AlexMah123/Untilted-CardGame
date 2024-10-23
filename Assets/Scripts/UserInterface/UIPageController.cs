@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UserInterface.LoadoutSelection;
+using DG.Tweening;
+using UserInterface.Buttons;
 
 namespace UserInterface
 {
@@ -32,7 +34,12 @@ namespace UserInterface
         [SerializeField] private Vector2 contentOffset = Vector2.zero;
         [SerializeField] private PageType pageType = PageType.Horizontal; 
         [SerializeField] private SnapType snapType = SnapType.Top;
+        [SerializeField] float animationTime = 0.25f;
+        [SerializeField] private float selectedScale = 1.25f;
+        [SerializeField] private float defaultScale = 0.75f;
         
+        private List<RectTransform> contentList = new();
+        private RectTransform lastSelectedLevel = null;
         private int currentPageIndex = 0;
         private int totalContentCount;
         
@@ -40,13 +47,12 @@ namespace UserInterface
 
         private void Awake()
         {
-            totalContentCount = contentPanel.childCount;
+            InitializeController();
         }
-
+        
         private void Start()
         {
             InitializePage();
-            Invoke(nameof(UpdateButtonState), 0.1f);
         }
 
         private void InitializePage()
@@ -58,6 +64,30 @@ namespace UserInterface
             }
 
             SnapTo(contentPanel.GetChild(0) as RectTransform);
+            Invoke(nameof(UpdateButtonState), 0.1f);
+            Invoke(nameof(UpdateCurrentScale), 0.1f);
+        }
+        
+        
+        private void InitializeController()
+        {
+            totalContentCount = contentPanel.childCount;
+            foreach (Transform child in contentPanel)
+            {
+                var currentContent = child.GetComponent<RectTransform>();
+                if (currentContent != null)
+                {
+                    contentList.Add(currentContent);
+                }
+
+                var button = child.GetComponent<Button>();
+                var sceneTransitionHandler = child.GetComponent<SceneTransitionHandler>();
+                var levelDataHandler = child.GetComponent<LevelDataHandler>();
+                if (button&& sceneTransitionHandler && levelDataHandler)
+                {
+                    button.onClick.AddListener(() => HandleLevelOnClick(currentContent, sceneTransitionHandler, levelDataHandler));
+                }
+            }
         }
 
         public void PreviousPage()
@@ -78,21 +108,45 @@ namespace UserInterface
 
             // Snap to the target page
             SnapTo(contentPanel.GetChild(currentPageIndex) as RectTransform);
-            
-            UpdateButtonState();
-
             OnPageUpdated?.Invoke();
         }
 
-        protected virtual void UpdateButtonState()
+        private void HandleLevelOnClick(RectTransform clickedLevel, SceneTransitionHandler sceneTransitionHandler, LevelDataHandler levelDataHandler)
+        {
+            if (lastSelectedLevel == clickedLevel)
+            {
+                levelDataHandler.SelectLevel();
+                sceneTransitionHandler.LoadScene();
+            }
+            else
+            {
+                int pageDelta = contentList.IndexOf(clickedLevel) - currentPageIndex;
+
+                ChangePage(pageDelta);
+            }
+        }
+        
+        private void UpdateButtonState()
         {
             previousButton.gameObject.SetActive(currentPageIndex > 0);
             nextButton.gameObject.SetActive(currentPageIndex < totalContentCount - 1);
         }
 
+        private void UpdateCurrentScale()
+        {
+            contentList[currentPageIndex].DOScale(new Vector3(selectedScale, selectedScale, 1f), animationTime).SetEase(Ease.OutSine);
+
+            for (int i = 0; i < contentList.Count; i++)
+            {
+                if (i == currentPageIndex) continue;
+                
+                contentList[i].DOScale(defaultScale, animationTime).SetEase(Ease.OutSine);
+            }
+        }
+
         public void SnapTo(RectTransform target)
         {
-            //#TODO: add some sort of animation like lerping
+            lastSelectedLevel = target;
             
             Canvas.ForceUpdateCanvases();
             LayoutRebuilder.ForceRebuildLayoutImmediate(contentPanel);
@@ -103,26 +157,26 @@ namespace UserInterface
 
             Vector2 deltaPosition = contentPanelPosition - targetPosition;
 
-            // Horizontal snapping
+            // Horizontal snapping (pivot is 0.5, 0.5)
             if (pageType == PageType.Horizontal)
             {
                 switch (snapType)
                 {
                     case SnapType.Left:
-                        deltaPosition.x += 0;
+                        deltaPosition.x += target.rect.width / 2;
                         break;
                     
                     case SnapType.Middle:
-                        deltaPosition.x += (contentParent.rect.width / 2) - (target.rect.width / 2);
+                        deltaPosition.x += (contentParent.rect.width / 2);
                         break;
 
-                    case SnapType.Right:
-                        deltaPosition.x += contentParent.rect.width - target.rect.width;
+                    case SnapType.Right: // needs to be inframe so offset minus
+                        deltaPosition.x += contentParent.rect.width - (target.rect.width / 2);
                         break;
                     
                     //default to left
                     default:
-                        deltaPosition.x += 0;
+                        deltaPosition.x += target.rect.width / 2;
                         break;
                 }
             }
@@ -131,28 +185,38 @@ namespace UserInterface
                 switch (snapType)
                 {
                     case SnapType.Top:
-                        deltaPosition.y += 0;
+                        deltaPosition.y += target.rect.height / 2;
                         break;
+                    
                     case SnapType.Middle:
-                        // Snap to the middle of the contentParent
-                        deltaPosition.y += (contentParent.rect.height / 2) - (target.rect.height / 2);
+                        deltaPosition.y += (contentParent.rect.height / 2);
                         break;
                     
                     case SnapType.Bottom:
-                        deltaPosition.y += contentParent.rect.height - target.rect.height;
+                        deltaPosition.y += contentParent.rect.height - (target.rect.height / 2);
                         break;
                     
                     //default to top
                     default:
-                        deltaPosition.y += 0;
+                        deltaPosition.y += target.rect.height / 2;
                         break;
                 }
             }
 
             deltaPosition += contentOffset;
+
+            if (pageType == PageType.Horizontal)
+            {
+                contentPanel.DOAnchorPosX(deltaPosition.x, animationTime);
+
+            }
+            else if (pageType == PageType.Vertical)
+            {
+                contentPanel.DOAnchorPosY(deltaPosition.y, animationTime);
+            }
             
-            // Apply the new anchored position
-            contentPanel.anchoredPosition = deltaPosition;
+            UpdateButtonState();
+            UpdateCurrentScale();
         }
     }
 }
