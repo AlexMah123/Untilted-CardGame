@@ -1,8 +1,9 @@
 using System;
 using GameCore.SaveSystem;
-using GameCore.TurnSystem.Turns;
-using GameCore.TurnSystem.Turns.Base;
+using GameCore.TurnSystem.Phases;
+using GameCore.TurnSystem.Phases.Base;
 using PlayerCore;
+using PlayerCore.AIPlayer;
 using UnityEngine;
 
 namespace GameCore.TurnSystem
@@ -12,51 +13,19 @@ namespace GameCore.TurnSystem
         public static TurnSystemManager Instance;
 
         //#TODO: currently not in use, used when enemy has their own turn
-        private Player HumanPlayer { get => GameManager.Instance.humanPlayer; }
-        private Player AiPlayer { get => GameManager.Instance.computerPlayer; }
+        private Player HumanPlayer => GameManager.Instance.humanPlayer;
+        private AIPlayer AIPlayer => GameManager.Instance.AIPlayer;
 
-
-        //Current values of the game.
         [Header("Runtime values")]
-        public Player currentPlayer;
-        public Turn currentTurn;
+        public Phase CurrentPhase;
         public int turnCount;
 
         //declaration of possible turns
-        PlayerTurn playerTurn = new PlayerTurn();
-
-        //declaration of events
-        public event Action<TurnSystemManager, Turn, Turn> OnChangedTurnEvent;
-
-        //flag
-        private bool isTurnHasCompletedEventBinded = false;
-        private bool isAllDataLoadedEventBinded = false;
-
-        private void OnEnable()
-        {
-            if (!isTurnHasCompletedEventBinded)
-            {
-                BindTurnHasCompletedEvent();
-            }
-
-            if (!isAllDataLoadedEventBinded)
-            {
-                BindAllDataLoadedEvent();
-            }
-        }
-
-        private void OnDisable()
-        {
-            if (isTurnHasCompletedEventBinded)
-            {
-                UnbindStartNewTurnEvent();
-            }
-
-            if (isAllDataLoadedEventBinded)
-            {
-                UnbindAllDataLoadedEvent();
-            }
-        }
+        public readonly StartOfRound StartOfRound = new();
+        public readonly PlayerPhase PlayerPhase = new();
+        public readonly EnemyPhase EnemyPhase = new();
+        public readonly EvaluationPhase EvaluationPhase = new();
+        
 
         private void Awake()
         {
@@ -71,97 +40,29 @@ namespace GameCore.TurnSystem
             }
         }
 
-        void Start()
-        {
-            //To avoid racing condition
-            if (!isTurnHasCompletedEventBinded)
-            {
-                BindTurnHasCompletedEvent();
-            }
-
-            if (!isAllDataLoadedEventBinded)
-            {
-                BindAllDataLoadedEvent();
-            }
-
-            currentPlayer = HumanPlayer;
-        }
-
         void Update()
         {
-            if (currentTurn != null)
+            if (CurrentPhase != null)
             {
-                currentTurn.OnUpdateTurn(currentPlayer);
+                CurrentPhase.OnUpdatePhase(HumanPlayer, AIPlayer);
             }
         }
 
         [ContextMenu("TurnSystemManager/StartRound")]
         public void HandleTurnHasCompleted()
         {
-            ChangeTurn(playerTurn);
+            ChangePhase(StartOfRound);
         }
 
-        public void ChangeTurn(Turn newTurn)
+        public void ChangePhase(Phase newPhase)
         {
-            if (currentPlayer == null)
+            if (CurrentPhase != null)
             {
-                Debug.LogError("current player is not assigned");
-                return;
+                CurrentPhase.OnEndPhase(HumanPlayer, AIPlayer);
             }
-
-            if (currentTurn != null)
-            {
-                currentTurn.OnEndTurn(currentPlayer);
-            }
-
-            //#TODO: Should Swap Player?
-
-            //broadcast event, primarily binded to PlayerHandUIManager
-            OnChangedTurnEvent?.Invoke(this, currentTurn, newTurn);
-            currentTurn = newTurn;
-
-            turnCount++;
-            currentTurn.OnStartTurn(this, currentPlayer);
+            
+            CurrentPhase = newPhase;
+            CurrentPhase.OnStartPhase(this, HumanPlayer, AIPlayer);
         }
-
-        #region Bind StartNewTurnEvent
-
-        private void BindTurnHasCompletedEvent()
-        {
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.OnTurnCompleted += HandleTurnHasCompleted;
-                isTurnHasCompletedEventBinded = true;
-            }
-        }
-
-        private void UnbindStartNewTurnEvent()
-        {
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.OnTurnCompleted -= HandleTurnHasCompleted;
-                isTurnHasCompletedEventBinded = false;
-            }
-        }
-        #endregion
-
-        #region BindAllDataLoadedEvent
-        private void BindAllDataLoadedEvent()
-        {
-            if (SaveSystemManager.Instance != null)
-            {
-                SaveSystemManager.Instance.OnAllSaveDataLoaded += HandleTurnHasCompleted;
-                isAllDataLoadedEventBinded = true;
-            }
-        }
-        private void UnbindAllDataLoadedEvent()
-        {
-            if (SaveSystemManager.Instance != null)
-            {
-                SaveSystemManager.Instance.OnAllSaveDataLoaded -= HandleTurnHasCompleted;
-                isAllDataLoadedEventBinded = false;
-            }
-        }
-        #endregion
     }
 }

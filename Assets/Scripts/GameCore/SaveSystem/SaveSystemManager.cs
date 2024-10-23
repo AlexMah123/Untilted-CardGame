@@ -139,6 +139,7 @@ namespace GameCore.SaveSystem
 
         private void OnAllDataLoaded()
         {
+            Debug.Log("All Data has been loaded from saveSystem");
             OnAllSaveDataLoaded?.Invoke();
         }
 

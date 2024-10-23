@@ -1952,7 +1952,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f065875cd9a27fb4d9f03b8335e5e002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPlayer: {fileID: 0}
   turnCount: 0
 --- !u!1001 &1093168129
 PrefabInstance:
@@ -3252,7 +3251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   humanPlayer: {fileID: 1824892700}
-  computerPlayer: {fileID: 1344209820}
+  AIPlayer: {fileID: 1344209820}
   rewardTransitionType: 0
 --- !u!1 &1671567551
 GameObject:

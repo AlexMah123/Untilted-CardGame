@@ -11,7 +11,7 @@ namespace PlayerCore.HumanPlayer
         {
             base.LoadComponents();
             
-            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.computerPlayer, currentStats);
+            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.AIPlayer, currentStats);
         }
 
         #region SaveSystem Override

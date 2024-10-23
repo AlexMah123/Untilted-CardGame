@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using GameCore;
 using GameCore.TurnSystem;
-using GameCore.TurnSystem.Turns.Base;
+using GameCore.TurnSystem.Phases.Base;
 using UnityEngine;
 using PlayerCore;
 using PlayerCore.AIPlayer;
@@ -31,37 +31,14 @@ namespace UserInterface.Cards
 
         //event binding flags
         private bool isOnClearHandEventBinded = false;
-        private bool isOnChangeTurnEventBinded = false;
         private bool isOnSealChoiceEventBinded = false;
+        private bool isOnPlayerPhaseEventBinded = false;
 
         //factory
         private ChoiceCardUIFactory choiceCardFactory;
-
-        private void OnEnable()
-        {
-            if (!isOnChangeTurnEventBinded)
-            {
-                BindChangeTurnEvent();
-            }
-
-            if (!isOnClearHandEventBinded)
-            {
-                BindClearCardHandEvent();
-            }
-
-            if (!isOnSealChoiceEventBinded)
-            {
-                BindSealChoiceEvent();
-            }
-        }
-
+        
         private void OnDisable()
         {
-            if (isOnChangeTurnEventBinded)
-            {
-                UnbindChangeTurnEvent();
-            }
-
             if (isOnClearHandEventBinded)
             {
                 UnbindClearCardHandEvent();
@@ -70,6 +47,11 @@ namespace UserInterface.Cards
             if (isOnSealChoiceEventBinded)
             {
                 UnbindSealChoiceEvent();
+            }
+
+            if (isOnPlayerPhaseEventBinded)
+            {
+                UnbindOnPlayerPhaseStart();
             }
         }
 
@@ -85,26 +67,25 @@ namespace UserInterface.Cards
 
         private void Start()
         {
-            //To avoid racing condition
             if (!isOnClearHandEventBinded)
             {
                 BindClearCardHandEvent();
-            }
-
-            if (!isOnChangeTurnEventBinded)
-            {
-                BindChangeTurnEvent();
             }
 
             if (!isOnSealChoiceEventBinded)
             {
                 BindSealChoiceEvent();
             }
+
+            if (!isOnPlayerPhaseEventBinded)
+            {
+                BindOnPlayerPhaseStart();
+            }
         }
 
         #region public methods
 
-        public void HandleOnPlayerStartTurn(Player player)
+        public void HandleOnOnPlayerStartPhase(Player player)
         {
             //used to deal/display the card choices.
             RequestCardChoices(attachedPlayer);
@@ -119,17 +100,7 @@ namespace UserInterface.Cards
         {
             AdjustHand();
         }
-
-        public void HandleOnChangedTurn(TurnSystemManager manager, Turn currentTurn, Turn newTurn)
-        {
-            if (currentTurn != null)
-            {
-                currentTurn.OnPlayerTurnStart -= HandleOnPlayerStartTurn;
-            }
-
-            newTurn.OnPlayerTurnStart += HandleOnPlayerStartTurn;
-        }
-
+        
         public void HandleOnSealChoice()
         {
             RequestCardChoices(attachedPlayer);
@@ -277,52 +248,51 @@ namespace UserInterface.Cards
         }
 
         #endregion
+        
+        #region Bind OnPlayerPhaseStart
+
+        private void BindOnPlayerPhaseStart()
+        {
+            if (TurnSystemManager.Instance != null)
+            {
+                TurnSystemManager.Instance.PlayerPhase.OnPlayerPhaseStart += HandleOnOnPlayerStartPhase;
+                isOnPlayerPhaseEventBinded = true;
+            }
+        }
+
+        private void UnbindOnPlayerPhaseStart()
+        {
+            if (TurnSystemManager.Instance != null)
+            {
+                TurnSystemManager.Instance.PlayerPhase.OnPlayerPhaseStart -= HandleOnOnPlayerStartPhase;
+                isOnPlayerPhaseEventBinded = false;
+            }
+        }
+        
+        #endregion
 
         #region Bind ClearCardHand Delegate
 
         private void BindClearCardHandEvent()
         {
-            if (GameManager.Instance != null)
+            if (TurnSystemManager.Instance != null)
             {
-                GameManager.Instance.OnClearCardInHand += HandleOnClearCardHand;
+                TurnSystemManager.Instance.EvaluationPhase.OnClearCardInHand += HandleOnClearCardHand;
                 isOnClearHandEventBinded = true;
             }
         }
 
         private void UnbindClearCardHandEvent()
         {
-            if (GameManager.Instance != null)
+            if (TurnSystemManager.Instance != null)
             {
-                GameManager.Instance.OnClearCardInHand -= HandleOnClearCardHand;
+                TurnSystemManager.Instance.EvaluationPhase.OnClearCardInHand -= HandleOnClearCardHand;
                 isOnClearHandEventBinded = false;
             }
-
         }
 
         #endregion
-
-        #region Bind ChangeTurn Delegate
-
-        private void BindChangeTurnEvent()
-        {
-            if (TurnSystemManager.Instance != null)
-            {
-                TurnSystemManager.Instance.OnChangedTurnEvent += HandleOnChangedTurn;
-                isOnChangeTurnEventBinded = true;
-            }
-
-        }
-
-        private void UnbindChangeTurnEvent()
-        {
-            if (TurnSystemManager.Instance != null)
-            {
-                TurnSystemManager.Instance.OnChangedTurnEvent -= HandleOnChangedTurn;
-                isOnChangeTurnEventBinded = false;
-            }
-        }
-        #endregion
-
+        
         #region Bind SealChoice Delegate
         private void BindSealChoiceEvent()
         {
