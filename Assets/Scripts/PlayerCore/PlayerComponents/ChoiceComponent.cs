@@ -14,13 +14,14 @@ namespace PlayerCore.PlayerComponents
 
     public class ChoiceComponent : MonoBehaviour
     {
-        [Header("Runtime Values")]
+        [Header("Runtime Values")] 
         public GameChoice currentChoice = GameChoice.Rock;
 
         //events
         public event Action OnChoiceSealed;
 
-        public Dictionary<GameChoice, bool> choicesAvailable = new Dictionary<GameChoice, bool> {
+        public Dictionary<GameChoice, bool> choicesAvailable = new Dictionary<GameChoice, bool>
+        {
             { GameChoice.Rock, true },
             { GameChoice.Paper, true },
             { GameChoice.Scissor, true },

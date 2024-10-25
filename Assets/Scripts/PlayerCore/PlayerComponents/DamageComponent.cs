@@ -5,7 +5,7 @@ namespace PlayerCore.PlayerComponents
 {
     public class DamageComponent : MonoBehaviour
     {
-        [Header("Runtime Value")]
+        [Header("Runtime Value")] 
         public int damageAmount;
 
         //declaration of events
@@ -14,7 +14,7 @@ namespace PlayerCore.PlayerComponents
         public void InitializeComponent(PlayerStats referencedStats)
         {
             damageAmount = referencedStats.damage;
-        
+
             OnDamageModified?.Invoke(damageAmount);
         }
 
@@ -34,6 +34,7 @@ namespace PlayerCore.PlayerComponents
         }
 
         #region Internal Function
+
         private void ModifyDamageAmount(int value)
         {
             damageAmount += value;
@@ -41,6 +42,7 @@ namespace PlayerCore.PlayerComponents
             //#TODO: broadcast event to total stats display
             OnDamageModified?.Invoke(damageAmount);
         }
+
         #endregion
     }
 }

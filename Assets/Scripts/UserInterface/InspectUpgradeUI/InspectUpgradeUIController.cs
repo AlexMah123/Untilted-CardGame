@@ -7,10 +7,10 @@ namespace UserInterface.InspectUpgradeUI
 {
     public class InspectUpgradeUIController : MonoBehaviour
     {
-        [Header("Parent")]
+        [Header("Parent")] 
         [SerializeField] GameObject inspectUI;
 
-        [Header("Content")]
+        [Header("Content")] 
         [SerializeField] Image upgradeImage;
         [SerializeField] TextMeshProUGUI upgradeName;
         [SerializeField] TextMeshProUGUI upgradeDescription;
@@ -46,12 +46,14 @@ namespace UserInterface.InspectUpgradeUI
         }
 
         #region Internal method
+
         private void UpdateUI(UpgradeDefinitionSO upgradeSO)
         {
             upgradeImage.sprite = upgradeSO.upgradeSprite;
             upgradeName.text = upgradeSO.upgradeName;
             upgradeDescription.text = upgradeSO.upgradeDescription;
         }
+
         #endregion
 
         public void BindOnCardInspectEvent()

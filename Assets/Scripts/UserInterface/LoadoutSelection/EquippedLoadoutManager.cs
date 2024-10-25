@@ -10,16 +10,17 @@ namespace UserInterface.LoadoutSelection
 {
     public class EquippedLoadoutManager : MonoBehaviour
     {
-        [Header("Dependencies")]
+        [Header("Dependencies")] 
         public LoadoutSelectionManager loadoutLayoutManager;
         public GameObject equippedLoadoutParent;
-        
+
         public event Action OnLoadoutUpdated;
         public event Action<FLoadoutCardObj> OnLoadoutRemoved;
-        
+
         private void OnEnable()
         {
-            LoadoutCardUI[] loadoutCards = equippedLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
+            LoadoutCardUI[] loadoutCards =
+                equippedLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
 
             foreach (LoadoutCardUI loadoutCard in loadoutCards)
             {
@@ -31,7 +32,8 @@ namespace UserInterface.LoadoutSelection
         {
             if (equippedLoadoutParent != null)
             {
-                LoadoutCardUI[] loadoutCards = equippedLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
+                LoadoutCardUI[] loadoutCards =
+                    equippedLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
 
                 foreach (LoadoutCardUI loadoutCard in loadoutCards)
                 {
@@ -55,10 +57,10 @@ namespace UserInterface.LoadoutSelection
             {
                 return false;
             }
-            
+
             GameObject loadoutCardObj = GetFirstInactiveLoadout();
             if (!loadoutCardObj) return false;
-            
+
             LoadoutCardUI loadoutCardUI = loadoutCardObj.GetComponent<LoadoutCardUI>();
             if (loadoutCardUI)
             {
@@ -79,6 +81,7 @@ namespace UserInterface.LoadoutSelection
         }
 
         #region Internal methods
+
         private void InitializeEquippedLoadout()
         {
             var activeLoadoutObjList = GetAllEquippedLoadoutObj();
@@ -99,19 +102,22 @@ namespace UserInterface.LoadoutSelection
 
         private int GetActiveLoadoutCount()
         {
-            if(equippedLoadoutParent == null) return 0;
-            
+            if (equippedLoadoutParent == null) return 0;
+
             //return number for child in parent that is active.
-            int activeCount = (from Transform child in equippedLoadoutParent.transform where child.gameObject.activeSelf select child).Count();
+            int activeCount = (from Transform child in equippedLoadoutParent.transform
+                where child.gameObject.activeSelf
+                select child).Count();
 
             return activeCount;
         }
-        
+
         private List<GameObject> GetAllEquippedLoadoutObj()
         {
             //return all active loadout objects.
             return (from Transform child in equippedLoadoutParent.transform select child.gameObject).ToList();
         }
+
         #endregion
     }
 }

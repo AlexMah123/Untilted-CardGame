@@ -7,7 +7,6 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
     [CreateAssetMenu(fileName = "TheMoon", menuName = "Upgrades/UpgradeDefiniton/TheMoon")]
     public class TheMoon : UpgradeDefinitionSO
     {
-
         public override (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats,
             PlayerStats enemyCardStats)
         {

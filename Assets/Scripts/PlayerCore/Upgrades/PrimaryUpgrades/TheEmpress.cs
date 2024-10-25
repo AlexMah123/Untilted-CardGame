@@ -7,7 +7,6 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
     [CreateAssetMenu(fileName = "TheEmpress", menuName = "Upgrades/UpgradeDefiniton/TheEmpress")]
     public class TheEmpress : UpgradeDefinitionSO
     {
-
         public override (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats,
             PlayerStats enemyCardStats)
         {

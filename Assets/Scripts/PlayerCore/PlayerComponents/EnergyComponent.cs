@@ -5,7 +5,7 @@ namespace PlayerCore.PlayerComponents
 {
     public class EnergyComponent : MonoBehaviour
     {
-        [Header("Runtime Value")]
+        [Header("Runtime Value")] 
         public int energyAmount;
 
         //declaration of events
@@ -14,7 +14,7 @@ namespace PlayerCore.PlayerComponents
         public void InitializeComponent(PlayerStats referencedStats)
         {
             energyAmount = referencedStats.energy;
-        
+
             OnEnergyModified?.Invoke(energyAmount);
         }
 
@@ -29,6 +29,7 @@ namespace PlayerCore.PlayerComponents
         }
 
         #region Internal Function
+
         private void ModifyEnergyAmount(int value)
         {
             energyAmount += value;
@@ -36,6 +37,7 @@ namespace PlayerCore.PlayerComponents
             //#TODO: broadcast event to PlayerHUD/EnemyHUD
             OnEnergyModified?.Invoke(energyAmount);
         }
+
         #endregion
     }
 }

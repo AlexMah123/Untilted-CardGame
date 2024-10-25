@@ -8,7 +8,8 @@ namespace GameCore.LoadoutSelection
     [Serializable]
     public struct FLoadoutData
     {
-        public FLoadoutData(List<UpgradeDefinitionSO> _totalUpgrades, HashSet<UpgradeDefinitionSO> _totalUnlockedUpgrades, HashSet<UpgradeDefinitionSO> _currentActiveUpgrades)
+        public FLoadoutData(List<UpgradeDefinitionSO> _totalUpgrades,
+            HashSet<UpgradeDefinitionSO> _totalUnlockedUpgrades, HashSet<UpgradeDefinitionSO> _currentActiveUpgrades)
         {
             totalUpgradesInGame = _totalUpgrades;
             totalUnlockedUpgrades = _totalUnlockedUpgrades;
@@ -31,7 +32,7 @@ namespace GameCore.LoadoutSelection
 
         public UpgradeDefinitionSO upgradeSO;
     }
-    
+
     public struct FLoadoutCardCreation
     {
         public FLoadoutCardCreation(Transform spawnParent)

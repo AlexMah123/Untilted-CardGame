@@ -14,7 +14,7 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
             PlayerStats enemyCardStats)
         {
             playerCardStats.maxHealth += healthIncrease;
-            
+
             return (playerCardStats, enemyCardStats);
         }
 

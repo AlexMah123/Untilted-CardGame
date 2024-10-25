@@ -6,14 +6,13 @@ namespace PlayerCore.Upgrades.Base
 {
     public abstract class UpgradeDefinitionSO : ScriptableObject
     {
-        [Header("User Interface Configs")]
+        [Header("User Interface Configs")] 
         public Sprite upgradeSprite;
         public string upgradeName;
 
-        [Multiline]
-        public string upgradeDescription;
+        [Multiline] public string upgradeDescription;
 
-        [Header("Gameplay Configs")]
+        [Header("Gameplay Configs")] 
         public bool isActivatable;
         public UpgradeType upgradeType;
 
@@ -32,8 +31,9 @@ namespace PlayerCore.Upgrades.Base
             return upgradeType.GetHashCode();
         }
 
-        public abstract (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats, PlayerStats enemyCardStats);
-        
+        public abstract (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats,
+            PlayerStats enemyCardStats);
+
         public virtual void ApplyPassiveEffect(Player attachedPlayer, Player enemyPlayer)
         {
             Debug.Log($"Applying Passive Effect of {this.GetType()}, {attachedPlayer}, {enemyPlayer}");
@@ -47,19 +47,16 @@ namespace PlayerCore.Upgrades.Base
         public virtual void OnWinRound(Player attachedPlayer, Player enemyPlayer)
         {
             Debug.Log($"Applying OnWin Effect of {this.GetType()}");
-
         }
 
         public virtual void OnLoseRound(Player attachedPlayer, Player enemyPlayer)
         {
             Debug.Log($"Applying OnLose Effect of {this.GetType()}");
-
         }
 
         public virtual void OnDrawRound(Player attachedPlayer, Player enemyPlayer)
         {
             Debug.Log($"Applying OnDraw Effect of {this.GetType()}");
-
         }
     }
 }

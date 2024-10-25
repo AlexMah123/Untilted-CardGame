@@ -14,16 +14,16 @@ namespace UserInterface.LoadoutSelection
     {
         public static LoadoutSelectionManager Instance;
 
-        [Header("Dependencies")]
+        [Header("Dependencies")] 
         public EquippedLoadoutManager equippedLoadoutManager;
 
-        [Header("Layout Config")]
+        [Header("Layout Config")] 
         public Transform spawnContainer;
         public float radiusFromCenter;
         public float angleBetweenCards;
         [Range(1, 9)] public int displayAmountPerPage = 9;
 
-        [Header("Layout Offset Config")]
+        [Header("Layout Offset Config")] 
         [Tooltip("This value is relative to World Position")] public Vector3 offsetPosition;
 
         public FLoadoutData cachedLoadoutData;
@@ -78,7 +78,6 @@ namespace UserInterface.LoadoutSelection
             {
                 UnbindOnActiveLoadoutRemoveEvent();
             }
-
         }
 
         private void Awake()
@@ -116,11 +115,12 @@ namespace UserInterface.LoadoutSelection
 
 
         #region Public methods
+
         private void HandleOnCardSelected(FLoadoutCardObj cardInfo)
         {
             AddToActiveCardSlots(cardInfo.upgradeSO);
         }
-        
+
         private void HandleOnInitializeLayout(FLoadoutData fLoadoutData)
         {
             cachedLoadoutData = fLoadoutData;
@@ -149,6 +149,7 @@ namespace UserInterface.LoadoutSelection
         #endregion
 
         #region Internal methods
+
         private void RequestLoadoutObj()
         {
             for (int i = 0; i < displayAmountPerPage; i++)
@@ -212,7 +213,8 @@ namespace UserInterface.LoadoutSelection
 
                 //adjust position
                 cardDisplayList[i].gameObject.transform.localPosition = new Vector3(x, y, 0);
-                cardDisplayList[i].gameObject.transform.position += new Vector3(offsetPosition.x, offsetPosition.y, offsetPosition.z);
+                cardDisplayList[i].gameObject.transform.position +=
+                    new Vector3(offsetPosition.x, offsetPosition.y, offsetPosition.z);
 
                 //rotate cards outwards
                 cardDisplayList[i].gameObject.transform.localRotation = Quaternion.Euler(0, 0, angle + 90);
@@ -239,7 +241,8 @@ namespace UserInterface.LoadoutSelection
                 {
                     //compare if unlocked upgrade contains the total upgrade
                     var upgrade = cachedLoadoutData.totalUpgradesInGame[startIndex + i];
-                    var isUnlocked = cachedLoadoutData.totalUnlockedUpgrades.Any(unlockedUpgrade => unlockedUpgrade.upgradeName == upgrade.upgradeName);
+                    var isUnlocked = cachedLoadoutData.totalUnlockedUpgrades.Any(unlockedUpgrade =>
+                        unlockedUpgrade.upgradeName == upgrade.upgradeName);
 
                     cardDisplayList[i].cardSpriteRenderer.sprite = upgrade.upgradeSprite;
                     cardDisplayList[i].InitialiseLoadoutGO(new FLoadoutCardObj(upgrade), !isUnlocked);
@@ -269,9 +272,11 @@ namespace UserInterface.LoadoutSelection
                 LoadoutSelectionPageManager.Instance.UpdateButtonState();
             }
         }
+
         #endregion
 
         #region Bind CardEndInteract Event
+
         public void BindOnCardEndInteractEvent(List<LoadoutCardObj> cardUIList)
         {
             foreach (var card in cardUIList)
@@ -330,10 +335,10 @@ namespace UserInterface.LoadoutSelection
             }
         }
 
-
         #endregion
 
         #region Bind LoadoutPageUpdate Event
+
         public void BindOnLoadoutPageUpdatedEvent()
         {
             if (LoadoutSelectionPageManager.Instance != null)
@@ -351,9 +356,11 @@ namespace UserInterface.LoadoutSelection
                 isLoadoutPageUpdatedEventBinded = false;
             }
         }
+
         #endregion
 
         #region Bind LoadoutInitialize Event
+
         public void BindOnInitializeLoadoutEvent()
         {
             if (LoadoutManager.Instance != null)
@@ -371,6 +378,7 @@ namespace UserInterface.LoadoutSelection
                 isInitializeLoadoutEventBinded = false;
             }
         }
+
         #endregion
     }
 }

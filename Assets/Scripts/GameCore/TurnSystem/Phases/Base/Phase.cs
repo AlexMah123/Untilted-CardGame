@@ -8,6 +8,7 @@ namespace GameCore.TurnSystem.Phases.Base
         protected TurnSystemManager Controller;
 
         #region Ran on every phase
+
         public void OnStartPhase(TurnSystemManager turnController, Player player, AIPlayer aiPlayer)
         {
             Controller = turnController;
@@ -24,6 +25,7 @@ namespace GameCore.TurnSystem.Phases.Base
         {
             OnEnd(player, aiPlayer);
         }
+
         #endregion
 
 

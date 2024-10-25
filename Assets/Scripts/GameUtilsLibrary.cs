@@ -12,8 +12,8 @@ public static class GameUtilsLibrary
             result = GameResult.Draw;
         }
         else if (humanPlayerChoice == GameChoice.Rock && aiPlayerChoice == GameChoice.Scissor ||
-                humanPlayerChoice == GameChoice.Paper && aiPlayerChoice == GameChoice.Rock ||
-                humanPlayerChoice == GameChoice.Scissor && aiPlayerChoice == GameChoice.Paper)
+                 humanPlayerChoice == GameChoice.Paper && aiPlayerChoice == GameChoice.Rock ||
+                 humanPlayerChoice == GameChoice.Scissor && aiPlayerChoice == GameChoice.Paper)
         {
             result = GameResult.Win;
         }

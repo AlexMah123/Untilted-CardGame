@@ -5,11 +5,9 @@ namespace PlayerCore.AIPlayer.AIModule.Base
 {
     public abstract class AIDecision : ScriptableObject
     {
-        [TextArea]
-        public string Description;
+        [TextArea] public string Description;
 
-        [Range(0, 1)]
-        public float aiAccuracy = 1.0f;
+        [Range(0, 1)] public float aiAccuracy = 1.0f;
 
         //injected references
         protected ChoiceComponent choiceComponent;
@@ -27,7 +25,6 @@ namespace PlayerCore.AIPlayer.AIModule.Base
         //override only whenever neccesary
         public virtual void UpdateAIModule(GameChoice opponentChoice)
         {
-
         }
 
         protected GameChoice RandomChoice()

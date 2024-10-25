@@ -9,17 +9,15 @@ namespace PlayerCore.PlayerComponents
 {
     public class ActiveLoadoutComponent : MonoBehaviour
     {
-        [Header("Runtime Value")]
-        public int maxLimitOfLoadout;
+        [Header("Runtime Value")] public int maxLimitOfLoadout;
         public List<UpgradeDefinitionSO> cardUpgradeList = new();
 
-        [HideInInspector]
-        public Player attachedPlayer;
+        [HideInInspector] public Player attachedPlayer;
 
         public Player enemyPlayer;
-        
+
         public event Action<List<UpgradeDefinitionSO>> OnLoadoutChanged;
-        
+
         private void Start()
         {
             if (attachedPlayer == null)
@@ -47,17 +45,17 @@ namespace PlayerCore.PlayerComponents
         {
             PlayerStats tempPlayerStats = new();
             PlayerStats tempEnemyStats = new();
-            
+
             foreach (UpgradeDefinitionSO upgrade in cardUpgradeList)
             {
                 upgrade.ApplyStatUpgrade(tempPlayerStats, tempEnemyStats);
             }
-            
+
             cardStats = tempPlayerStats;
-            
+
             return cardStats;
         }
-        
+
         [ContextMenu("ActiveLoadout/Apply Passive Effect")]
         public void ApplyPassiveEffects()
         {
@@ -94,7 +92,7 @@ namespace PlayerCore.PlayerComponents
                 upgrade.OnDrawRound(attachedPlayer, enemyPlayer);
             }
         }
-        
+
         public void AddUpgradeToLoadout(UpgradeDefinitionSO upgrade)
         {
             cardUpgradeList.Add(upgrade);
@@ -114,26 +112,27 @@ namespace PlayerCore.PlayerComponents
             cardUpgradeList.Remove(removedUpgrade);
             OnLoadoutChanged?.Invoke(cardUpgradeList);
         }
-        
+
         #region Debug
+
         [ContextMenu("Debug/Debug Attached Player")]
         public void DebugAttachedPlayer()
         {
             Debug.Log($"{attachedPlayer.GetType()}");
         }
-        
+
         [ContextMenu("Debug/Add DevilUpgrade to Player")]
         public void AddUpgradeToPlayer()
         {
             AddUpgradeToLoadout(UpgradeType.TheDevil);
         }
-        
+
         [ContextMenu("Debug/Remove DevilUpgrade to Player")]
         public void RemoveUpgradeFromPlayer()
         {
             RemoveUpgradeFromLoadout(UpgradeType.TheDevil);
         }
-        #endregion
 
+        #endregion
     }
 }

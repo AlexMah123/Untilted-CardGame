@@ -42,11 +42,10 @@ namespace UserInterface.Gameplay
             {
                 ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
 
-                if(confirmedCardUI)
+                if (confirmedCardUI)
                 {
                     confirmedCardUI.GetComponent<Outline>().enabled = true;
                 }
-
             }
         }
 
@@ -60,7 +59,6 @@ namespace UserInterface.Gameplay
                 {
                     confirmedCardUI.GetComponent<Outline>().enabled = false;
                 }
-
             }
         }
     }

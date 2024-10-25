@@ -11,7 +11,7 @@ namespace PlayerCore.AIPlayer
     public class AIPlayer : Player
     {
         public AIDecision aiModuleConfig;
-    
+
         public override void LoadComponents()
         {
             base.LoadComponents();
@@ -31,10 +31,9 @@ namespace PlayerCore.AIPlayer
         }
 
         #region SaveSystemOverride
+
         protected override void LoadPlayerData(GameData data)
         {
-            Debug.Log("LoadedPlayer: " + Time.time);
-
             var aiPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.aiFPlayer;
 
             baseStatsConfig = aiPlayerData.baseStatsConfig;
@@ -46,7 +45,7 @@ namespace PlayerCore.AIPlayer
                 ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeSO);
             }
         }
-        #endregion
 
+        #endregion
     }
 }

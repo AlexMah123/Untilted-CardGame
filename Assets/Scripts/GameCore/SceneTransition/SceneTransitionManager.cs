@@ -112,7 +112,5 @@ namespace GameCore.SceneTransition
             //reset flag
             isTransitioning = false;
         }
-
-
     }
 }

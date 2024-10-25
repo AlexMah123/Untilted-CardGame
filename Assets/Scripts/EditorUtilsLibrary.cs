@@ -1,4 +1,3 @@
-
 #if UNITY_EDITOR
 using System;
 using System.Reflection;
@@ -8,6 +7,7 @@ using UnityEngine;
 public static class EditorUtilsLibrary
 {
     static MethodInfo _clearConsoleMethod;
+
     static MethodInfo clearConsoleMethod
     {
         get
@@ -18,6 +18,7 @@ public static class EditorUtilsLibrary
                 Type logEntries = assembly.GetType("UnityEditor.LogEntries");
                 _clearConsoleMethod = logEntries.GetMethod("Clear");
             }
+
             return _clearConsoleMethod;
         }
     }

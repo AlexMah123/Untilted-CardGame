@@ -26,7 +26,7 @@ namespace PlayerCore.Upgrades.UpgradeFactory
     {
         public static UpgradeSOFactory Instance;
 
-        [Header("Upgrade List")]
+        [Header("Upgrade List")] 
         public UpgradeCollectionSO totalPossibleUpgrade;
 
         private void Awake()
@@ -43,9 +43,12 @@ namespace PlayerCore.Upgrades.UpgradeFactory
 
         public static UpgradeDefinitionSO CreateUpgradeDefinitionSO(UpgradeType upgradeEnum)
         {
-            UpgradeDefinitionSO queriedSO = Instance.totalPossibleUpgrade.upgradeList.FirstOrDefault(x => x.upgradeType == upgradeEnum);
+            UpgradeDefinitionSO queriedSO =
+                Instance.totalPossibleUpgrade.upgradeList.FirstOrDefault(x => x.upgradeType == upgradeEnum);
 
-            if (!queriedSO) throw new MissingReferenceException($"Tried to get a reference to a non existing upgradeSO: {upgradeEnum.ToString()}");
+            if (!queriedSO)
+                throw new MissingReferenceException(
+                    $"Tried to get a reference to a non existing upgradeSO: {upgradeEnum.ToString()}");
 
 
             UpgradeDefinitionSO newSO = Instantiate(queriedSO);

@@ -19,9 +19,8 @@ namespace PlayerCore
         public DamageComponent DamageComponent => damageComponent;
         public EnergyComponent EnergyComponent => energyComponent;
 
-        [Header("Player Stats Config")]
+        [Header("Player Stats Config")] 
         public PlayerStatsSO baseStatsConfig;
-
         public PlayerStats progressionStats = new();
         public PlayerStats cardStats = new();
         public PlayerStats finalStats = new();
@@ -37,6 +36,7 @@ namespace PlayerCore
         public event Action OnSaveDataLoaded;
 
         #region Overrides
+
         protected virtual void Awake()
         {
             choiceComponent = GetComponent<ChoiceComponent>();
@@ -53,7 +53,6 @@ namespace PlayerCore
 
         protected virtual void Update()
         {
-
         }
 
         //override if necessary
@@ -66,7 +65,7 @@ namespace PlayerCore
             healthComponent.InitializeComponent(finalStats);
             damageComponent.InitializeComponent(finalStats);
             energyComponent.InitializeComponent(finalStats);
-            
+
             //active component is overriden to specify
         }
 
@@ -77,6 +76,7 @@ namespace PlayerCore
         }
 
         #region SaveSystem
+
         public virtual void LoadData(GameData data)
         {
             if (LevelDataManager.Instance.currentSelectedLevelSO == null)
@@ -91,7 +91,6 @@ namespace PlayerCore
 
         public virtual void SaveData(ref GameData data)
         {
-
         }
 
         //override to have their own implementation of loadData
@@ -99,6 +98,7 @@ namespace PlayerCore
         {
             //implement in child class
         }
+
         #endregion
 
         #endregion
@@ -106,22 +106,22 @@ namespace PlayerCore
         public void InitializeStartingStats()
         {
             cardStats = ActiveLoadoutComponent.ApplyStatUpgrade(cardStats);
-            
+
             finalStats.maxHealth = baseStatsConfig.maxHealth + progressionStats.maxHealth + cardStats.maxHealth;
             finalStats.damage = baseStatsConfig.damage + progressionStats.damage + cardStats.damage;
             finalStats.cardSlots = baseStatsConfig.cardSlots + progressionStats.cardSlots + cardStats.cardSlots;
             finalStats.energy = baseStatsConfig.energy + progressionStats.energy + cardStats.energy;
         }
-        
+
         public void UpdateCurrentStats()
         {
             cardStats = ActiveLoadoutComponent.ApplyStatUpgrade(cardStats);
-            
+
             finalStats.maxHealth = baseStatsConfig.maxHealth + progressionStats.maxHealth + cardStats.maxHealth;
             finalStats.damage = baseStatsConfig.damage + progressionStats.damage + cardStats.damage;
             finalStats.cardSlots = baseStatsConfig.cardSlots + progressionStats.cardSlots + cardStats.cardSlots;
             finalStats.energy = baseStatsConfig.energy + progressionStats.energy + cardStats.energy;
-            
+
             healthComponent.UpdateComponent(finalStats);
             damageComponent.InitializeComponent(finalStats);
             energyComponent.InitializeComponent(finalStats);

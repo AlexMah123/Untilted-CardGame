@@ -11,20 +11,19 @@ namespace PlayerCore.HumanPlayer
         public override void LoadComponents()
         {
             base.LoadComponents();
-            
+
             ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.AIPlayer, finalStats);
         }
 
         #region SaveSystem Override
+
         protected override void LoadPlayerData(GameData data)
         {
-            Debug.Log("LoadedPlayer: " + Time.time);
-            
             //load from LevelDataManager
             var playerData = LevelDataManager.Instance.currentSelectedLevelSO.humanFPlayer;
 
             baseStatsConfig = playerData.baseStatsConfig;
-        
+
             //load stats upgrade from save file
             progressionStats = new PlayerStats
             {
@@ -40,7 +39,7 @@ namespace PlayerCore.HumanPlayer
                 ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeType);
             }
         }
-        #endregion
 
+        #endregion
     }
 }

@@ -11,7 +11,7 @@ namespace UserInterface.Cards.LoadoutCard
     [RequireComponent(typeof(InspectComponent), typeof(Outline))]
     public class LoadoutCardUI : CardUI, IPointerClickHandler
     {
-        [Header("Loadout Card Config")]
+        [Header("Loadout Card Config")] 
         public FLoadoutCardObj cardInfo;
         public bool shouldDisableOnClick = true;
         public bool shouldDisplayOutline = true;
@@ -22,11 +22,10 @@ namespace UserInterface.Cards.LoadoutCard
         {
             base.OnPointerEnter(eventData);
 
-            if(shouldDisplayOutline)
+            if (shouldDisplayOutline)
             {
                 gameObject.GetComponent<Outline>().enabled = true;
             }
-
         }
 
         public override void OnPointerExit(PointerEventData eventData)
@@ -45,7 +44,7 @@ namespace UserInterface.Cards.LoadoutCard
             {
                 OnCardClicked?.Invoke(cardInfo);
 
-                if(shouldDisableOnClick)
+                if (shouldDisableOnClick)
                 {
                     gameObject.SetActive(false);
                 }
@@ -62,7 +61,5 @@ namespace UserInterface.Cards.LoadoutCard
             cardInfo.upgradeSO = fLoadoutCardInfo.upgradeSO;
             cardImage.sprite = cardInfo.upgradeSO.upgradeSprite;
         }
-
-
     }
 }

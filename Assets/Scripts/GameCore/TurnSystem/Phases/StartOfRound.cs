@@ -15,22 +15,19 @@ namespace GameCore.TurnSystem.Phases
             //load/update the current components
             player.UpdateCurrentStats();
             aiPlayer.UpdateCurrentStats();
-            
+
             //check passive/stat effects below here.
 
-            
-            
+
             Controller.ChangePhase(Controller.PlayerPhase);
         }
 
         protected override void OnUpdate(Player player, AIPlayer aiPlayer)
         {
-            
         }
 
         protected override void OnEnd(Player player, AIPlayer aiPlayer)
         {
-            
         }
     }
 }

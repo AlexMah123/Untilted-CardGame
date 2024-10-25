@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-
 using Audio;
 using GameCore.SceneTransition;
 

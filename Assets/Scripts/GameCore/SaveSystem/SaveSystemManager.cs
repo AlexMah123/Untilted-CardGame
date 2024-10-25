@@ -11,7 +11,7 @@ namespace GameCore.SaveSystem
     {
         public static SaveSystemManager Instance { get; private set; }
 
-        [Header("File Storage Config")]
+        [Header("File Storage Config")] 
         [SerializeField] private string fileName;
 
         private GameData gameData;
@@ -60,6 +60,7 @@ namespace GameCore.SaveSystem
         }
 
         #region Save System
+
         private void NewGame()
         {
             gameData = new GameData();
@@ -97,16 +98,17 @@ namespace GameCore.SaveSystem
                 savableDataObj.LoadData(gameData);
             }
         }
-    
+
         [ContextMenu("SaveSysten/ClearSaveData")]
         public void ClearSaveData()
         {
             dataHandler.ClearData();
         }
-    
+
         #endregion
 
         #region Internal Methods
+
         private void BootstrapSaveData()
         {
             //query for all objects that implement ISavableData, and Load to them.
@@ -125,9 +127,6 @@ namespace GameCore.SaveSystem
 
             if (objectsLoadedCount >= objectsToLoadCount)
             {
-                //#DEBUG
-                //Debug.Log("Finished loading all data");
-
                 foreach (ISavableData savableDataObj in savableDataObjectsInScene)
                 {
                     savableDataObj.OnSaveDataLoaded -= HandleDataLoaded;
@@ -149,6 +148,7 @@ namespace GameCore.SaveSystem
 
             savableDataObjectsInScene = new(allSavableDataObjects);
         }
+
         #endregion
     }
 }

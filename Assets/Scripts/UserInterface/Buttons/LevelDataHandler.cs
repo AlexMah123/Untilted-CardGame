@@ -8,15 +8,15 @@ namespace UserInterface.Buttons
 {
     public class LevelDataHandler : MonoBehaviour
     {
-        [Header("UI Component")]
+        [Header("UI Component")] 
         public Image thumbnailImage;
         public Image completedOverlay;
         public TextMeshProUGUI levelNameText;
-        
-        [Header("Locked Config")]
+
+        [Header("Locked Config")] 
         public Color lockedColor;
 
-        [Header("Level Data")]
+        [Header("Level Data")] 
         public LevelConfigSO levelConfig;
 
         private void Start()
@@ -34,7 +34,6 @@ namespace UserInterface.Buttons
             {
                 throw new MissingReferenceException($"Level Config Data is missing from {gameObject}");
             }
-
         }
 
         public void SelectLevel()

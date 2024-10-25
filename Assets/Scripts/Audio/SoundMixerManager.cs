@@ -19,7 +19,8 @@ namespace Audio
         {
             if (masterVolumeSlider == null || musicVolumeSlider == null || sfxVolumeSlider == null)
             {
-                throw new MissingReferenceException("One or more sliders are missing reference. Check slider reference");
+                throw new MissingReferenceException(
+                    "One or more sliders are missing reference. Check slider reference");
             }
         }
 

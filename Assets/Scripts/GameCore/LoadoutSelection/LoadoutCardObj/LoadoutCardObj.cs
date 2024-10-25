@@ -9,7 +9,7 @@ namespace GameCore.LoadoutSelection.LoadoutCardObj
     [RequireComponent(typeof(InspectComponent))]
     public class LoadoutCardObj : MonoBehaviour
     {
-        [Header("Card Visual Configs")]
+        [Header("Card Visual Configs")] 
         public SpriteRenderer cardSpriteRenderer;
         public SpriteRenderer lockedSpriteRenderer;
         public Vector3 hoveredOffset;
@@ -19,7 +19,7 @@ namespace GameCore.LoadoutSelection.LoadoutCardObj
         public Color lockedColor;
         public bool isLocked = false;
 
-        [Header("Card Configs")]
+        [Header("Card Configs")] 
         public FLoadoutCardObj cardInfo;
 
         //private
@@ -119,7 +119,8 @@ namespace GameCore.LoadoutSelection.LoadoutCardObj
         protected void SetCardHovered()
         {
             //move the offset then scale up
-            transform.localPosition = new Vector3(transform.localPosition.x + hoveredOffset.x, transform.localPosition.y + hoveredOffset.y, transform.localPosition.z + hoveredOffset.z);
+            transform.localPosition = new Vector3(transform.localPosition.x + hoveredOffset.x,
+                transform.localPosition.y + hoveredOffset.y, transform.localPosition.z + hoveredOffset.z);
             transform.localScale = originalCardScale * hoveredEnlargedScale;
             cardSpriteRenderer.sortingOrder = 99;
             lockedSpriteRenderer.sortingOrder = 100;
@@ -129,7 +130,8 @@ namespace GameCore.LoadoutSelection.LoadoutCardObj
         {
             //scale down then move down the offset
             gameObject.transform.localScale = originalCardScale;
-            transform.localPosition = new Vector3(transform.localPosition.x - hoveredOffset.x, transform.localPosition.y - hoveredOffset.y, transform.localPosition.z - hoveredOffset.z);
+            transform.localPosition = new Vector3(transform.localPosition.x - hoveredOffset.x,
+                transform.localPosition.y - hoveredOffset.y, transform.localPosition.z - hoveredOffset.z);
             cardSpriteRenderer.sortingOrder = originalSortingOrder;
             lockedSpriteRenderer.sortingOrder = originalSortingOrder + 1;
 
@@ -145,6 +147,7 @@ namespace GameCore.LoadoutSelection.LoadoutCardObj
             {
                 return hit.transform == transform;
             }
+
             return false;
         }
     }

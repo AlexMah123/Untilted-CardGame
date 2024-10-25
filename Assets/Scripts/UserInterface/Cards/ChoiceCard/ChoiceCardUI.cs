@@ -8,7 +8,7 @@ namespace UserInterface.Cards.ChoiceCard
 {
     public class ChoiceCardUI : CardUI, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        [Header("Choice Card Configs")]
+        [Header("Choice Card Configs")] 
         public Image sealedEffectImage;
         public GameChoice gameChoice;
 

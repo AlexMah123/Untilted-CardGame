@@ -9,10 +9,9 @@ namespace UserInterface.Gameplay
 {
     public class GameConditionController : MonoBehaviour
     {
-        [Header("Condition Configs")]
+        [Header("Condition Configs")] 
         [SerializeField] Sprite winScreen;
         [SerializeField] Sprite loseScreen;
-
         [SerializeField] GameObject conditionPanel;
         [SerializeField] Image conditionImage;
         [SerializeField] GameObject levelSelectButton;
@@ -23,11 +22,11 @@ namespace UserInterface.Gameplay
         {
             GameManager.Instance.OnLevelCompleted -= DisplayImage;
         }
-        
+
         private void Start()
         {
             GameManager.Instance.OnLevelCompleted += DisplayImage;
-            
+
             //defaulted to be empty and hidden
             conditionText.gameObject.SetActive(false);
             conditionText.text = String.Empty;
@@ -39,13 +38,14 @@ namespace UserInterface.Gameplay
 
             conditionPanel.SetActive(true);
 
-            switch(gameResult)
+            switch (gameResult)
             {
                 case GameResult.Win:
                     conditionImage.sprite = winScreen;
-                    
+
                     //if level name in totalLevels is equal and isCompleted is false, enable claim reward button.
-                    if(LevelDataManager.Instance.IsLevelCompleted(LevelDataManager.Instance.currentSelectedLevelSO.levelName) == false)
+                    if (LevelDataManager.Instance.IsLevelCompleted(LevelDataManager.Instance.currentSelectedLevelSO
+                            .levelName) == false)
                     {
                         EnableClaimReward(true);
                         break;
@@ -78,6 +78,5 @@ namespace UserInterface.Gameplay
             levelSelectButton.SetActive(!state);
             rewardButton.SetActive(state);
         }
-        
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GameCore;
 using GameCore.LoadoutSelection;
-
 using PlayerCore;
 using PlayerCore.Upgrades.Base;
 using PlayerCore.Upgrades.UpgradeFactory;
@@ -14,8 +13,9 @@ namespace UserInterface.Gameplay.GameLoadout
 {
     public class GameLoadoutController : MonoBehaviour
     {
-        [Header("PlayerUpgrades Parent")]
+        [Header("PlayerUpgrades Parent")] 
         [SerializeField] private GameObject playerUpgradesParent;
+
         [SerializeField] private GameObject aiPlayerUpgradesParent;
 
         List<LoadoutCardUI> playerUpgrades;
@@ -23,11 +23,13 @@ namespace UserInterface.Gameplay.GameLoadout
 
         private Player Player => GameManager.Instance.player;
         private Player AIPlayer => GameManager.Instance.AIPlayer;
-        
+
         private void OnEnable()
         {
-            playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
-            aiPlayerUpgrades = aiPlayerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
+            playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
+                .ToList();
+            aiPlayerUpgrades = aiPlayerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
+                .ToList();
 
             foreach (LoadoutCardUI loadoutCard in playerUpgrades)
             {
@@ -39,7 +41,8 @@ namespace UserInterface.Gameplay.GameLoadout
         {
             if (playerUpgradesParent != null)
             {
-                playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
+                playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
+                    .ToList();
 
                 foreach (LoadoutCardUI loadoutCard in playerUpgrades)
                 {
@@ -52,11 +55,11 @@ namespace UserInterface.Gameplay.GameLoadout
 
             UnbindPlayerLoadoutComponent();
         }
-        
+
         private void Start()
         {
             BindPlayersLoadoutComponent();
-            
+
             HandlePlayerLoadoutUpdate(Player.ActiveLoadoutComponent.cardUpgradeList);
             HandleAIPlayerLoadoutUpdate(AIPlayer.ActiveLoadoutComponent.cardUpgradeList);
         }
@@ -64,7 +67,7 @@ namespace UserInterface.Gameplay.GameLoadout
         private void HandlePlayerLoadoutUpdate(List<UpgradeDefinitionSO> playerLoadoutList)
         {
             ResetPlayerLoadoutUI();
-            
+
             //for each upgrade equipped by player, display it
             for (int i = 0; i < playerLoadoutList.Count; i++)
             {
@@ -78,7 +81,7 @@ namespace UserInterface.Gameplay.GameLoadout
         private void HandleAIPlayerLoadoutUpdate(List<UpgradeDefinitionSO> aiPlayerLoadoutList)
         {
             ResetAIPlayerLoadout();
-            
+
             //for each upgrade equipped by enemy (level config), display it
             for (int i = 0; i < aiPlayerLoadoutList.Count; i++)
             {
@@ -92,10 +95,10 @@ namespace UserInterface.Gameplay.GameLoadout
         private void HandleActivateSkill(FLoadoutCardObj info)
         {
             Debug.Log("Card Clicked, Prompt player confirmation to activate skill");
-            
+
             GameManager.Instance.player.ActiveLoadoutComponent.HandleActivateSkill(info.upgradeSO);
         }
-        
+
         private void ResetPlayerLoadoutUI()
         {
             foreach (LoadoutCardUI loadoutCard in playerUpgrades)
@@ -111,7 +114,7 @@ namespace UserInterface.Gameplay.GameLoadout
                 loadoutCard.gameObject.SetActive(false);
             }
         }
-        
+
         #region Bind PlayerLoadoutComponent
 
         private void BindPlayersLoadoutComponent()
@@ -139,7 +142,7 @@ namespace UserInterface.Gameplay.GameLoadout
                 AIPlayer.ActiveLoadoutComponent.OnLoadoutChanged -= HandlePlayerLoadoutUpdate;
             }
         }
-        
+
         #endregion
     }
 }

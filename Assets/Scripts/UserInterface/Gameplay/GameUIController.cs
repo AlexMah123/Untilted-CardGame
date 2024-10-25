@@ -6,7 +6,7 @@ namespace UserInterface.Gameplay
     {
         public static GameUIController Instance;
 
-        [Header("Layout Groups")]
+        [Header("Layout Groups")] 
         public GameObject GameplayGroup;
         public GameObject SettingsGroup;
 

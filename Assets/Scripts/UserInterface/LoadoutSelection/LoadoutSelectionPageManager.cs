@@ -23,7 +23,7 @@ namespace UserInterface.LoadoutSelection
             if (equippedLoadoutManager != null)
             {
                 equippedLoadoutManager.OnLoadoutUpdated += UpdateButtonState;
-            }        
+            }
         }
 
         private void OnDisable()
@@ -80,9 +80,10 @@ namespace UserInterface.LoadoutSelection
             {
                 return;
             }
-            
+
             previousButton.interactable = currentPageIndex > 0;
-            nextButton.interactable = (currentPageIndex + 1) * LoadoutSelectionManager.Instance.displayAmountPerPage < LoadoutSelectionManager.Instance.cachedLoadoutData.totalUpgradesInGame.Count;
+            nextButton.interactable = (currentPageIndex + 1) * LoadoutSelectionManager.Instance.displayAmountPerPage <
+                                      LoadoutSelectionManager.Instance.cachedLoadoutData.totalUpgradesInGame.Count;
         }
     }
 }

@@ -14,14 +14,14 @@ namespace LevelCore.LevelManager
         public string levelName;
         public bool isCompleted;
     }
-    
+
     public class LevelDataManager : MonoBehaviour, ISavableData
     {
         public static LevelDataManager Instance;
 
         public LevelConfigSO currentSelectedLevelSO;
 
-        [Header("Level Completion Data")]
+        [Header("Level Completion Data")] 
         public List<LevelCompletionData> totalLevels;
 
         public event Action OnSaveDataLoaded;
@@ -43,9 +43,10 @@ namespace LevelCore.LevelManager
         {
             return totalLevels.Any(level => level.levelName == levelName && level.isCompleted);
         }
-        
-        
+
+
         #region SaveInterface
+
         public void LoadData(GameData data)
         {
             foreach (var savedLevel in data.levelCompletionData)
@@ -63,9 +64,8 @@ namespace LevelCore.LevelManager
 
         public void SaveData(ref GameData data)
         {
-        
         }
+
         #endregion
     }
-    
 }

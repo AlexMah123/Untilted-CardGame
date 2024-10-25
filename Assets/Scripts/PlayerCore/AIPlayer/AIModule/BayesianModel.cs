@@ -21,7 +21,8 @@ namespace PlayerCore.AIPlayer.AIModule
             GameChoice aiDecision = GameChoice.Rock;
 
             //sum the total thrown moves by the opponent
-            int totalMoves = opponentMoveCount[GameChoice.Rock] + opponentMoveCount[GameChoice.Paper] + opponentMoveCount[GameChoice.Scissor];
+            int totalMoves = opponentMoveCount[GameChoice.Rock] + opponentMoveCount[GameChoice.Paper] +
+                             opponentMoveCount[GameChoice.Scissor];
 
             //if its the first time playing, return a random move
             if (totalMoves == 0) return RandomChoice();
@@ -59,7 +60,6 @@ namespace PlayerCore.AIPlayer.AIModule
             {
                 return GetNextBestChoice();
             }
-
         }
 
         public override void ResetAIConfig()
@@ -84,7 +84,8 @@ namespace PlayerCore.AIPlayer.AIModule
         {
             // Get a list of choices sorted by the opponents most thrown move
             List<GameChoice> sortedOpponentMostThrownMove = new List<GameChoice>(opponentMoveCount.Keys);
-            sortedOpponentMostThrownMove.Sort((choice1, choice2) => opponentMoveCount[choice2].CompareTo(opponentMoveCount[choice1]));
+            sortedOpponentMostThrownMove.Sort((choice1, choice2) =>
+                opponentMoveCount[choice2].CompareTo(opponentMoveCount[choice1]));
 
             // Return the next available choice
             foreach (GameChoice choice in sortedOpponentMostThrownMove)

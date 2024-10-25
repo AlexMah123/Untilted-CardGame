@@ -13,15 +13,21 @@ namespace UserInterface.Cards
     [RequireComponent(typeof(ChoiceCardUIFactory))]
     public class PlayerHandLayoutController : MonoBehaviour
     {
-        public List<CardUI> CardUIContainer = new List<CardUI>();
+        public List<CardUI> cardUIContainer = new List<CardUI>();
 
-        [Header("Card Allignment Configs")]
+        [Header("Card Allignment Configs")] 
         public Transform spawnContainer;
-        [Tooltip("How much each card rotates")] public float totalAngleOfHand = 0f;
-        [Tooltip("How much to offset the cards on the side (left & right)")] public float cardOffsetYDuringRotation;
-        [Tooltip("Offset in between each card")] public float gapBetweenCards = 10f;
 
-        [Header("Card Controller Configs")]
+        [Tooltip("How much each card rotates")]
+        public float totalAngleOfHand = 0f;
+
+        [Tooltip("How much to offset the cards on the side (left & right)")]
+        public float cardOffsetYDuringRotation;
+
+        [Tooltip("Offset in between each card")]
+        public float gapBetweenCards = 10f;
+
+        [Header("Card Controller Configs")] 
         public Player attachedPlayer;
 
         //cached values
@@ -36,7 +42,7 @@ namespace UserInterface.Cards
 
         //factory
         private ChoiceCardUIFactory choiceCardFactory;
-        
+
         private void OnDisable()
         {
             if (isOnClearHandEventBinded)
@@ -62,7 +68,8 @@ namespace UserInterface.Cards
             //caching values
             spawnRectTransform = spawnContainer.GetComponent<RectTransform>();
             startingCardHeight = spawnRectTransform.rect.height / -2; //based on pivot points
-            cardUIPrefabExtent = (choiceCardFactory.choiceCardUIPrefab.GetComponent<RectTransform>().rect.width / 2) + gapBetweenCards;
+            cardUIPrefabExtent = (choiceCardFactory.choiceCardUIPrefab.GetComponent<RectTransform>().rect.width / 2) +
+                                 gapBetweenCards;
         }
 
         private void Start()
@@ -100,7 +107,7 @@ namespace UserInterface.Cards
         {
             AdjustHand();
         }
-        
+
         public void HandleOnSealChoice()
         {
             RequestCardChoices(attachedPlayer);
@@ -109,6 +116,7 @@ namespace UserInterface.Cards
         #endregion
 
         #region Internal Functions
+
         private void ClearCardsInHand()
         {
             // get the current cards in hand
@@ -123,7 +131,7 @@ namespace UserInterface.Cards
                 Destroy(card.gameObject);
             }
 
-            CardUIContainer.Clear();
+            cardUIContainer.Clear();
         }
 
         private void RequestCardChoices(Player player)
@@ -149,7 +157,7 @@ namespace UserInterface.Cards
                 }
 
                 //add to list, set to inactive and wait for adjusthand
-                CardUIContainer.Add(cardUI);
+                cardUIContainer.Add(cardUI);
                 cardUIGO.SetActive(false);
             }
 
@@ -172,7 +180,8 @@ namespace UserInterface.Cards
 
             //alignment calculation
             float startPositionX = isEvenNum
-                ? (spawnRectTransform.rect.width / 2f) - ((halfOfTotalCards) * cardUIPrefabExtent) + (cardUIPrefabExtent / 2)
+                ? (spawnRectTransform.rect.width / 2f) - ((halfOfTotalCards) * cardUIPrefabExtent) +
+                  (cardUIPrefabExtent / 2)
                 : (spawnRectTransform.rect.width / 2f) - (halfOfTotalCards * cardUIPrefabExtent);
 
             int runningCount = 0;
@@ -193,14 +202,16 @@ namespace UserInterface.Cards
                 xPosition = startPositionX + (runningCount * cardUIPrefabExtent);
 
                 // Calculate y position and rotation, add offset based on which ever half you are on (left half, right half)
-                float yPosition = startingCardHeight + (cardOffsetYDuringRotation * Mathf.Abs(halfOfTotalCards - runningCount));
+                float yPosition = startingCardHeight +
+                                  (cardOffsetYDuringRotation * Mathf.Abs(halfOfTotalCards - runningCount));
 
                 //if you are odd, or you are at the half way point, then do not rotate (0f)
                 float rotationAngle = (isEvenNum || runningCount != halfOfTotalCards) ? currentAngle : 0f;
 
                 // Apply rotation and position
                 cardRectTransform.localEulerAngles = new Vector3(0f, 0f, rotationAngle);
-                cardRectTransform.anchoredPosition3D = new Vector3(xPosition, yPosition, cardRectTransform.anchoredPosition3D.z);
+                cardRectTransform.anchoredPosition3D =
+                    new Vector3(xPosition, yPosition, cardRectTransform.anchoredPosition3D.z);
 
                 runningCount++;
                 card.gameObject.SetActive(true);
@@ -209,7 +220,7 @@ namespace UserInterface.Cards
 
         private List<CardUI> GetCardsInHand()
         {
-            return CardUIContainer;
+            return cardUIContainer;
         }
 
         private void ResetCardsOffset()
@@ -219,7 +230,8 @@ namespace UserInterface.Cards
             foreach (var card in cardsInHand)
             {
                 var cardRectTransform = card.GetComponent<RectTransform>();
-                Vector3 originalCardPosition = new(cardRectTransform.anchoredPosition3D.x, startingCardHeight, cardRectTransform.anchoredPosition3D.z);
+                Vector3 originalCardPosition = new(cardRectTransform.anchoredPosition3D.x, startingCardHeight,
+                    cardRectTransform.anchoredPosition3D.z);
 
                 //reset position and rotation
                 cardRectTransform.anchoredPosition3D = originalCardPosition;
@@ -227,10 +239,10 @@ namespace UserInterface.Cards
             }
         }
 
-
         #endregion
 
         #region Bind CardEndDrag Delegate
+
         public void BindOnCardEndInteractEvent(List<CardUI> cardUIList)
         {
             foreach (var card in cardUIList)
@@ -248,7 +260,7 @@ namespace UserInterface.Cards
         }
 
         #endregion
-        
+
         #region Bind OnPlayerPhaseStart
 
         private void BindOnPlayerPhaseStart()
@@ -268,7 +280,7 @@ namespace UserInterface.Cards
                 isOnPlayerPhaseEventBinded = false;
             }
         }
-        
+
         #endregion
 
         #region Bind ClearCardHand Delegate
@@ -292,8 +304,9 @@ namespace UserInterface.Cards
         }
 
         #endregion
-        
+
         #region Bind SealChoice Delegate
+
         private void BindSealChoiceEvent()
         {
             if (attachedPlayer && attachedPlayer.ChoiceComponent)

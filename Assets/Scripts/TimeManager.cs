@@ -4,7 +4,6 @@ public class TimeManager : MonoBehaviour
 {
     private TimeManager()
     {
-
     }
 
     public static bool isTimePaused = false;
@@ -25,6 +24,5 @@ public class TimeManager : MonoBehaviour
 
         //#DEBUG
         Debug.Log("TimeisUnpaused");
-
     }
 }

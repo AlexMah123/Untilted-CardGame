@@ -12,14 +12,14 @@ namespace PlayerCore.PlayerComponents
         //declaration of events
         public event Action<int> OnHealthModified;
         public event Action OnHealthZero;
-        
+
         public void InitializeComponent(PlayerStats referencedStats)
         {
             maxHealth = referencedStats.maxHealth;
             currentHealth = maxHealth;
 
             currentHealth = Mathf.Min(currentHealth, maxHealth);
-            
+
             OnHealthModified?.Invoke(currentHealth);
         }
 
@@ -29,13 +29,13 @@ namespace PlayerCore.PlayerComponents
             currentHealth = Mathf.Min(currentHealth, maxHealth);
 
             OnHealthModified?.Invoke(currentHealth);
-        }        
-        
+        }
+
         public void SetHealth(int value)
         {
             ModifyHealthAmount(value - currentHealth);
         }
-        
+
         public void IncreaseHealth(int value)
         {
             ModifyHealthAmount(value);
@@ -47,6 +47,7 @@ namespace PlayerCore.PlayerComponents
         }
 
         #region Internal Function
+
         private void ModifyHealthAmount(int value)
         {
             currentHealth += value;
@@ -55,12 +56,12 @@ namespace PlayerCore.PlayerComponents
 
             OnHealthModified?.Invoke(currentHealth);
 
-            if(currentHealth <= 0)
+            if (currentHealth <= 0)
             {
                 OnHealthZero?.Invoke();
             }
-
         }
+
         #endregion
     }
 }

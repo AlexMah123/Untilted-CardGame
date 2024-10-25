@@ -18,7 +18,7 @@ namespace GameCore.SaveSystem.Data
         public GameData()
         {
             levelCompletionData = new();
-        
+
             upgradedPlayerStats = new();
             playerUnlockedUpgrades = new();
             playerEquippedUpgrades = new();

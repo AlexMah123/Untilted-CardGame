@@ -16,7 +16,6 @@ namespace PlayerCore.AIPlayer.AIModule
 
         public override void ResetAIConfig()
         {
-        
         }
     }
 }

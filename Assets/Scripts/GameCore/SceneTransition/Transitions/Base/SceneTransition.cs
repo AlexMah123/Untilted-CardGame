@@ -9,6 +9,5 @@ namespace GameCore.SceneTransition.Transitions.Base
 
         public abstract IEnumerator AnimateTransitionIn();
         public abstract IEnumerator AnimateTransitionOut();
-
     }
 }

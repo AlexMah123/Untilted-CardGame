@@ -16,16 +16,18 @@ namespace GameCore.RewardSystem
 {
     public class RewardSystemController : MonoBehaviour, ISavableData
     {
-        [Header("RewardUI Config")] [SerializeField]
-        LoadoutCardUI rewardPrefab;
+        [Header("RewardUI Config")] 
+        [SerializeField] LoadoutCardUI rewardPrefab;
 
         [Header("Reward Display Ref")] 
         [SerializeField] private RectTransform rewardContainer;
+
         [SerializeField] private RectTransform content;
         [SerializeField] private GridLayoutGroup gridLayout;
-        
-        [Header("Reward Display Config")]
-        [SerializeField] private float rewardContainerXScale = 1.5f;
+
+        [Header("Reward Display Config")] 
+        [SerializeField] float rewardContainerXScale = 1.5f;
+
         [SerializeField] private float rewardContainerYScale = 1f;
         [SerializeField] private bool immediateUpdate = false;
         [SerializeField] private float rewardDisplayDelay = 0.25f;
@@ -34,7 +36,7 @@ namespace GameCore.RewardSystem
         [Header("Runtime Data")]
         [SerializeField] List<UpgradeDefinitionSO> upgradeRewardList;
         [SerializeField] PlayerStats playerRewardStats;
-    
+
         //cached
         List<LoadoutCardUI> rewardUIList;
 
@@ -52,7 +54,7 @@ namespace GameCore.RewardSystem
             //Based on the level, there is a set rewardList
             upgradeRewardList = LevelDataManager.Instance.currentSelectedLevelSO.rewardList;
             playerRewardStats = LevelDataManager.Instance.currentSelectedLevelSO.rewardStats;
-        
+
             InitializeRewardContainer();
 
             if (immediateUpdate)
@@ -60,10 +62,10 @@ namespace GameCore.RewardSystem
                 UpdateRewardDisplay();
             }
             else
-            { 
+            {
                 StartCoroutine(ShowRewardSequantially());
             }
-            
+
             //save the rewards to the player's save data
             SaveSystemManager.Instance.SaveGame();
         }
@@ -78,11 +80,11 @@ namespace GameCore.RewardSystem
                 rewardUI.gameObject.SetActive(false);
             }
         }
-        
+
         private IEnumerator ShowRewardSequantially()
         {
             yield return new WaitForSeconds(0.1f);
-            
+
             // Reset all rewardUI
             foreach (LoadoutCardUI reward in rewardUIList)
             {
@@ -100,7 +102,7 @@ namespace GameCore.RewardSystem
                     rewardUI.InitializeCard(new FLoadoutCardObj(upgrade));
                     rewardUI.gameObject.SetActive(true);
                     rewardUI.gameObject.transform.localScale = new Vector3(popupScale, popupScale, 1);
-                    
+
                     yield return new WaitForSeconds(rewardDisplayDelay); // Delay before showing the next reward
                     rewardUI.gameObject.transform.localScale = Vector3.one;
                 }
@@ -196,7 +198,7 @@ namespace GameCore.RewardSystem
             {
                 data.playerUnlockedUpgrades.Add(upgrades.upgradeType);
             }
-        
+
             //update the player's stats'
             data.upgradedPlayerStats.maxHealth += playerRewardStats.maxHealth;
             data.upgradedPlayerStats.damage += playerRewardStats.damage;

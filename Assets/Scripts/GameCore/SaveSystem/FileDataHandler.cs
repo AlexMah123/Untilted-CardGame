@@ -70,7 +70,6 @@ namespace GameCore.SaveSystem
                         writer.Write(dataToStore);
                     }
                 }
-
             }
             catch (Exception e)
             {
@@ -84,7 +83,7 @@ namespace GameCore.SaveSystem
 
             try
             {
-                if(File.Exists(fullPath))
+                if (File.Exists(fullPath))
                 {
                     File.Delete(fullPath);
                 }
@@ -98,6 +97,5 @@ namespace GameCore.SaveSystem
                 Debug.LogError("Error occured when trying to clear save data from file:" + fullPath + "\n" + e);
             }
         }
-
     }
 }

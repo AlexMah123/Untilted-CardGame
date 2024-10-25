@@ -18,8 +18,8 @@ namespace GameCore.LoadoutSelection
 
         [Header("Loadout Configs")] 
         [SerializeField] private PlayerStatsSO playerStats;
-        
-        [Header("Total upgrades in game")]
+
+        [Header("Total upgrades in game")] 
         [SerializeField] private List<UpgradeCollectionSO> totalUpgradesInGame = new();
 
         //from runtime, loaded from totalUpgradesInGame
@@ -29,7 +29,7 @@ namespace GameCore.LoadoutSelection
         public HashSet<UpgradeDefinitionSO> cachedUpgradesUnlocked = new();
         public HashSet<UpgradeDefinitionSO> cachedEquippedUpgrades = new();
         public int cachedMaxSlots;
-        
+
         public event Action<FLoadoutData> OnInitializeLoadout;
 
         //Interface
@@ -110,9 +110,6 @@ namespace GameCore.LoadoutSelection
 
             //add to the equipped upgrades
             cachedEquippedUpgrades.Add(addedUpgradeSO);
-
-            //#DEBUG
-            //Debug.Log($"Added {addedUpgradeSO.upgradeName} to player");
         }
 
         public void HandleEquippedUpgradeRemoved(UpgradeDefinitionSO addedUpgradeSO)
@@ -122,18 +119,13 @@ namespace GameCore.LoadoutSelection
 
             //remove from equipped upgrades
             cachedEquippedUpgrades.Remove(addedUpgradeSO);
-
-            //#DEBUG
-            //Debug.Log($"Removed {addedUpgradeSO.upgradeName} from player");
         }
 
         #region Savable Interface
+
         public void LoadData(GameData data)
         {
             InitializeLoadoutData(ref data);
-
-            //#DEBUG
-            //Debug.Log($"game data is loaded");
 
             OnSaveDataLoaded?.Invoke();
         }
@@ -149,6 +141,7 @@ namespace GameCore.LoadoutSelection
         #endregion
 
         #region Internal Methods
+
         private void SavePlayerUpgradeData(ref GameData data)
         {
             data.playerUnlockedUpgrades.Clear();
@@ -163,11 +156,11 @@ namespace GameCore.LoadoutSelection
                 data.playerEquippedUpgrades.Add(upgradeSO.upgradeType);
             }
         }
-        
+
         private void InitializeLoadoutData(ref GameData data)
         {
             cachedMaxSlots = data.upgradedPlayerStats.cardSlots + playerStats.cardSlots;
-            
+
             //clear when loading to overwrite
             cachedUpgradesUnlocked.Clear();
             foreach (UpgradeType upgradeUnlocked in data.playerUnlockedUpgrades)
@@ -181,14 +174,16 @@ namespace GameCore.LoadoutSelection
                 cachedEquippedUpgrades.Add(UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradesEquipped));
             }
         }
-        
+
         private void InitializeUpgradeData()
         {
             totalUpgrades = totalUpgradesInGame.SelectMany(upgradeCollection => upgradeCollection.upgradeList).ToList();
         }
+
         #endregion
 
         #region Bind LoadoutSelectedEvent
+
         private void BindLoadoutSelectedEvent()
         {
             if (LoadoutSelectionManager.Instance != null)
@@ -206,9 +201,11 @@ namespace GameCore.LoadoutSelection
                 isLoadoutSelectedEventBinded = false;
             }
         }
+
         #endregion
-        
+
         #region Bind EquippedLoadoutRemovedEvent
+
         private void BindEquippedLoadoutRemovedEvent()
         {
             if (LoadoutSelectionManager.Instance != null)
@@ -226,6 +223,7 @@ namespace GameCore.LoadoutSelection
                 isEquippedLoadoutRemovedEvent = true;
             }
         }
+
         #endregion
     }
 }

@@ -12,11 +12,10 @@ namespace GameCore.TurnSystem
     {
         public static TurnSystemManager Instance;
 
-        //#TODO: currently not in use, used when enemy has their own turn
         private Player Player => GameManager.Instance.player;
         private AIPlayer AIPlayer => GameManager.Instance.AIPlayer;
 
-        [Header("Runtime values")]
+        [Header("Runtime values")] 
         public Phase CurrentPhase;
         public int turnCount;
 
@@ -25,7 +24,7 @@ namespace GameCore.TurnSystem
         public readonly PlayerPhase PlayerPhase = new();
         public readonly EnemyPhase EnemyPhase = new();
         public readonly EvaluationPhase EvaluationPhase = new();
-        
+
 
         private void Awake()
         {
@@ -60,7 +59,7 @@ namespace GameCore.TurnSystem
             {
                 CurrentPhase.OnEndPhase(Player, AIPlayer);
             }
-            
+
             CurrentPhase = newPhase;
             CurrentPhase.OnStartPhase(this, Player, AIPlayer);
         }

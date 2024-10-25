@@ -32,12 +32,11 @@ namespace PlayerCore
     [Serializable]
     public class PlayerStats
     {
-        [Header("Stats Config")]
-        public int maxHealth;
+        [Header("Stats Config")] public int maxHealth;
         public int damage;
         public int cardSlots;
         public int energy;
-        
+
         public PlayerStats(int _maxHealth, int _damage, int _cardSlots, int _energy)
         {
             maxHealth = _maxHealth;
@@ -45,7 +44,7 @@ namespace PlayerCore
             cardSlots = _cardSlots;
             energy = _energy;
         }
-        
+
         public PlayerStats()
         {
             maxHealth = 0;
@@ -53,7 +52,5 @@ namespace PlayerCore
             cardSlots = 0;
             energy = 0;
         }
-    
-
     }
 }

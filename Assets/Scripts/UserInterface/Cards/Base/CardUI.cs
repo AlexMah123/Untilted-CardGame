@@ -8,7 +8,7 @@ namespace UserInterface.Cards.Base
     [RequireComponent(typeof(Image))]
     public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [Header("Card Configs")]
+        [Header("Card Configs")] 
         public Vector3 hoveredOffset;
         public float hoveredEnlargedScale = 1.5f;
         public bool shouldEnlargeOnHover = true;
@@ -38,6 +38,7 @@ namespace UserInterface.Cards.Base
 
 
         #region Pointer Interface
+
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
             //if player is already dragging a card, dont hover
@@ -53,13 +54,16 @@ namespace UserInterface.Cards.Base
 
             ResetCardState();
         }
+
         #endregion
 
         protected void SetCardHovered()
         {
             //move the offset then scale up
 
-            rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x + hoveredOffset.x, rectTransform.anchoredPosition3D.y + hoveredOffset.y, rectTransform.anchoredPosition3D.z + hoveredOffset.z);
+            rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x + hoveredOffset.x,
+                rectTransform.anchoredPosition3D.y + hoveredOffset.y,
+                rectTransform.anchoredPosition3D.z + hoveredOffset.z);
 
             if (shouldEnlargeOnHover)
             {
@@ -83,7 +87,9 @@ namespace UserInterface.Cards.Base
                 gameObject.transform.localScale = originalCardScale;
             }
 
-            rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x - hoveredOffset.x, rectTransform.anchoredPosition3D.y - hoveredOffset.y, rectTransform.anchoredPosition3D.z - hoveredOffset.z);
+            rectTransform.anchoredPosition3D = new Vector3(rectTransform.anchoredPosition3D.x - hoveredOffset.x,
+                rectTransform.anchoredPosition3D.y - hoveredOffset.y,
+                rectTransform.anchoredPosition3D.z - hoveredOffset.z);
 
             if (shouldReorderToTop)
             {
