@@ -11,13 +11,12 @@ namespace PlayerCore.PlayerComponents
     {
         [Header("Runtime Value")]
         public int maxLimitOfLoadout;
-        public List<UpgradeDefinitionSO> upgradeCardSlots = new();
+        public List<UpgradeDefinitionSO> cardUpgradeList = new();
 
         [HideInInspector]
         public Player attachedPlayer;
 
         public Player enemyPlayer;
-
         
         public event Action<List<UpgradeDefinitionSO>> OnLoadoutChanged;
         
@@ -38,23 +37,20 @@ namespace PlayerCore.PlayerComponents
 
         public void HandleActivateSkill(UpgradeDefinitionSO info)
         {
-            if (upgradeCardSlots.Contains(info))
+            if (cardUpgradeList.Contains(info))
             {
                 info.ApplyActivatableEffect(attachedPlayer, enemyPlayer);
             }
         }
 
-        [ContextMenu("ActiveLoadout/Apply Stat Upgrade")]
         public PlayerStats ApplyStatUpgrade(PlayerStats cardStats)
         {
             PlayerStats tempPlayerStats = new();
             PlayerStats tempEnemyStats = new();
-
-            (PlayerStats, PlayerStats) calculatedStatUpgrade;
             
-            foreach (UpgradeDefinitionSO upgrade in upgradeCardSlots)
+            foreach (UpgradeDefinitionSO upgrade in cardUpgradeList)
             {
-                calculatedStatUpgrade = upgrade.ApplyStatUpgrade(tempPlayerStats, tempEnemyStats);
+                upgrade.ApplyStatUpgrade(tempPlayerStats, tempEnemyStats);
             }
             
             cardStats = tempPlayerStats;
@@ -65,7 +61,7 @@ namespace PlayerCore.PlayerComponents
         [ContextMenu("ActiveLoadout/Apply Passive Effect")]
         public void ApplyPassiveEffects()
         {
-            foreach (UpgradeDefinitionSO upgrade in upgradeCardSlots)
+            foreach (UpgradeDefinitionSO upgrade in cardUpgradeList)
             {
                 upgrade.ApplyPassiveEffect(attachedPlayer, enemyPlayer);
             }
@@ -74,7 +70,7 @@ namespace PlayerCore.PlayerComponents
         [ContextMenu("ActiveLoadout/Apply OnWin Effect")]
         public void ApplyOnWinEffects()
         {
-            foreach (UpgradeDefinitionSO upgrade in upgradeCardSlots)
+            foreach (UpgradeDefinitionSO upgrade in cardUpgradeList)
             {
                 upgrade.OnWinRound(attachedPlayer, enemyPlayer);
             }
@@ -84,7 +80,7 @@ namespace PlayerCore.PlayerComponents
         [ContextMenu("ActiveLoadout/Apply OnLose Effect")]
         public void ApplyOnLoseEffect()
         {
-            foreach (UpgradeDefinitionSO upgrade in upgradeCardSlots)
+            foreach (UpgradeDefinitionSO upgrade in cardUpgradeList)
             {
                 upgrade.OnLoseRound(attachedPlayer, enemyPlayer);
             }
@@ -93,7 +89,7 @@ namespace PlayerCore.PlayerComponents
         [ContextMenu("ActiveLoadout/Apply OnDraw Effect")]
         public void ApplyOnDrawEffect()
         {
-            foreach (UpgradeDefinitionSO upgrade in upgradeCardSlots)
+            foreach (UpgradeDefinitionSO upgrade in cardUpgradeList)
             {
                 upgrade.OnDrawRound(attachedPlayer, enemyPlayer);
             }
@@ -101,22 +97,22 @@ namespace PlayerCore.PlayerComponents
         
         public void AddUpgradeToLoadout(UpgradeDefinitionSO upgrade)
         {
-            upgradeCardSlots.Add(upgrade);
-            OnLoadoutChanged?.Invoke(upgradeCardSlots);
+            cardUpgradeList.Add(upgrade);
+            OnLoadoutChanged?.Invoke(cardUpgradeList);
         }
 
         public void AddUpgradeToLoadout(UpgradeType upgradeType)
         {
             var createdUpgrade = UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradeType);
-            upgradeCardSlots.Add(createdUpgrade);
-            OnLoadoutChanged?.Invoke(upgradeCardSlots);
+            cardUpgradeList.Add(createdUpgrade);
+            OnLoadoutChanged?.Invoke(cardUpgradeList);
         }
 
         public void RemoveUpgradeFromLoadout(UpgradeType upgradeType)
         {
-            var removedUpgrade = upgradeCardSlots.Find(upgrade => upgrade.upgradeType == upgradeType);
-            upgradeCardSlots.Remove(removedUpgrade);
-            OnLoadoutChanged?.Invoke(upgradeCardSlots);
+            var removedUpgrade = cardUpgradeList.Find(upgrade => upgrade.upgradeType == upgradeType);
+            cardUpgradeList.Remove(removedUpgrade);
+            OnLoadoutChanged?.Invoke(cardUpgradeList);
         }
         
         #region Debug
@@ -124,6 +120,18 @@ namespace PlayerCore.PlayerComponents
         public void DebugAttachedPlayer()
         {
             Debug.Log($"{attachedPlayer.GetType()}");
+        }
+        
+        [ContextMenu("Debug/Add DevilUpgrade to Player")]
+        public void AddUpgradeToPlayer()
+        {
+            AddUpgradeToLoadout(UpgradeType.TheDevil);
+        }
+        
+        [ContextMenu("Debug/Remove DevilUpgrade to Player")]
+        public void RemoveUpgradeFromPlayer()
+        {
+            RemoveUpgradeFromLoadout(UpgradeType.TheDevil);
         }
         #endregion
 

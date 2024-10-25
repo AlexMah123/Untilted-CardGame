@@ -1749,7 +1749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUpgradesParent: {fileID: 1981521406}
-  AIPlayerUpgradesParent: {fileID: 1389534267}
+  aiPlayerUpgradesParent: {fileID: 1389534267}
 --- !u!1 &812573762
 GameObject:
   m_ObjectHideFlags: 0
@@ -2809,19 +2809,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseStatsConfig: {fileID: 0}
   progressionStats:
-    currentHealth: 0
     maxHealth: 0
     damage: 0
     cardSlots: 0
     energy: 0
   cardStats:
-    currentHealth: 0
     maxHealth: 0
     damage: 0
     cardSlots: 0
     energy: 0
   finalStats:
-    currentHealth: 0
     maxHealth: 0
     damage: 0
     cardSlots: 0
@@ -2868,7 +2865,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLimitOfLoadout: 0
-  upgradeCardSlots: []
+  cardUpgradeList: []
   attachedPlayer: {fileID: 0}
   enemyPlayer: {fileID: 0}
 --- !u!114 &1344209826
@@ -2909,7 +2906,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f401efcb8832bd04080d04d2e076b22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthAmount: 0
+  maxHealth: 0
+  currentHealth: 0
 --- !u!1 &1389534267
 GameObject:
   m_ObjectHideFlags: 0
@@ -3258,7 +3256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adc9002e6ce87924fa7b5d0b40d19324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  humanPlayer: {fileID: 1824892700}
+  player: {fileID: 1824892700}
   AIPlayer: {fileID: 1344209820}
   rewardTransitionType: 0
 --- !u!1 &1671567551
@@ -3536,19 +3534,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseStatsConfig: {fileID: 0}
   progressionStats:
-    currentHealth: 0
     maxHealth: 0
     damage: 0
     cardSlots: 0
     energy: 0
   cardStats:
-    currentHealth: 0
     maxHealth: 0
     damage: 0
     cardSlots: 0
     energy: 0
   finalStats:
-    currentHealth: 0
     maxHealth: 0
     damage: 0
     cardSlots: 0
@@ -3594,7 +3589,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLimitOfLoadout: 0
-  upgradeCardSlots: []
+  cardUpgradeList: []
   attachedPlayer: {fileID: 0}
   enemyPlayer: {fileID: 0}
 --- !u!114 &1824892706
@@ -3635,7 +3630,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f401efcb8832bd04080d04d2e076b22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthAmount: 0
+  maxHealth: 0
+  currentHealth: 0
 --- !u!1001 &1851293664
 PrefabInstance:
   m_ObjectHideFlags: 0

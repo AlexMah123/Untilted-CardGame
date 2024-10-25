@@ -2,6 +2,7 @@ using GameCore;
 using GameCore.SaveSystem.Data;
 using LevelCore.LevelManager;
 using PlayerCore.Upgrades.UpgradeFactory;
+using UnityEngine;
 
 namespace PlayerCore.HumanPlayer
 {
@@ -17,10 +18,12 @@ namespace PlayerCore.HumanPlayer
         #region SaveSystem Override
         protected override void LoadPlayerData(GameData data)
         {
+            Debug.Log("LoadedPlayer: " + Time.time);
+            
             //load from LevelDataManager
-            var humanPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.humanFPlayer;
+            var playerData = LevelDataManager.Instance.currentSelectedLevelSO.humanFPlayer;
 
-            baseStatsConfig = humanPlayerData.baseStatsConfig;
+            baseStatsConfig = playerData.baseStatsConfig;
         
             //load stats upgrade from save file
             progressionStats = new PlayerStats

@@ -16,7 +16,7 @@ namespace PlayerCore.AIPlayer
         {
             base.LoadComponents();
 
-            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.humanPlayer, finalStats);
+            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.player, finalStats);
             aiModuleConfig.InitializeAIConfig(ChoiceComponent);
         }
 
@@ -33,13 +33,15 @@ namespace PlayerCore.AIPlayer
         #region SaveSystemOverride
         protected override void LoadPlayerData(GameData data)
         {
-            var computerPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.aiFPlayer;
+            Debug.Log("LoadedPlayer: " + Time.time);
 
-            baseStatsConfig = computerPlayerData.baseStatsConfig;
-            aiModuleConfig = computerPlayerData.aiModule;
+            var aiPlayerData = LevelDataManager.Instance.currentSelectedLevelSO.aiFPlayer;
+
+            baseStatsConfig = aiPlayerData.baseStatsConfig;
+            aiModuleConfig = aiPlayerData.aiModule;
 
             //load data from levelconfig
-            foreach (UpgradeDefinitionSO upgradeSO in computerPlayerData.upgradesEquipped)
+            foreach (UpgradeDefinitionSO upgradeSO in aiPlayerData.upgradesEquipped)
             {
                 ActiveLoadoutComponent.AddUpgradeToLoadout(upgradeSO);
             }

@@ -29,7 +29,7 @@ namespace GameCore
 
         
         [Header("Player Data")]
-        public Player humanPlayer;
+        public Player player;
         public AIPlayer AIPlayer;
 
         [Header("GameManager Config")]
@@ -108,13 +108,13 @@ namespace GameCore
 
         public void HandleConfirmCardChoice(ChoiceCardUI cardUI)
         {
-            if (humanPlayer == null)
+            if (player == null)
             {
                 Debug.LogError("player reference not attached");
                 return;
             }
 
-            humanPlayer.ChoiceComponent.currentChoice = cardUI.gameChoice;
+            player.ChoiceComponent.currentChoice = cardUI.gameChoice;
             TurnSystemManager.ChangePhase(TurnSystemManager.EnemyPhase);
         }
         private void HandleOnHumanPlayerLose()
@@ -141,10 +141,10 @@ namespace GameCore
         public (GameChoice playerChoice, GameChoice aiChoice) GetFinalChoice()
         {
             //#DEBUG
-            Debug.Log($"Human Player has selected {humanPlayer.GetChoice()}");
+            Debug.Log($"Human Player has selected {player.GetChoice()}");
             Debug.Log($"AI Player has selected {AIPlayer.GetChoice()}");
             
-            return (humanPlayer.GetChoice(), AIPlayer.GetChoice());
+            return (player.GetChoice(), AIPlayer.GetChoice());
         }
 
         public void EvaluateResults(GameResult roundResult)
@@ -153,12 +153,12 @@ namespace GameCore
             {
                 case GameResult.Win:
                     //human player deal dmg to opposing player
-                    humanPlayer.DamageComponent.DealDamage(AIPlayer, humanPlayer.DamageComponent.damageAmount);
+                    player.DamageComponent.DealDamage(AIPlayer, player.DamageComponent.damageAmount);
                     break;
 
                 case GameResult.Lose:
                     //aiPlayer player deal dmg to human player
-                    AIPlayer.DamageComponent.DealDamage(humanPlayer, AIPlayer.DamageComponent.damageAmount);
+                    AIPlayer.DamageComponent.DealDamage(player, AIPlayer.DamageComponent.damageAmount);
                     break;
 
                 case GameResult.Draw:
@@ -256,9 +256,9 @@ namespace GameCore
         #region Bind PlayerHealthZero Event
         private void BindPlayersHealthZeroEvent()
         {
-            if(humanPlayer)
+            if(player)
             {
-                humanPlayer.HealthComponent.OnHealthZero += HandleOnHumanPlayerLose;
+                player.HealthComponent.OnHealthZero += HandleOnHumanPlayerLose;
             }
 
             if(AIPlayer)
@@ -269,9 +269,9 @@ namespace GameCore
 
         private void UnbindPlayersHealthZeroEvent()
         {
-            if (humanPlayer)
+            if (player)
             {
-                humanPlayer.HealthComponent.OnHealthZero -= HandleOnHumanPlayerLose;
+                player.HealthComponent.OnHealthZero -= HandleOnHumanPlayerLose;
             }
 
             if (AIPlayer)

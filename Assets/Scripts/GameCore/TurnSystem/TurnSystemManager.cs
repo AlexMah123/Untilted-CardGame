@@ -13,7 +13,7 @@ namespace GameCore.TurnSystem
         public static TurnSystemManager Instance;
 
         //#TODO: currently not in use, used when enemy has their own turn
-        private Player HumanPlayer => GameManager.Instance.humanPlayer;
+        private Player Player => GameManager.Instance.player;
         private AIPlayer AIPlayer => GameManager.Instance.AIPlayer;
 
         [Header("Runtime values")]
@@ -44,7 +44,7 @@ namespace GameCore.TurnSystem
         {
             if (CurrentPhase != null)
             {
-                CurrentPhase.OnUpdatePhase(HumanPlayer, AIPlayer);
+                CurrentPhase.OnUpdatePhase(Player, AIPlayer);
             }
         }
 
@@ -58,11 +58,11 @@ namespace GameCore.TurnSystem
         {
             if (CurrentPhase != null)
             {
-                CurrentPhase.OnEndPhase(HumanPlayer, AIPlayer);
+                CurrentPhase.OnEndPhase(Player, AIPlayer);
             }
             
             CurrentPhase = newPhase;
-            CurrentPhase.OnStartPhase(this, HumanPlayer, AIPlayer);
+            CurrentPhase.OnStartPhase(this, Player, AIPlayer);
         }
     }
 }
