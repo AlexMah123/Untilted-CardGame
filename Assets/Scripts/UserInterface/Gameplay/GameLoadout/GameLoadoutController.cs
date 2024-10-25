@@ -18,20 +18,21 @@ namespace UserInterface.Gameplay.GameLoadout
     public class GameLoadoutController : MonoBehaviour, ISavableData
     {
         [Header("PlayerUpgrades Parent")]
-        [SerializeField] GameObject humanPlayerUpgradesParent;
-        [SerializeField] GameObject computerPlayerUpgradesParent;
+        [SerializeField] GameObject playerUpgradesParent;
+        [SerializeField] GameObject AIPlayerUpgradesParent;
 
-        List<LoadoutCardUI> humanPlayerUpgrades;
-        List<LoadoutCardUI> computerPlayerUpgrades;
-
+        List<LoadoutCardUI> playerUpgrades;
+        List<LoadoutCardUI> AIPlayerUpgrades;
+        
+        //savesystem interface
         public event Action OnSaveDataLoaded;
 
         private void OnEnable()
         {
-            humanPlayerUpgrades = humanPlayerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
-            computerPlayerUpgrades = computerPlayerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
+            playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
+            AIPlayerUpgrades = AIPlayerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
 
-            foreach (LoadoutCardUI loadoutCard in humanPlayerUpgrades)
+            foreach (LoadoutCardUI loadoutCard in playerUpgrades)
             {
                 loadoutCard.OnCardClicked += HandleActivateSkill;
             }
@@ -39,11 +40,11 @@ namespace UserInterface.Gameplay.GameLoadout
 
         private void OnDisable()
         {
-            if (humanPlayerUpgradesParent != null)
+            if (playerUpgradesParent != null)
             {
-                humanPlayerUpgrades = humanPlayerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
+                playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
 
-                foreach (LoadoutCardUI loadoutCard in humanPlayerUpgrades)
+                foreach (LoadoutCardUI loadoutCard in playerUpgrades)
                 {
                     if (loadoutCard != null)
                     {
@@ -53,9 +54,9 @@ namespace UserInterface.Gameplay.GameLoadout
             }
         }
 
-        private void Awake()
+        private void UpdateLoadoutUI()
         {
-
+            
         }
 
         private void HandleActivateSkill(FLoadoutCardObj info)
@@ -64,40 +65,7 @@ namespace UserInterface.Gameplay.GameLoadout
             
             GameManager.Instance.humanPlayer.ActiveLoadoutComponent.HandleActivateSkill(info.upgradeSO);
         }
-
-        private void LoadPlayersUpgrades(GameData data)
-        {
-            //#TODO: need to check limit for player (probably 5)
-
-            LevelConfigSO currentLevelConfig = LevelDataManager.Instance.currentSelectedLevelSO;
-
-            List<UpgradeType> playerEquippedUpgradesList = data.playerEquippedUpgrades.ToList();
-
-            //for each upgrade equipped by player (save data), display it
-            for (int i = 0; i < playerEquippedUpgradesList.Count; i++)
-            {
-                var createdUpgrade = UpgradeSOFactory.CreateUpgradeDefinitionSO(playerEquippedUpgradesList[i]);
-
-                humanPlayerUpgrades[i].gameObject.SetActive(true);
-                humanPlayerUpgrades[i].InitializeCard(new(createdUpgrade));
-            }
-
-            //Enemy==============================================================================================================
-
-            FPlayerData computerFPlayerData = currentLevelConfig.aiFPlayer;
-            List<UpgradeDefinitionSO> computerPlayerEquippedUpgradesList = computerFPlayerData.upgradesEquipped;
-
-            //for each upgrade equipped by enemy (level config), display it
-            for (int i = 0; i < computerPlayerEquippedUpgradesList.Count; i++)
-            {
-                var createdUpgrade = UpgradeSOFactory.CreateUpgradeDefinitionSO(computerPlayerEquippedUpgradesList[i].upgradeType);
-
-                computerPlayerUpgrades[i].gameObject.SetActive(true);
-                computerPlayerUpgrades[i].InitializeCard(new(createdUpgrade));
-            }
-        }
-
-
+        
         #region Save System Interface
         public void LoadData(GameData data)
         {
@@ -114,6 +82,47 @@ namespace UserInterface.Gameplay.GameLoadout
         public void SaveData(ref GameData data)
         {
         
+        }
+        
+        private void LoadPlayersUpgrades(GameData data)
+        {
+            foreach (LoadoutCardUI loadoutCard in playerUpgrades)
+            {
+                loadoutCard.gameObject.SetActive(false);
+            }
+
+            foreach (LoadoutCardUI loadoutCard in AIPlayerUpgrades)
+            {
+                loadoutCard.gameObject.SetActive(false);
+            }
+            
+            //#TODO: need to check limit for player (probably 5)
+
+            LevelConfigSO currentLevelConfig = LevelDataManager.Instance.currentSelectedLevelSO;
+            List<UpgradeType> playerEquippedUpgradesList = data.playerEquippedUpgrades.ToList();
+
+            //for each upgrade equipped by player (save data), display it
+            for (int i = 0; i < playerEquippedUpgradesList.Count; i++)
+            {
+                var createdUpgrade = UpgradeSOFactory.CreateUpgradeDefinitionSO(playerEquippedUpgradesList[i]);
+
+                playerUpgrades[i].gameObject.SetActive(true);
+                playerUpgrades[i].InitializeCard(new(createdUpgrade));
+            }
+
+            //Enemy==============================================================================================================
+
+            FPlayerData computerFPlayerData = currentLevelConfig.aiFPlayer;
+            List<UpgradeDefinitionSO> computerPlayerEquippedUpgradesList = computerFPlayerData.upgradesEquipped;
+
+            //for each upgrade equipped by enemy (level config), display it
+            for (int i = 0; i < computerPlayerEquippedUpgradesList.Count; i++)
+            {
+                var createdUpgrade = UpgradeSOFactory.CreateUpgradeDefinitionSO(computerPlayerEquippedUpgradesList[i].upgradeType);
+
+                AIPlayerUpgrades[i].gameObject.SetActive(true);
+                AIPlayerUpgrades[i].InitializeCard(new(createdUpgrade));
+            }
         }
         #endregion
     }

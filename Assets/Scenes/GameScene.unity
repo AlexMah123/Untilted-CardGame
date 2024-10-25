@@ -1748,8 +1748,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42faccffd14059c4090737f3f2dfa97f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  humanPlayerUpgradesParent: {fileID: 1981521406}
-  computerPlayerUpgradesParent: {fileID: 1389534267}
+  playerUpgradesParent: {fileID: 1981521406}
+  AIPlayerUpgradesParent: {fileID: 1389534267}
 --- !u!1 &812573762
 GameObject:
   m_ObjectHideFlags: 0
@@ -2808,13 +2808,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseStatsConfig: {fileID: 0}
-  upgradeStats:
-    health: 0
+  progressionStats:
+    currentHealth: 0
+    maxHealth: 0
     damage: 0
     cardSlots: 0
     energy: 0
-  currentStats:
-    health: 0
+  cardStats:
+    currentHealth: 0
+    maxHealth: 0
+    damage: 0
+    cardSlots: 0
+    energy: 0
+  finalStats:
+    currentHealth: 0
+    maxHealth: 0
     damage: 0
     cardSlots: 0
     energy: 0
@@ -3527,13 +3535,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseStatsConfig: {fileID: 0}
-  upgradeStats:
-    health: 0
+  progressionStats:
+    currentHealth: 0
+    maxHealth: 0
     damage: 0
     cardSlots: 0
     energy: 0
-  currentStats:
-    health: 0
+  cardStats:
+    currentHealth: 0
+    maxHealth: 0
+    damage: 0
+    cardSlots: 0
+    energy: 0
+  finalStats:
+    currentHealth: 0
+    maxHealth: 0
     damage: 0
     cardSlots: 0
     energy: 0

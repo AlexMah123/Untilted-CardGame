@@ -30,7 +30,7 @@ namespace UserInterface.StatsUI
             }
 
             //initial call to set values
-            HandleOnHealthModified(attachedPlayer.HealthComponent.healthAmount);
+            HandleOnHealthModified(attachedPlayer.HealthComponent.currentHealth);
         }
 
         private void HandleOnHealthModified(int newHealth)

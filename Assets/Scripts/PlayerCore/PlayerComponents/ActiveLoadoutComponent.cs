@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GameCore.LoadoutSelection;
 using PlayerCore.Upgrades.Base;
@@ -17,6 +18,9 @@ namespace PlayerCore.PlayerComponents
 
         public Player enemyPlayer;
 
+        
+        public event Action<List<UpgradeDefinitionSO>> OnLoadoutChanged;
+        
         private void Start()
         {
             if (attachedPlayer == null)
@@ -40,6 +44,24 @@ namespace PlayerCore.PlayerComponents
             }
         }
 
+        [ContextMenu("ActiveLoadout/Apply Stat Upgrade")]
+        public PlayerStats ApplyStatUpgrade(PlayerStats cardStats)
+        {
+            PlayerStats tempPlayerStats = new();
+            PlayerStats tempEnemyStats = new();
+
+            (PlayerStats, PlayerStats) calculatedStatUpgrade;
+            
+            foreach (UpgradeDefinitionSO upgrade in upgradeCardSlots)
+            {
+                calculatedStatUpgrade = upgrade.ApplyStatUpgrade(tempPlayerStats, tempEnemyStats);
+            }
+            
+            cardStats = tempPlayerStats;
+            
+            return cardStats;
+        }
+        
         [ContextMenu("ActiveLoadout/Apply Passive Effect")]
         public void ApplyPassiveEffects()
         {
@@ -76,24 +98,27 @@ namespace PlayerCore.PlayerComponents
                 upgrade.OnDrawRound(attachedPlayer, enemyPlayer);
             }
         }
-
-        public List<UpgradeDefinitionSO> FetchActiveLoadout()
-        {
-            return upgradeCardSlots;
-        }
-
+        
         public void AddUpgradeToLoadout(UpgradeDefinitionSO upgrade)
         {
             upgradeCardSlots.Add(upgrade);
+            OnLoadoutChanged?.Invoke(upgradeCardSlots);
         }
 
         public void AddUpgradeToLoadout(UpgradeType upgradeType)
         {
             var createdUpgrade = UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradeType);
             upgradeCardSlots.Add(createdUpgrade);
+            OnLoadoutChanged?.Invoke(upgradeCardSlots);
         }
 
-
+        public void RemoveUpgradeFromLoadout(UpgradeType upgradeType)
+        {
+            var removedUpgrade = upgradeCardSlots.Find(upgrade => upgrade.upgradeType == upgradeType);
+            upgradeCardSlots.Remove(removedUpgrade);
+            OnLoadoutChanged?.Invoke(upgradeCardSlots);
+        }
+        
         #region Debug
         [ContextMenu("Debug/Debug Attached Player")]
         public void DebugAttachedPlayer()

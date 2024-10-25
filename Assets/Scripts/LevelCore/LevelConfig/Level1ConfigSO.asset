@@ -19,7 +19,7 @@ MonoBehaviour:
     upgradesEquipped: []
   aiFPlayer:
     baseStatsConfig: {fileID: 11400000, guid: af6be0f4975e2934aa9f5499aeb816ae, type: 2}
-    aiModule: {fileID: 11400000, guid: 827fa0f581f37bf4680a4e6a7df3e03f, type: 2}
+    aiModule: {fileID: 11400000, guid: a269275dbd8b89749a655335d86d606f, type: 2}
     playerType: 1
     upgradesEquipped:
     - {fileID: 11400000, guid: 9c43ce1864a89d94a8d186683e968ebb, type: 2}
@@ -28,7 +28,8 @@ MonoBehaviour:
   levelImage: {fileID: 21300000, guid: 90d8f0b52ca666f489993cf0eb55f92e, type: 3}
   rewardList: []
   rewardStats:
-    health: 1
+    currentHealth: 0
+    maxHealth: 1
     damage: 0
     cardSlots: 0
     energy: 0

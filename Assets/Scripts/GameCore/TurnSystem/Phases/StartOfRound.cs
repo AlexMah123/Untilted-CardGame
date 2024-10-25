@@ -10,10 +10,15 @@ namespace GameCore.TurnSystem.Phases
         protected override void OnStart(Player player, AIPlayer aiPlayer)
         {
             Debug.Log("Currently in StartOfRound");
-
             Controller.turnCount++;
 
-            //check passive/stat effects here.
+            //load/update the current components
+            player.UpdateCurrentStats();
+            aiPlayer.UpdateCurrentStats();
+            
+            //check passive/stat effects below here.
+
+            
             
             Controller.ChangePhase(Controller.PlayerPhase);
         }

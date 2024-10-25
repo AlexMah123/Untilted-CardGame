@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07472458ae83bed49946783e33338b0a, type: 3}
   m_Name: TestingAIStats
   m_EditorClassIdentifier: 
-  health: 2
+  currentHealth: 0
+  maxHealth: 2
   damage: 1
   cardSlots: 1
   energy: 0

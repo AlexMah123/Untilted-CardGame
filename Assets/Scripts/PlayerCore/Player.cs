@@ -22,8 +22,9 @@ namespace PlayerCore
         [Header("Player Stats Config")]
         public PlayerStatsSO baseStatsConfig;
 
-        public PlayerStats upgradeStats = new();
-        public PlayerStats currentStats = new();
+        public PlayerStats progressionStats = new();
+        public PlayerStats cardStats = new();
+        public PlayerStats finalStats = new();
 
         //local variables
         private ChoiceComponent choiceComponent;
@@ -58,13 +59,13 @@ namespace PlayerCore
         //override if necessary
         public virtual void LoadComponents()
         {
-            UpdateCurrentStats();
-        
+            InitializeStartingStats();
+
             //Inject values
             choiceComponent.currentChoice = GameChoice.Rock;
-            healthComponent.InitializeComponent(currentStats);
-            damageComponent.InitializeComponent(currentStats);
-            energyComponent.InitializeComponent(currentStats);
+            healthComponent.InitializeComponent(finalStats);
+            damageComponent.InitializeComponent(finalStats);
+            energyComponent.InitializeComponent(finalStats);
             
             //active component is overriden to specify
         }
@@ -101,13 +102,29 @@ namespace PlayerCore
         #endregion
 
         #endregion
+
+        public void InitializeStartingStats()
+        {
+            cardStats = ActiveLoadoutComponent.ApplyStatUpgrade(cardStats);
+            
+            finalStats.maxHealth = baseStatsConfig.maxHealth + progressionStats.maxHealth + cardStats.maxHealth;
+            finalStats.damage = baseStatsConfig.damage + progressionStats.damage + cardStats.damage;
+            finalStats.cardSlots = baseStatsConfig.cardSlots + progressionStats.cardSlots + cardStats.cardSlots;
+            finalStats.energy = baseStatsConfig.energy + progressionStats.energy + cardStats.energy;
+        }
         
         public void UpdateCurrentStats()
         {
-            currentStats.health = baseStatsConfig.health + upgradeStats.health;
-            currentStats.damage = baseStatsConfig.damage + upgradeStats.damage;
-            currentStats.cardSlots = baseStatsConfig.cardSlots + upgradeStats.cardSlots;
-            currentStats.energy = baseStatsConfig.energy + upgradeStats.energy;
+            cardStats = ActiveLoadoutComponent.ApplyStatUpgrade(cardStats);
+            
+            finalStats.maxHealth = baseStatsConfig.maxHealth + progressionStats.maxHealth + cardStats.maxHealth;
+            finalStats.damage = baseStatsConfig.damage + progressionStats.damage + cardStats.damage;
+            finalStats.cardSlots = baseStatsConfig.cardSlots + progressionStats.cardSlots + cardStats.cardSlots;
+            finalStats.energy = baseStatsConfig.energy + progressionStats.energy + cardStats.energy;
+            
+            healthComponent.UpdateComponent(finalStats);
+            damageComponent.InitializeComponent(finalStats);
+            energyComponent.InitializeComponent(finalStats);
         }
     }
 }

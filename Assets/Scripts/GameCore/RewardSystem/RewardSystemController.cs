@@ -64,8 +64,6 @@ namespace GameCore.RewardSystem
                 StartCoroutine(ShowRewardSequantially());
             }
             
-            
-
             //save the rewards to the player's save data
             SaveSystemManager.Instance.SaveGame();
         }
@@ -74,6 +72,11 @@ namespace GameCore.RewardSystem
         {
             //initialize the preset amount of rewardUI
             rewardUIList = content.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
+
+            foreach (var rewardUI in rewardUIList)
+            {
+                rewardUI.gameObject.SetActive(false);
+            }
         }
         
         private IEnumerator ShowRewardSequantially()
@@ -195,7 +198,7 @@ namespace GameCore.RewardSystem
             }
         
             //update the player's stats'
-            data.upgradedPlayerStats.health += playerRewardStats.health;
+            data.upgradedPlayerStats.maxHealth += playerRewardStats.maxHealth;
             data.upgradedPlayerStats.damage += playerRewardStats.damage;
             data.upgradedPlayerStats.cardSlots += playerRewardStats.cardSlots;
             data.upgradedPlayerStats.energy += playerRewardStats.energy;

@@ -11,7 +11,7 @@ namespace PlayerCore.HumanPlayer
         {
             base.LoadComponents();
             
-            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.AIPlayer, currentStats);
+            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.AIPlayer, finalStats);
         }
 
         #region SaveSystem Override
@@ -23,9 +23,9 @@ namespace PlayerCore.HumanPlayer
             baseStatsConfig = humanPlayerData.baseStatsConfig;
         
             //load stats upgrade from save file
-            upgradeStats = new PlayerStats
+            progressionStats = new PlayerStats
             {
-                health = data.upgradedPlayerStats.health,
+                maxHealth = data.upgradedPlayerStats.maxHealth,
                 damage = data.upgradedPlayerStats.damage,
                 cardSlots = data.upgradedPlayerStats.cardSlots,
                 energy = data.upgradedPlayerStats.energy

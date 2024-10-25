@@ -1,3 +1,4 @@
+using System;
 using PlayerCore.Upgrades.UpgradeFactory;
 using UnityEngine;
 
@@ -31,34 +32,31 @@ namespace PlayerCore.Upgrades.Base
             return upgradeType.GetHashCode();
         }
 
-        public virtual void ApplyAtStartOfGame(IPlayer attachedPlayer, IPlayer enemyPlayer)
-        {
-            Debug.Log($"Applying Stat Effect of {this.GetType()}, {attachedPlayer}, {enemyPlayer}");
-        }
+        public abstract (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats, PlayerStats enemyCardStats);
         
-        public virtual void ApplyPassiveEffect(IPlayer attachedPlayer, IPlayer enemyPlayer)
+        public virtual void ApplyPassiveEffect(Player attachedPlayer, Player enemyPlayer)
         {
             Debug.Log($"Applying Passive Effect of {this.GetType()}, {attachedPlayer}, {enemyPlayer}");
         }
 
-        public virtual void ApplyActivatableEffect(IPlayer attachedPlayer, IPlayer enemyPlayer)
+        public virtual void ApplyActivatableEffect(Player attachedPlayer, Player enemyPlayer)
         {
             Debug.Log($"Activating Effect of {this.GetType()}");
         }
 
-        public virtual void OnWinRound(IPlayer attachedPlayer, IPlayer enemyPlayer)
+        public virtual void OnWinRound(Player attachedPlayer, Player enemyPlayer)
         {
             Debug.Log($"Applying OnWin Effect of {this.GetType()}");
 
         }
 
-        public virtual void OnLoseRound(IPlayer attachedPlayer, IPlayer enemyPlayer)
+        public virtual void OnLoseRound(Player attachedPlayer, Player enemyPlayer)
         {
             Debug.Log($"Applying OnLose Effect of {this.GetType()}");
 
         }
 
-        public virtual void OnDrawRound(IPlayer attachedPlayer, IPlayer enemyPlayer)
+        public virtual void OnDrawRound(Player attachedPlayer, Player enemyPlayer)
         {
             Debug.Log($"Applying OnDraw Effect of {this.GetType()}");
 

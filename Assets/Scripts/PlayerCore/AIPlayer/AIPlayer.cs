@@ -16,7 +16,7 @@ namespace PlayerCore.AIPlayer
         {
             base.LoadComponents();
 
-            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.humanPlayer, currentStats);
+            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.humanPlayer, finalStats);
             aiModuleConfig.InitializeAIConfig(ChoiceComponent);
         }
 
