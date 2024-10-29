@@ -15,5 +15,7 @@ MonoBehaviour:
   upgradeSprite: {fileID: 21300000, guid: 31796bc7324d0a044b61b6febbb1e23a, type: 3}
   upgradeName: Death
   upgradeDescription: Death things
-  isActivatable: 0
+  isPriority: 0
   upgradeType: 1
+  damageDealtIncrease: 1
+  damageTakenIncrease: 1

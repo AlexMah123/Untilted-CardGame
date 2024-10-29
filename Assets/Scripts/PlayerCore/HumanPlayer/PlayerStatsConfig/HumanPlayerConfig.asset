@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07472458ae83bed49946783e33338b0a, type: 3}
   m_Name: HumanPlayerConfig
   m_EditorClassIdentifier: 
-  currentHealth: 0
   maxHealth: 3
-  damage: 1
+  attack: 1
+  damageTaken: 0
   cardSlots: 2
   energy: 0

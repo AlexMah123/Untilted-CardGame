@@ -1538,7 +1538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f87b68954f93a4a945d781f332240e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CardUIContainer: []
+  cardUIContainer: []
   spawnContainer: {fileID: 1289285580}
   totalAngleOfHand: 0
   cardOffsetYDuringRotation: 0
@@ -2822,16 +2822,19 @@ MonoBehaviour:
   progressionStats:
     maxHealth: 0
     damage: 0
+    damageTaken: 0
     cardSlots: 0
     energy: 0
   cardStats:
     maxHealth: 0
     damage: 0
+    damageTaken: 0
     cardSlots: 0
     energy: 0
   finalStats:
     maxHealth: 0
     damage: 0
+    damageTaken: 0
     cardSlots: 0
     energy: 0
   aiModuleConfig: {fileID: 11400000, guid: 827fa0f581f37bf4680a4e6a7df3e03f, type: 2}
@@ -2875,10 +2878,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c3d11184ed0ee046b3d85ec75603e29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyPlayer: {fileID: 1824892700}
+  attachedPlayer: {fileID: 0}
   maxLimitOfLoadout: 0
   cardUpgradeList: []
-  attachedPlayer: {fileID: 0}
-  enemyPlayer: {fileID: 0}
 --- !u!114 &1344209826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2904,7 +2907,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a999be3307d9c5a499e59639d655157d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 0
+  damageDealt: 0
+  damageTaken: 0
 --- !u!114 &1344209828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3432,7 +3436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1824892700}
-  AIPlayer: {fileID: 1344209820}
+  aiPlayer: {fileID: 1344209820}
   rewardTransitionType: 0
 --- !u!1 &1671567551
 GameObject:
@@ -3555,7 +3559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f87b68954f93a4a945d781f332240e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CardUIContainer: []
+  cardUIContainer: []
   spawnContainer: {fileID: 154998996}
   totalAngleOfHand: 0
   cardOffsetYDuringRotation: 0
@@ -3616,16 +3620,19 @@ MonoBehaviour:
   progressionStats:
     maxHealth: 0
     damage: 0
+    damageTaken: 0
     cardSlots: 0
     energy: 0
   cardStats:
     maxHealth: 0
     damage: 0
+    damageTaken: 0
     cardSlots: 0
     energy: 0
   finalStats:
     maxHealth: 0
     damage: 0
+    damageTaken: 0
     cardSlots: 0
     energy: 0
 --- !u!4 &1824892702
@@ -3668,10 +3675,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c3d11184ed0ee046b3d85ec75603e29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyPlayer: {fileID: 1344209820}
+  attachedPlayer: {fileID: 0}
   maxLimitOfLoadout: 0
   cardUpgradeList: []
-  attachedPlayer: {fileID: 0}
-  enemyPlayer: {fileID: 0}
 --- !u!114 &1824892706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3697,7 +3704,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a999be3307d9c5a499e59639d655157d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 0
+  damageDealt: 0
+  damageTaken: 0
 --- !u!114 &1824892708
 MonoBehaviour:
   m_ObjectHideFlags: 0

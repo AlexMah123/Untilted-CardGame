@@ -6,43 +6,73 @@ namespace PlayerCore.PlayerComponents
     public class DamageComponent : MonoBehaviour
     {
         [Header("Runtime Value")] 
-        public int damageAmount;
+        public int attack;
+
+        public int damageTaken;
 
         //declaration of events
-        public event Action<int> OnDamageModified;
+        public event Action<int> OnAttackModified;
+        public event Action<int> OnDamageTakenModified;
 
         public void InitializeComponent(PlayerStats referencedStats)
         {
-            damageAmount = referencedStats.damage;
-
-            OnDamageModified?.Invoke(damageAmount);
+            attack = referencedStats.attack;
+            damageTaken = referencedStats.damageTaken;
+            
+            OnAttackModified?.Invoke(attack);
+            OnDamageTakenModified?.Invoke(damageTaken);
         }
 
-        public void IncreaseDamage(int value)
+        public void IncreaseAttack(int value)
         {
-            ModifyDamageAmount(value);
+            ModifyAttack(value);
         }
 
-        public void DecreaseDamage(int value)
+        public void DecreaseAttack(int value)
         {
-            ModifyDamageAmount(-1 * value);
+            ModifyAttack(-1 * value);
+        }
+        
+        public void IncreaseDamageTaken(int value)
+        {
+            ModifyDamageTaken(value);
         }
 
-        public void DealDamage(Player target, int amount)
+        public void DecreaseDamageTaken(int value)
         {
-            target.HealthComponent.DecreaseHealth(amount);
+            ModifyDamageTaken(-1 * value);
+        }
+        
+        
+        public void DealDamage(Player target, int attackAmount)
+        {
+            //the amount + how much more damage target takes.
+            int totalDamage = attackAmount + target.DamageComponent.damageTaken;
+
+            if (totalDamage > 0)
+            {
+                target.HealthComponent.DecreaseHealth(totalDamage);
+            }
         }
 
         #region Internal Function
-
-        private void ModifyDamageAmount(int value)
+        private void ModifyAttack(int value)
         {
-            damageAmount += value;
-
+            attack += value;
+            attack = Mathf.Min(attack, 0);
+            
             //#TODO: broadcast event to total stats display
-            OnDamageModified?.Invoke(damageAmount);
+            OnAttackModified?.Invoke(attack);
         }
-
+        
+        private void ModifyDamageTaken(int value)
+        {
+            damageTaken += value;
+            damageTaken = Mathf.Min(damageTaken, 0);
+            
+            //#TODO: broadcast event to total stats display
+            OnAttackModified?.Invoke(damageTaken);
+        }
         #endregion
     }
 }

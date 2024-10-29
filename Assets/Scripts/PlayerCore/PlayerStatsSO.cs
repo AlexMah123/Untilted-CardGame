@@ -8,14 +8,16 @@ namespace PlayerCore
     {
         [Header("Stats Config")] 
         public int maxHealth;
-        public int damage;
+        public int attack;
+        public int damageTaken;
         public int cardSlots;
         public int energy;
 
-        public PlayerStatsSO(int _maxHealth, int _damage, int _cardSlots, int _energy)
+        public PlayerStatsSO(int _maxHealth, int _attack, int _damageTaken, int _cardSlots, int _energy)
         {
             maxHealth = _maxHealth;
-            damage = _damage;
+            attack = _attack;
+            damageTaken = _damageTaken;
             cardSlots = _cardSlots;
             energy = _energy;
         }
@@ -23,7 +25,8 @@ namespace PlayerCore
         public PlayerStatsSO()
         {
             maxHealth = 0;
-            damage = 0;
+            attack = 0;
+            damageTaken = 0;
             cardSlots = 0;
             energy = 0;
         }
@@ -32,15 +35,18 @@ namespace PlayerCore
     [Serializable]
     public class PlayerStats
     {
-        [Header("Stats Config")] public int maxHealth;
-        public int damage;
+        [Header("Stats Config")] 
+        public int maxHealth;
+        public int attack;
+        public int damageTaken;
         public int cardSlots;
         public int energy;
 
-        public PlayerStats(int _maxHealth, int _damage, int _cardSlots, int _energy)
+        public PlayerStats(int _maxHealth, int _attack, int _damageTaken, int _cardSlots, int _energy)
         {
             maxHealth = _maxHealth;
-            damage = _damage;
+            attack = _attack;
+            damageTaken = _damageTaken;
             cardSlots = _cardSlots;
             energy = _energy;
         }
@@ -48,7 +54,8 @@ namespace PlayerCore
         public PlayerStats()
         {
             maxHealth = 0;
-            damage = 0;
+            attack = 0;
+            damageTaken = 0;
             cardSlots = 0;
             energy = 0;
         }

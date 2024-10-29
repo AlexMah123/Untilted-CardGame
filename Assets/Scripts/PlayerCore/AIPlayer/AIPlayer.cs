@@ -12,7 +12,7 @@ namespace PlayerCore.AIPlayer
     {
         public AIDecision aiModuleConfig;
 
-        public override void LoadComponents()
+        protected override void LoadComponents()
         {
             base.LoadComponents();
 

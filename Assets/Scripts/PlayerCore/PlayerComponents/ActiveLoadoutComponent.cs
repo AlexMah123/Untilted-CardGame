@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameCore;
 using GameCore.LoadoutSelection;
 using PlayerCore.Upgrades.Base;
 using PlayerCore.Upgrades.UpgradeFactory;
@@ -9,13 +10,15 @@ namespace PlayerCore.PlayerComponents
 {
     public class ActiveLoadoutComponent : MonoBehaviour
     {
-        [Header("Runtime Value")] public int maxLimitOfLoadout;
-        public List<UpgradeDefinitionSO> cardUpgradeList = new();
-
+        //Injected Dependency
+        [HideInInspector] public Player enemyPlayer;
         [HideInInspector] public Player attachedPlayer;
 
-        public Player enemyPlayer;
+        [Header("Runtime Value")] 
+        public int maxLimitOfLoadout;
+        public List<UpgradeDefinitionSO> cardUpgradeList = new();
 
+        
         public event Action<List<UpgradeDefinitionSO>> OnLoadoutChanged;
 
         private void Start()
@@ -31,6 +34,17 @@ namespace PlayerCore.PlayerComponents
             attachedPlayer = refPlayer;
             enemyPlayer = enemyRef;
             maxLimitOfLoadout = referencedStats.cardSlots;
+        }
+
+        public GameResult ApplyResultAlteringEffect(GameResult initialResult)
+        {
+            GameResult alteredResult = initialResult;
+            foreach (UpgradeDefinitionSO upgrade in cardUpgradeList)
+            {
+                alteredResult = upgrade.ApplyResultAlteringEffect(initialResult, attachedPlayer, enemyPlayer);
+            }
+            
+            return alteredResult;
         }
 
         public void HandleActivateSkill(UpgradeDefinitionSO info)
@@ -112,6 +126,8 @@ namespace PlayerCore.PlayerComponents
             cardUpgradeList.Remove(removedUpgrade);
             OnLoadoutChanged?.Invoke(cardUpgradeList);
         }
+        
+        
 
         #region Debug
 

@@ -3,7 +3,7 @@ using PlayerCore.PlayerComponents;
 
 public static class GameUtilsLibrary
 {
-    public static GameResult GetGameResult(GameChoice humanPlayerChoice, GameChoice aiPlayerChoice)
+    public static GameResult GetPlayerGameResult(GameChoice humanPlayerChoice, GameChoice aiPlayerChoice)
     {
         var result = GameResult.None;
 
@@ -23,6 +23,19 @@ public static class GameUtilsLibrary
         }
 
         return result;
+    }
+
+    public static GameResult ConvertToEnemyResult(GameResult playerResult)
+    {
+        switch (playerResult)
+        {
+            case GameResult.Win: return GameResult.Lose;
+            case GameResult.Lose: return GameResult.Win;
+            case GameResult.Draw: return GameResult.Draw;
+            
+            //this should not happen
+            default: return GameResult.None;
+        }
     }
 
     public static T GetRandomEnum<T>()

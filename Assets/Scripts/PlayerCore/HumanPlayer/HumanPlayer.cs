@@ -8,11 +8,11 @@ namespace PlayerCore.HumanPlayer
 {
     public class HumanPlayer : Player
     {
-        public override void LoadComponents()
+        protected override void LoadComponents()
         {
             base.LoadComponents();
 
-            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.AIPlayer, finalStats);
+            ActiveLoadoutComponent.InitializeComponent(this, GameManager.Instance.aiPlayer, finalStats);
         }
 
         #region SaveSystem Override
@@ -28,7 +28,7 @@ namespace PlayerCore.HumanPlayer
             progressionStats = new PlayerStats
             {
                 maxHealth = data.upgradedPlayerStats.maxHealth,
-                damage = data.upgradedPlayerStats.damage,
+                attack = data.upgradedPlayerStats.attack,
                 cardSlots = data.upgradedPlayerStats.cardSlots,
                 energy = data.upgradedPlayerStats.energy
             };

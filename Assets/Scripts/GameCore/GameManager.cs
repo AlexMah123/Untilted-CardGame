@@ -30,7 +30,7 @@ namespace GameCore
         
         [Header("Player Data")]
         public Player player;
-        public AIPlayer AIPlayer;
+        public AIPlayer aiPlayer;
 
         [Header("GameManager Config")]
         [SerializeField] Transition rewardTransitionType;
@@ -142,23 +142,62 @@ namespace GameCore
         {
             //#DEBUG
             Debug.Log($"Human Player has selected {player.GetChoice()}");
-            Debug.Log($"AI Player has selected {AIPlayer.GetChoice()}");
+            Debug.Log($"AI Player has selected {aiPlayer.GetChoice()}");
             
-            return (player.GetChoice(), AIPlayer.GetChoice());
+            return (player.GetChoice(), aiPlayer.GetChoice());
         }
 
-        public void EvaluateResults(GameResult roundResult)
+        public bool EvaluateResults(ref GameResult result)
+        {
+            GameResult cachedResult = result;
+            
+            //check if there are any altering effects for player first
+            cachedResult = player.ActiveLoadoutComponent.ApplyResultAlteringEffect(cachedResult);
+
+            //convert relative to the enemy. (if player win, aiPlayer loses, etc)
+            GameResult aiResult = GameUtilsLibrary.ConvertToEnemyResult(cachedResult);
+            cachedResult = aiPlayer.ActiveLoadoutComponent.ApplyResultAlteringEffect(cachedResult);
+
+            ApplyRoundEffects(cachedResult);
+
+            //default return false, the results is the same
+            return cachedResult != result || aiResult != result;
+        }
+
+        private void ApplyRoundEffects(GameResult cachedResult)
+        {
+            //result is relative to the player (player win,lose,draw)
+            switch (cachedResult)
+            {
+                case GameResult.Win: // player win, aiplayer lose
+                    player.ActiveLoadoutComponent.ApplyOnWinEffects();
+                    aiPlayer.ActiveLoadoutComponent.ApplyOnLoseEffect();
+                    break;
+                    
+                case GameResult.Lose: // player lose, aiplayer win
+                    player.ActiveLoadoutComponent.ApplyOnLoseEffect();
+                    aiPlayer.ActiveLoadoutComponent.ApplyOnWinEffects();
+                    break;
+                    
+                case GameResult.Draw: // both player draw
+                    player.ActiveLoadoutComponent.ApplyOnDrawEffect();
+                    aiPlayer.ActiveLoadoutComponent.ApplyOnDrawEffect();
+                    break;
+            }
+        }
+
+        public void FinalizeResults(GameResult roundResult)
         {
             switch (roundResult)
             {
                 case GameResult.Win:
                     //human player deal dmg to opposing player
-                    player.DamageComponent.DealDamage(AIPlayer, player.DamageComponent.damageAmount);
+                    player.DamageComponent.DealDamage(aiPlayer, player.DamageComponent.attack);
                     break;
 
                 case GameResult.Lose:
                     //aiPlayer player deal dmg to human player
-                    AIPlayer.DamageComponent.DealDamage(player, AIPlayer.DamageComponent.damageAmount);
+                    aiPlayer.DamageComponent.DealDamage(player, aiPlayer.DamageComponent.attack);
                     break;
 
                 case GameResult.Draw:
@@ -261,9 +300,9 @@ namespace GameCore
                 player.HealthComponent.OnHealthZero += HandleOnHumanPlayerLose;
             }
 
-            if(AIPlayer)
+            if(aiPlayer)
             {
-                AIPlayer.HealthComponent.OnHealthZero += HandleOnAIPlayerLose;
+                aiPlayer.HealthComponent.OnHealthZero += HandleOnAIPlayerLose;
             }
         }
 
@@ -274,9 +313,9 @@ namespace GameCore
                 player.HealthComponent.OnHealthZero -= HandleOnHumanPlayerLose;
             }
 
-            if (AIPlayer)
+            if (aiPlayer)
             {
-                AIPlayer.HealthComponent.OnHealthZero -= HandleOnAIPlayerLose;
+                aiPlayer.HealthComponent.OnHealthZero -= HandleOnAIPlayerLose;
             }
         }
 

@@ -1,4 +1,5 @@
 using System;
+using GameCore;
 using PlayerCore.Upgrades.UpgradeFactory;
 using UnityEngine;
 
@@ -13,9 +14,10 @@ namespace PlayerCore.Upgrades.Base
         [Multiline] public string upgradeDescription;
 
         [Header("Gameplay Configs")] 
-        public bool isActivatable;
+        public bool isPriority = false;
         public UpgradeType upgradeType;
 
+        #region Overrides
         public override bool Equals(object obj)
         {
             if (obj is UpgradeDefinitionSO other)
@@ -30,7 +32,16 @@ namespace PlayerCore.Upgrades.Base
         {
             return upgradeType.GetHashCode();
         }
+        #endregion
 
+        //used if you need to apply an effect before win,lose,draw
+        public virtual GameResult ApplyResultAlteringEffect(GameResult initialResult, Player attachedPlayer, Player enemyPlayer)
+        {
+            return initialResult;
+        }
+        
+        #region CardUpgrade Effects
+        //return nothing if there is no stat upgrade
         public abstract (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats,
             PlayerStats enemyCardStats);
 
@@ -58,5 +69,6 @@ namespace PlayerCore.Upgrades.Base
         {
             Debug.Log($"Applying OnDraw Effect of {this.GetType()}");
         }
+        #endregion
     }
 }

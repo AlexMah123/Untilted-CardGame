@@ -13,7 +13,7 @@ namespace GameCore.TurnSystem
         public static TurnSystemManager Instance;
 
         private Player Player => GameManager.Instance.player;
-        private AIPlayer AIPlayer => GameManager.Instance.AIPlayer;
+        private AIPlayer AIPlayer => GameManager.Instance.aiPlayer;
 
         [Header("Runtime values")] 
         public Phase CurrentPhase;

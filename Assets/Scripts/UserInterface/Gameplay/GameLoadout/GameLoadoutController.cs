@@ -22,7 +22,7 @@ namespace UserInterface.Gameplay.GameLoadout
         List<LoadoutCardUI> aiPlayerUpgrades;
 
         private Player Player => GameManager.Instance.player;
-        private Player AIPlayer => GameManager.Instance.AIPlayer;
+        private Player AIPlayer => GameManager.Instance.aiPlayer;
 
         private void OnEnable()
         {

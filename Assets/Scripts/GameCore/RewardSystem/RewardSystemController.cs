@@ -201,7 +201,7 @@ namespace GameCore.RewardSystem
 
             //update the player's stats'
             data.upgradedPlayerStats.maxHealth += playerRewardStats.maxHealth;
-            data.upgradedPlayerStats.damage += playerRewardStats.damage;
+            data.upgradedPlayerStats.attack += playerRewardStats.attack;
             data.upgradedPlayerStats.cardSlots += playerRewardStats.cardSlots;
             data.upgradedPlayerStats.energy += playerRewardStats.energy;
         }
