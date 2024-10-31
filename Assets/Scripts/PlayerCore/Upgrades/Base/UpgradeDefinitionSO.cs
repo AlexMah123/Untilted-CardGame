@@ -14,7 +14,7 @@ namespace PlayerCore.Upgrades.Base
         [Multiline] public string upgradeDescription;
 
         [Header("Gameplay Configs")] 
-        public bool isPriority = false;
+        public bool isInEffect = false;
         public UpgradeType upgradeType;
 
         #region Overrides
@@ -32,6 +32,11 @@ namespace PlayerCore.Upgrades.Base
         {
             return upgradeType.GetHashCode();
         }
+
+        public virtual void Initialize()
+        {
+            
+        }
         #endregion
 
         //used if you need to apply an effect before win,lose,draw
@@ -43,31 +48,31 @@ namespace PlayerCore.Upgrades.Base
         #region CardUpgrade Effects
         //return nothing if there is no stat upgrade
         public abstract (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats,
-            PlayerStats enemyCardStats);
+            PlayerStats enemyCardStats, int currentTurnCount);
 
-        public virtual void ApplyPassiveEffect(Player attachedPlayer, Player enemyPlayer)
+        public virtual void ApplyPassiveEffect(Player attachedPlayer, Player enemyPlayer, int currentTurnCount)
         {
-            Debug.Log($"Applying Passive Effect of {this.GetType()}, {attachedPlayer}, {enemyPlayer}");
+            //Debug.Log($"Applying Passive Effect of {this.GetType()}, {attachedPlayer}, {enemyPlayer}");
         }
 
         public virtual void ApplyActivatableEffect(Player attachedPlayer, Player enemyPlayer)
         {
-            Debug.Log($"Activating Effect of {this.GetType()}");
+            //Debug.Log($"Activating Effect of {this.GetType()}");
         }
 
         public virtual void OnWinRound(Player attachedPlayer, Player enemyPlayer)
         {
-            Debug.Log($"Applying OnWin Effect of {this.GetType()}");
+            //Debug.Log($"Applying OnWin Effect of {this.GetType()}");
         }
 
         public virtual void OnLoseRound(Player attachedPlayer, Player enemyPlayer)
         {
-            Debug.Log($"Applying OnLose Effect of {this.GetType()}");
+            //Debug.Log($"Applying OnLose Effect of {this.GetType()}");
         }
 
         public virtual void OnDrawRound(Player attachedPlayer, Player enemyPlayer)
         {
-            Debug.Log($"Applying OnDraw Effect of {this.GetType()}");
+            //Debug.Log($"Applying OnDraw Effect of {this.GetType()}");
         }
         #endregion
     }

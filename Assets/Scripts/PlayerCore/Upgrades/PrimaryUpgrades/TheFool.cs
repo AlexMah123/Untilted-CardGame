@@ -10,7 +10,7 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
         [SerializeField] private int healthIncrease = 2;
 
         public override (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats,
-            PlayerStats enemyCardStats)
+            PlayerStats enemyCardStats, int currentTurnCount)
         {
             playerCardStats.maxHealth += healthIncrease;
 

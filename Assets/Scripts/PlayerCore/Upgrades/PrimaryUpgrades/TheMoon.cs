@@ -7,35 +7,17 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
     [CreateAssetMenu(fileName = "TheMoon", menuName = "Upgrades/UpgradeDefiniton/TheMoon")]
     public class TheMoon : UpgradeDefinitionSO
     {
+        [SerializeField] private int attackIncrease = 1;
+        
         public override (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats,
-            PlayerStats enemyCardStats)
+            PlayerStats enemyCardStats, int currentTurnCount)
         {
+            if (currentTurnCount % 2 == 0)
+            {
+                playerCardStats.attack += attackIncrease;
+            }
+            
             return (playerCardStats, enemyCardStats);
-        }
-
-        public override void ApplyPassiveEffect(Player attachedPlayer, Player enemyPlayer)
-        {
-            base.ApplyPassiveEffect(attachedPlayer, enemyPlayer);
-        }
-
-        public override void ApplyActivatableEffect(Player attachedPlayer, Player enemyPlayer)
-        {
-            base.ApplyActivatableEffect(attachedPlayer, enemyPlayer);
-        }
-
-        public override void OnWinRound(Player attachedPlayer, Player enemyPlayer)
-        {
-            base.OnWinRound(attachedPlayer, enemyPlayer);
-        }
-
-        public override void OnLoseRound(Player attachedPlayer, Player enemyPlayer)
-        {
-            base.OnLoseRound(attachedPlayer, enemyPlayer);
-        }
-
-        public override void OnDrawRound(Player attachedPlayer, Player enemyPlayer)
-        {
-            base.OnDrawRound(attachedPlayer, enemyPlayer);
         }
     }
 }

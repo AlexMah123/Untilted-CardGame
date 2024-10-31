@@ -11,7 +11,7 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
         [SerializeField] private int enemyHeal = 1;
 
         public override (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats,
-            PlayerStats enemyCardStats)
+            PlayerStats enemyCardStats, int currentTurnCount)
         {
             return (playerCardStats, enemyCardStats);
         }

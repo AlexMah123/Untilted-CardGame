@@ -7,35 +7,33 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
     [CreateAssetMenu(fileName = "Justice", menuName = "Upgrades/UpgradeDefiniton/Justice")]
     public class Justice : UpgradeDefinitionSO
     {
+        private bool hasBeenApplied = false;
+
+        public override void Initialize()
+        {
+            hasBeenApplied = false;
+        }
+
         public override (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats,
-            PlayerStats enemyCardStats)
+            PlayerStats enemyCardStats, int currentTurnCount)
         {
             return (playerCardStats, enemyCardStats);
         }
 
-        public override void ApplyPassiveEffect(Player attachedPlayer, Player enemyPlayer)
+        public override void ApplyPassiveEffect(Player attachedPlayer, Player enemyPlayer, int currentTurnCount)
         {
-            base.ApplyPassiveEffect(attachedPlayer, enemyPlayer);
-        }
+            if (hasBeenApplied) return;
+            
+            //total players health, rounded up, split health
+            var attachedPlayerHealth = attachedPlayer.HealthComponent.currentHealth;
+            var enemyHealth = enemyPlayer.HealthComponent.currentHealth;
+            var splitHealth = Mathf.CeilToInt((attachedPlayerHealth + enemyHealth) / 2f);
+                
+            attachedPlayer.HealthComponent.SetHealth(splitHealth);
+            enemyPlayer.HealthComponent.SetHealth(splitHealth);
 
-        public override void ApplyActivatableEffect(Player attachedPlayer, Player enemyPlayer)
-        {
-            base.ApplyActivatableEffect(attachedPlayer, enemyPlayer);
-        }
-
-        public override void OnWinRound(Player attachedPlayer, Player enemyPlayer)
-        {
-            base.OnWinRound(attachedPlayer, enemyPlayer);
-        }
-
-        public override void OnLoseRound(Player attachedPlayer, Player enemyPlayer)
-        {
-            base.OnLoseRound(attachedPlayer, enemyPlayer);
-        }
-
-        public override void OnDrawRound(Player attachedPlayer, Player enemyPlayer)
-        {
-            base.OnDrawRound(attachedPlayer, enemyPlayer);
+            Debug.Log($"Justice activated: {attachedPlayerHealth} | {enemyHealth} | {splitHealth}");
+            hasBeenApplied = true;
         }
     }
 }

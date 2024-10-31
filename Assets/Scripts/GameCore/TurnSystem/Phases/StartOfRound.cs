@@ -11,14 +11,17 @@ namespace GameCore.TurnSystem.Phases
         {
             Debug.Log("Currently in StartOfRound");
             Controller.turnCount++;
+            
+            //check passive
+            player.ActiveLoadoutComponent.ApplyPassiveEffects(Controller.turnCount);
+            aiPlayer.ActiveLoadoutComponent.ApplyPassiveEffects(Controller.turnCount);
+            
+            //update the current components if there are stat effects
+            player.UpdateCurrentStats(Controller.turnCount);
+            aiPlayer.UpdateCurrentStats(Controller.turnCount);
+            
 
-            //load/update the current components
-            player.UpdateCurrentStats();
-            aiPlayer.UpdateCurrentStats();
-
-            //check passive/stat effects below here.
-
-
+            
             Controller.ChangePhase(Controller.PlayerPhase);
         }
 

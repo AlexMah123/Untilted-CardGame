@@ -34,6 +34,12 @@ namespace PlayerCore.PlayerComponents
             attachedPlayer = refPlayer;
             enemyPlayer = enemyRef;
             maxLimitOfLoadout = referencedStats.cardSlots;
+
+            //used for resetting any values for upgrades
+            foreach (UpgradeDefinitionSO upgrade in cardUpgradeList)
+            {
+                upgrade.Initialize();
+            }
         }
 
         public GameResult ApplyResultAlteringEffect(GameResult initialResult)
@@ -54,15 +60,21 @@ namespace PlayerCore.PlayerComponents
                 info.ApplyActivatableEffect(attachedPlayer, enemyPlayer);
             }
         }
+        
+        public PlayerStats InitializeStatUpgrade(PlayerStats cardStats)
+        {
+            //assume this is turn 1, only used for player to self Initialize
+            return ApplyStatUpgrade(cardStats, 1);
+        }
 
-        public PlayerStats ApplyStatUpgrade(PlayerStats cardStats)
+        public PlayerStats ApplyStatUpgrade(PlayerStats cardStats, int currentTurnCount)
         {
             PlayerStats tempPlayerStats = new();
             PlayerStats tempEnemyStats = new();
 
             foreach (UpgradeDefinitionSO upgrade in cardUpgradeList)
             {
-                upgrade.ApplyStatUpgrade(tempPlayerStats, tempEnemyStats);
+                upgrade.ApplyStatUpgrade(tempPlayerStats, tempEnemyStats, currentTurnCount);
             }
 
             cardStats = tempPlayerStats;
@@ -71,11 +83,11 @@ namespace PlayerCore.PlayerComponents
         }
 
         [ContextMenu("ActiveLoadout/Apply Passive Effect")]
-        public void ApplyPassiveEffects()
+        public void ApplyPassiveEffects(int currentTurnCount)
         {
             foreach (UpgradeDefinitionSO upgrade in cardUpgradeList)
             {
-                upgrade.ApplyPassiveEffect(attachedPlayer, enemyPlayer);
+                upgrade.ApplyPassiveEffect(attachedPlayer, enemyPlayer, currentTurnCount);
             }
         }
 
@@ -140,13 +152,13 @@ namespace PlayerCore.PlayerComponents
         [ContextMenu("Debug/Add DevilUpgrade to Player")]
         public void AddUpgradeToPlayer()
         {
-            AddUpgradeToLoadout(UpgradeType.TheDevil);
+            AddUpgradeToLoadout(UpgradeType.TheFool);
         }
 
         [ContextMenu("Debug/Remove DevilUpgrade to Player")]
         public void RemoveUpgradeFromPlayer()
         {
-            RemoveUpgradeFromLoadout(UpgradeType.TheDevil);
+            RemoveUpgradeFromLoadout(UpgradeType.TheFool);
         }
 
         #endregion

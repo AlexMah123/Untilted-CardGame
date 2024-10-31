@@ -32,7 +32,7 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
         }
 
         public override (PlayerStats playerstats, PlayerStats enemyStats) ApplyStatUpgrade(PlayerStats playerCardStats,
-            PlayerStats enemyCardStats)
+            PlayerStats enemyCardStats, int currentTurnCount)
         {
             return (playerCardStats, enemyCardStats);
         }

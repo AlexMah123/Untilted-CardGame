@@ -55,11 +55,8 @@ namespace PlayerCore
         {
             InitializeStartingStats();
 
-            //Inject values
+            //set default
             choiceComponent.currentChoice = GameChoice.Rock;
-            healthComponent.InitializeComponent(finalStats);
-            damageComponent.InitializeComponent(finalStats);
-            energyComponent.InitializeComponent(finalStats);
 
             //active component is overriden to specify
         }
@@ -96,20 +93,26 @@ namespace PlayerCore
         }
         #endregion
         
+        //used for self initialization for player
         private void InitializeStartingStats()
         {
-            cardStats = ActiveLoadoutComponent.ApplyStatUpgrade(cardStats);
+            cardStats = ActiveLoadoutComponent.InitializeStatUpgrade(cardStats);
 
             finalStats.maxHealth = baseStatsConfig.maxHealth + progressionStats.maxHealth + cardStats.maxHealth;
             finalStats.attack = baseStatsConfig.attack + progressionStats.attack + cardStats.attack;
             finalStats.damageTaken = baseStatsConfig.damageTaken + progressionStats.damageTaken + cardStats.damageTaken;
             finalStats.cardSlots = baseStatsConfig.cardSlots + progressionStats.cardSlots + cardStats.cardSlots;
             finalStats.energy = baseStatsConfig.energy + progressionStats.energy + cardStats.energy;
+            
+            //Inject values
+            healthComponent.InitializeComponent(finalStats, cardStats.maxHealth);
+            damageComponent.InitializeComponent(finalStats);
+            energyComponent.InitializeComponent(finalStats);
         }
 
-        public void UpdateCurrentStats()
+        public void UpdateCurrentStats(int currentTurnCount)
         {
-            cardStats = ActiveLoadoutComponent.ApplyStatUpgrade(cardStats);
+            cardStats = ActiveLoadoutComponent.ApplyStatUpgrade(cardStats, currentTurnCount);
 
             finalStats.maxHealth = baseStatsConfig.maxHealth + progressionStats.maxHealth + cardStats.maxHealth;
             finalStats.attack = baseStatsConfig.attack + progressionStats.attack + cardStats.attack;
@@ -118,7 +121,7 @@ namespace PlayerCore
             finalStats.energy = baseStatsConfig.energy + progressionStats.energy + cardStats.energy;
 
             //update the components
-            healthComponent.UpdateComponent(finalStats);
+            healthComponent.UpdateComponent(finalStats, cardStats.maxHealth);
             damageComponent.InitializeComponent(finalStats);
             energyComponent.InitializeComponent(finalStats);
         }

@@ -6,29 +6,33 @@ namespace PlayerCore.PlayerComponents
     public class HealthComponent : MonoBehaviour
     {
         [Header("Runtime Value")] 
-        public int maxHealth;
         public int currentHealth;
+
+        private int bonusHealth = 0;
 
         //declaration of events
         public event Action<int> OnHealthModified;
         public event Action OnHealthZero;
 
-        public void InitializeComponent(PlayerStats referencedStats)
+        public void InitializeComponent(PlayerStats referencedStats, int effectiveBonusHealth)
         {
-            maxHealth = referencedStats.maxHealth;
-            currentHealth = maxHealth;
-
-            currentHealth = Mathf.Min(currentHealth, maxHealth);
-
-            OnHealthModified?.Invoke(currentHealth);
+            bonusHealth = effectiveBonusHealth;
+            SetHealth(referencedStats.maxHealth);
         }
 
-        public void UpdateComponent(PlayerStats referencedStats)
+        public void UpdateComponent(PlayerStats referencedStats, int effectiveBonusHealth)
         {
-            maxHealth = referencedStats.maxHealth;
-            currentHealth = Mathf.Min(currentHealth, maxHealth);
-
-            OnHealthModified?.Invoke(currentHealth);
+            //check if the the bonus has changed
+            if (bonusHealth != effectiveBonusHealth)
+            {
+                int healthDelta = effectiveBonusHealth - bonusHealth;
+                
+                //update the difference
+                ModifyHealthAmount(healthDelta);
+                
+                //update bonusHealth
+                bonusHealth = effectiveBonusHealth;
+            }
         }
 
         public void SetHealth(int value)
@@ -52,7 +56,7 @@ namespace PlayerCore.PlayerComponents
         {
             currentHealth += value;
 
-            currentHealth = Mathf.Min(currentHealth, maxHealth);
+            currentHealth = Mathf.Max(currentHealth, 0);
 
             OnHealthModified?.Invoke(currentHealth);
 
