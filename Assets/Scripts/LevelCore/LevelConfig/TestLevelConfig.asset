@@ -22,7 +22,7 @@ MonoBehaviour:
     aiModule: {fileID: 11400000, guid: 827fa0f581f37bf4680a4e6a7df3e03f, type: 2}
     playerType: 1
     upgradesEquipped:
-    - {fileID: 11400000, guid: 18d759f3d231e29409cab080507da93f, type: 2}
+    - {fileID: 11400000, guid: 4715a156ca2274448a0fc521c1341d23, type: 2}
   levelName: Testing Scene
   levelImage: {fileID: 21300000, guid: 90d8f0b52ca666f489993cf0eb55f92e, type: 3}
   rewardList:

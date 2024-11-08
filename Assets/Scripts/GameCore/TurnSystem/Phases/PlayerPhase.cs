@@ -12,8 +12,6 @@ namespace GameCore.TurnSystem.Phases
         
         protected override void OnStart(Player player, AIPlayer aiPlayer)
         {
-            Debug.Log("Currently in PlayerPhase");
-
             //broadcast event, primarily binded to PlayerHandUIManager
             OnPlayerPhaseStart?.Invoke(player);
         }

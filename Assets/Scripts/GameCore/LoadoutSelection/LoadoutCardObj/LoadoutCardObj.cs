@@ -57,7 +57,7 @@ namespace GameCore.LoadoutSelection.LoadoutCardObj
 
         private void HandleOnSelected()
         {
-            if (Input.GetMouseButtonUp((int)MouseButton.Left))
+            if (Input.GetMouseButtonDown((int)MouseButton.Left))
             {
                 if (EventSystem.current.IsPointerOverGameObject() || IsLocked) return;
 
@@ -73,7 +73,7 @@ namespace GameCore.LoadoutSelection.LoadoutCardObj
 
         private void HandleOnInspected()
         {
-            if (Input.GetMouseButtonUp((int)MouseButton.Right))
+            if (Input.GetMouseButtonDown((int)MouseButton.Right))
             {
                 if (EventSystem.current.IsPointerOverGameObject()) return;
 

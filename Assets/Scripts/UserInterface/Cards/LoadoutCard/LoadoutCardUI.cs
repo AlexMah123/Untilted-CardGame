@@ -8,15 +8,18 @@ using UserInterface.InspectUpgradeUI;
 
 namespace UserInterface.Cards.LoadoutCard
 {
-    [RequireComponent(typeof(InspectComponent), typeof(Outline))]
+    [RequireComponent(typeof(InspectComponent))]
     public class LoadoutCardUI : CardUI, IPointerClickHandler
     {
         [Header("Loadout Card Config")] 
         public FLoadoutCardObj cardInfo;
         public bool shouldDisableOnClick = true;
+        
+        public Outline outlineComponent;
         public bool shouldDisplayOutline = true;
 
         public event Action<FLoadoutCardObj> OnCardClicked;
+
 
         public override void OnPointerEnter(PointerEventData eventData)
         {
@@ -24,7 +27,7 @@ namespace UserInterface.Cards.LoadoutCard
 
             if (shouldDisplayOutline)
             {
-                gameObject.GetComponent<Outline>().enabled = true;
+                outlineComponent.enabled = true;
             }
         }
 
@@ -34,7 +37,7 @@ namespace UserInterface.Cards.LoadoutCard
 
             if (shouldDisplayOutline)
             {
-                gameObject.GetComponent<Outline>().enabled = false;
+                outlineComponent.enabled = false;
             }
         }
 

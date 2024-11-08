@@ -12,8 +12,6 @@ namespace GameCore.TurnSystem.Phases
 
         protected override void OnStart(Player player, AIPlayer aiPlayer)
         {
-            Debug.Log("Currently in EnemyPhase");
-
             //#TODO: Play animations etc etc. do enemy decision
 
             //ai player update its Ai Module

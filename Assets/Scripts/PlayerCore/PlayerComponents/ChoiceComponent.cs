@@ -27,14 +27,22 @@ namespace PlayerCore.PlayerComponents
             { GameChoice.Scissor, true },
         };
 
+        public Dictionary<GameChoice, int> choicesSealed = new Dictionary<GameChoice, int>
+        {
+            { GameChoice.Rock, 0 },
+            { GameChoice.Paper, 0 },
+            { GameChoice.Scissor, 0 },
+        };
+
         public bool IsChoiceAvailable(GameChoice choice)
         {
             return choicesAvailable[choice];
         }
 
-        public void SealChoice(GameChoice choice)
+        public void SealChoice(GameChoice choice, int duration)
         {
             choicesAvailable[choice] = false;
+            choicesSealed[choice] = duration;
 
             //broadcast event to PlayerHandUIManager to update
             OnChoiceSealed?.Invoke();
@@ -43,12 +51,19 @@ namespace PlayerCore.PlayerComponents
         [ContextMenu("ChoiceComponent/ResetChoices")]
         public void ResetChoicesAvailable()
         {
-            var choicesKVP = choicesAvailable.ToList();
-            foreach (var choice in choicesKVP)
+            //loop through choicesSealed and decrement the duration.
+            var choicesSealedKVP = choicesSealed.ToList();
+            foreach (var choice in choicesSealedKVP)
             {
-                choicesAvailable[choice.Key] = true;
-            }
+                choicesSealed[choice.Key] = Mathf.Max(choicesSealed[choice.Key] - 1, 0);
 
+                //if the duration is finished, unseal it (set it to available/true)
+                if (choicesSealed[choice.Key] == 0)
+                {
+                    choicesAvailable[choice.Key] = true;
+                }
+            }
+            
             //broadcast event to PlayerHandUIManager to update
             OnChoiceSealed?.Invoke();
         }
@@ -64,19 +79,19 @@ namespace PlayerCore.PlayerComponents
         [ContextMenu("ChoiceComponent/SealRock")]
         public void SealRock()
         {
-            SealChoice(GameChoice.Rock);
+            SealChoice(GameChoice.Rock, 1);
         }
 
         [ContextMenu("ChoiceComponent/SealPaper")]
         public void SealPaper()
         {
-            SealChoice(GameChoice.Paper);
+            SealChoice(GameChoice.Paper, 1);
         }
 
         [ContextMenu("ChoiceComponent/SealScissor")]
         public void SealScissor()
         {
-            SealChoice(GameChoice.Scissor);
+            SealChoice(GameChoice.Scissor, 1);
         }
 #endif
     }

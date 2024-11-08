@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2894337446451464476}
   - component: {fileID: 8790829373188093239}
   - component: {fileID: 4980601937900164467}
-  - component: {fileID: 2207436469971284736}
   m_Layer: 5
   m_Name: ChoiceCardUI
   m_TagString: Untagged
@@ -102,21 +101,6 @@ MonoBehaviour:
   DisabledColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
   isSealed: 0
   isMoveable: 1
---- !u!114 &2207436469971284736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2130793156531348567}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 1, g: 0.8534628, b: 0, a: 1}
-  m_EffectDistance: {x: 15, y: -15}
-  m_UseGraphicAlpha: 0
 --- !u!1 &8038382709288226848
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,7 +27,7 @@ namespace UserInterface.Cards.Base
         //events
         public event Action OnCardInteractEnd;
 
-        private void Awake()
+        public virtual void Awake()
         {
             canvas = transform.root.GetComponent<Canvas>();
 

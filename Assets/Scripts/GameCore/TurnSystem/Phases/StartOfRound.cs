@@ -1,4 +1,5 @@
-﻿using GameCore.TurnSystem.Phases.Base;
+﻿using System;
+using GameCore.TurnSystem.Phases.Base;
 using PlayerCore;
 using PlayerCore.AIPlayer;
 using UnityEngine;
@@ -7,10 +8,12 @@ namespace GameCore.TurnSystem.Phases
 {
     public class StartOfRound : Phase
     {
+        public event Action<int> TurnCountChanged;
+
         protected override void OnStart(Player player, AIPlayer aiPlayer)
         {
-            Debug.Log("Currently in StartOfRound");
             Controller.turnCount++;
+            TurnCountChanged?.Invoke(Controller.turnCount);
             
             //check passive
             player.ActiveLoadoutComponent.ApplyPassiveEffects(Controller.turnCount);
@@ -20,7 +23,6 @@ namespace GameCore.TurnSystem.Phases
             player.UpdateCurrentStats(Controller.turnCount);
             aiPlayer.UpdateCurrentStats(Controller.turnCount);
             
-
             
             Controller.ChangePhase(Controller.PlayerPhase);
         }

@@ -41,11 +41,6 @@ namespace UserInterface.Gameplay
             if (eventData.pointerDrag != null)
             {
                 ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
-
-                if (confirmedCardUI)
-                {
-                    confirmedCardUI.GetComponent<Outline>().enabled = true;
-                }
             }
         }
 
@@ -54,11 +49,6 @@ namespace UserInterface.Gameplay
             if (eventData.pointerDrag != null)
             {
                 ChoiceCardUI confirmedCardUI = eventData.pointerDrag.GetComponent<ChoiceCardUI>();
-
-                if (confirmedCardUI)
-                {
-                    confirmedCardUI.GetComponent<Outline>().enabled = false;
-                }
             }
         }
     }

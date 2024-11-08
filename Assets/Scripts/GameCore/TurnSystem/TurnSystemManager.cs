@@ -24,8 +24,7 @@ namespace GameCore.TurnSystem
         public readonly PlayerPhase PlayerPhase = new();
         public readonly EnemyPhase EnemyPhase = new();
         public readonly EvaluationPhase EvaluationPhase = new();
-
-
+        
         private void Awake()
         {
             //singleton
@@ -59,7 +58,7 @@ namespace GameCore.TurnSystem
             {
                 CurrentPhase.OnEndPhase(Player, AIPlayer);
             }
-
+            
             CurrentPhase = newPhase;
             CurrentPhase.OnStartPhase(this, Player, AIPlayer);
         }

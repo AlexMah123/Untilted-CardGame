@@ -15,5 +15,7 @@ MonoBehaviour:
   upgradeSprite: {fileID: 21300000, guid: ae82006bda21fe54d83cfd281bc59f06, type: 3}
   upgradeName: The Wheel Of Fortune
   upgradeDescription: 
-  isActivatable: 0
+  isInEffect: 0
   upgradeType: 11
+  winChance: 0.05
+  drawChance: 0.2

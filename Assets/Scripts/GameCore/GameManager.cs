@@ -147,24 +147,36 @@ namespace GameCore
             return (player.GetChoice(), aiPlayer.GetChoice());
         }
 
-        public bool EvaluateResults(ref GameResult result)
+        public bool EvaluateResults(ref GameResult initialResult)
         {
-            GameResult cachedResult = result;
+            //convert relative playerResult to the enemy. (if player win, aiPlayer loses, etc)
+            GameResult aiPlayerInitialResult = GameUtilsLibrary.ConvertToEnemyResult(initialResult);
+
+            //result is relative to player. cache these values.
+            GameResult alteredPlayerResult = initialResult;
+            GameResult alteredAIPlayerResult = aiPlayerInitialResult;
             
-            //check if there are any altering effects for player first
-            cachedResult = player.ActiveLoadoutComponent.ApplyResultAlteringEffect(cachedResult);
-
-            //convert relative to the enemy. (if player win, aiPlayer loses, etc)
-            GameResult aiResult = GameUtilsLibrary.ConvertToEnemyResult(cachedResult);
-            cachedResult = aiPlayer.ActiveLoadoutComponent.ApplyResultAlteringEffect(cachedResult);
-
-            ApplyRoundEffects(cachedResult);
-
+            //check if there are any altering effects for player based on the initial round result (players altering effect will not trigger this)
+            alteredPlayerResult = player.ActiveLoadoutComponent.ApplyResultAlteringEffect(alteredPlayerResult);
+            
+            //check if there any altering effects for enemy based on the initial round result (players altering effect will not trigger this)
+            alteredAIPlayerResult = aiPlayer.ActiveLoadoutComponent.ApplyResultAlteringEffect(alteredAIPlayerResult);
+            
+            //if either player or enemy has altered result, change the result.
+            if(alteredPlayerResult != initialResult)
+            {
+                initialResult = alteredPlayerResult;
+            }
+            else if(alteredAIPlayerResult != aiPlayerInitialResult)
+            {
+                initialResult = GameUtilsLibrary.ConvertToEnemyResult(alteredAIPlayerResult);
+            }
+            
             //default return false, the results is the same
-            return cachedResult != result || aiResult != result;
+            return alteredPlayerResult != initialResult || alteredAIPlayerResult != aiPlayerInitialResult;
         }
 
-        private void ApplyRoundEffects(GameResult cachedResult)
+        public void ApplyRoundEffects(GameResult cachedResult)
         {
             //result is relative to the player (player win,lose,draw)
             switch (cachedResult)
@@ -186,7 +198,7 @@ namespace GameCore
             }
         }
 
-        public void FinalizeResults(GameResult roundResult)
+        public void ApplyDamage(GameResult roundResult)
         {
             switch (roundResult)
             {

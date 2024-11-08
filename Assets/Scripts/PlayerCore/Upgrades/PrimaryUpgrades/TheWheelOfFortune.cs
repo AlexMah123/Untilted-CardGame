@@ -20,13 +20,27 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
                 int chance = Random.Range(0, 101);
                 
                 float winThreshold = winChance * 100f;
-                float drawThreshold = (winChance + drawChance) * 100f; 
+                float drawThreshold = (winChance + drawChance) * 100f;
+
+
+                if (chance < winThreshold)
+                {
+                    Debug.Log("Changed to Win");
+                    return GameResult.Win;
+                }
+
+                if (chance < drawThreshold)
+                {
+                    Debug.Log("Changed to Draw");
+                    return GameResult.Draw;
+                }
                 
-                if(chance < winThreshold) return GameResult.Win;
-                if(chance < drawThreshold) return GameResult.Draw;
+                Debug.Log("No Change");
                 return GameResult.Lose;
             }
             
+            Debug.Log("Didnt Lose");
+
             //no change
             return initialResult;
         }

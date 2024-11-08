@@ -18,8 +18,6 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
 
         public override void OnDrawRound(Player attachedPlayer, Player enemyPlayer)
         {
-            base.OnDrawRound(attachedPlayer, enemyPlayer);
-
             attachedPlayer.HealthComponent.IncreaseHealth(selfHeal);
             enemyPlayer.HealthComponent.IncreaseHealth(enemyHeal);
         }
