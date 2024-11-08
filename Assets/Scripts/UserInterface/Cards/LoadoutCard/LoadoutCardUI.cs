@@ -45,7 +45,10 @@ namespace UserInterface.Cards.LoadoutCard
         {
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                OnCardClicked?.Invoke(cardInfo);
+                if (cardInfo.upgradeSO.isActivatable)
+                {
+                    OnCardClicked?.Invoke(cardInfo);
+                }
 
                 if (shouldDisableOnClick)
                 {

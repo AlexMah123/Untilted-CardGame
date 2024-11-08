@@ -26,36 +26,15 @@ namespace UserInterface.Gameplay.GameLoadout
 
         private void OnEnable()
         {
-            playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
-                .ToList();
-            aiPlayerUpgrades = aiPlayerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
-                .ToList();
-
-            foreach (LoadoutCardUI loadoutCard in playerUpgrades)
-            {
-                loadoutCard.OnCardClicked += HandleActivateSkill;
-            }
+            LoadAndBindCardOnClick();
         }
-
+        
         private void OnDisable()
         {
-            if (playerUpgradesParent != null)
-            {
-                playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
-                    .ToList();
-
-                foreach (LoadoutCardUI loadoutCard in playerUpgrades)
-                {
-                    if (loadoutCard != null)
-                    {
-                        loadoutCard.OnCardClicked -= HandleActivateSkill;
-                    }
-                }
-            }
-
+            UnbindCardOnClick();
             UnbindPlayerLoadoutComponent();
         }
-
+        
         private void Start()
         {
             BindPlayersLoadoutComponent();
@@ -142,6 +121,42 @@ namespace UserInterface.Gameplay.GameLoadout
                 AIPlayer.ActiveLoadoutComponent.OnLoadoutChanged -= HandlePlayerLoadoutUpdate;
             }
         }
+
+        #endregion
+
+        #region Bind CardOnClick
+        private void LoadAndBindCardOnClick()
+        {
+            if (playerUpgradesParent == null || aiPlayerUpgradesParent == null) Debug.LogError("Player/EnemyUpgradeParent is missing");
+                
+            playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
+                .ToList();
+            aiPlayerUpgrades = aiPlayerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
+                .ToList();
+
+            foreach (LoadoutCardUI loadoutCard in playerUpgrades)
+            {
+                loadoutCard.OnCardClicked += HandleActivateSkill;
+            }
+        }
+        
+        private void UnbindCardOnClick()
+        {
+            if (playerUpgradesParent != null)
+            {
+                playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
+                    .ToList();
+
+                foreach (LoadoutCardUI loadoutCard in playerUpgrades)
+                {
+                    if (loadoutCard != null)
+                    {
+                        loadoutCard.OnCardClicked -= HandleActivateSkill;
+                    }
+                }
+            }
+        }
+        
 
         #endregion
     }

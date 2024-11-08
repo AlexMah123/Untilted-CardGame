@@ -14,6 +14,7 @@ namespace PlayerCore.Upgrades.Base
         [Multiline] public string upgradeDescription;
 
         [Header("Gameplay Configs")] 
+        public bool isActivatable = false;
         public bool isInEffect = false;
         public UpgradeType upgradeType;
 

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeSprite: {fileID: 21300000, guid: 759e7cd22d56cef4e9679110e561762f, type: 3}
   upgradeName: The Emperor
-  upgradeDefinition: 
-  isActivatable: 0
+  upgradeDescription: 
+  isActivatable: 1
+  isInEffect: 0
   upgradeType: 5
