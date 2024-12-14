@@ -19,10 +19,12 @@ MonoBehaviour:
     upgradesEquipped: []
   aiFPlayer:
     baseStatsConfig: {fileID: 11400000, guid: c444568b120687f45a684a2a5c2e7edf, type: 2}
-    aiModule: {fileID: 11400000, guid: 827fa0f581f37bf4680a4e6a7df3e03f, type: 2}
+    aiModule: {fileID: 11400000, guid: f12b92243688d8240b0391a685f61c97, type: 2}
     playerType: 1
     upgradesEquipped:
-    - {fileID: 11400000, guid: 4715a156ca2274448a0fc521c1341d23, type: 2}
+    - {fileID: 11400000, guid: 18d759f3d231e29409cab080507da93f, type: 2}
+    - {fileID: 11400000, guid: 7a48d19317b10924aa6e308defe5cc0f, type: 2}
+    - {fileID: 11400000, guid: 5b427f2ce81795a4f803cc8a7e5d7e75, type: 2}
   levelName: Testing Scene
   levelImage: {fileID: 21300000, guid: 90d8f0b52ca666f489993cf0eb55f92e, type: 3}
   rewardList:

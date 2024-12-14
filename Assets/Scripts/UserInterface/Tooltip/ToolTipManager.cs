@@ -10,9 +10,10 @@ namespace UserInterface.Tooltip
         [SerializeField] RectTransform tooltipRectTransform;
         public static Action<Vector2, string, string, bool, bool> OnMouseHoverCard;
         public static Action OnMouseLoseFocusCard;
+        public static bool isTooltipActive;
 
         private RectTransform canvasRectTransform;
-        
+
         private void Awake()
         {
             tooltipRectTransform = tooltip.GetComponent<RectTransform>();
@@ -52,11 +53,13 @@ namespace UserInterface.Tooltip
             
             tooltipRectTransform.pivot = new Vector2(finalPivotX, finalPivotY);
             tooltipRectTransform.gameObject.SetActive(true);
+            isTooltipActive = true;
         }
 
         private void HideTooltip()
         {
             tooltipRectTransform.gameObject.SetActive(false);
+            isTooltipActive = false;
         }
     }
 }

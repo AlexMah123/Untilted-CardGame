@@ -72,7 +72,7 @@ namespace GameCore.TurnSystem.Phases
             //Apply all the effects
             GameManager.ApplyRoundEffects(finalResult);
             
-            //call the finalized results which is damage. 
+            //call the finalized result that is damage. 
             GameManager.ApplyDamage(finalResult);
         }
         #endregion

@@ -5,51 +5,25 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UserInterface.Cards.Base;
 using UserInterface.InspectUpgradeUI;
+using UserInterface.Tooltip;
 
 namespace UserInterface.Cards.LoadoutCard
 {
     [RequireComponent(typeof(InspectComponent))]
-    public class LoadoutCardUI : CardUI, IPointerClickHandler
+    public class LoadoutCardDisplayUI : CardUI, IPointerClickHandler
     {
-        [Header("Loadout Card Config")] 
-        public FLoadoutCardObj cardInfo;
+        [Header("LoadoutCard Display Config")] 
         public bool shouldDisableOnClick = true;
-        
-        public Outline outlineComponent;
-        public bool shouldDisplayOutline = true;
+        public FLoadoutCardObj cardInfo;
 
         public event Action<FLoadoutCardObj> OnCardClicked;
-
-
-        public override void OnPointerEnter(PointerEventData eventData)
-        {
-            base.OnPointerEnter(eventData);
-
-            if (shouldDisplayOutline)
-            {
-                outlineComponent.enabled = true;
-            }
-        }
-
-        public override void OnPointerExit(PointerEventData eventData)
-        {
-            base.OnPointerExit(eventData);
-
-            if (shouldDisplayOutline)
-            {
-                outlineComponent.enabled = false;
-            }
-        }
-
+        
         public void OnPointerClick(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                if (cardInfo.upgradeSO.isActivatable)
-                {
-                    OnCardClicked?.Invoke(cardInfo);
-                }
-
+                OnCardClicked?.Invoke(cardInfo);
+                
                 if (shouldDisableOnClick)
                 {
                     gameObject.SetActive(false);

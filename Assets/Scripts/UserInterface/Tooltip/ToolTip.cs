@@ -40,7 +40,6 @@ namespace UserInterface.Tooltip
             contentField.text = content;
             inspectField.gameObject.SetActive(displayInspect);
             reminderField.gameObject.SetActive(displayReminder);
-
             
             //if either header or content is bigger, than layoutElement, enable
             layoutElement.enabled = Mathf.Max(headerField.preferredWidth, contentField.preferredWidth) >= layoutElement.preferredWidth;

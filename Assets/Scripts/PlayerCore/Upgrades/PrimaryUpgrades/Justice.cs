@@ -32,7 +32,7 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
             attachedPlayer.HealthComponent.SetHealth(splitHealth);
             enemyPlayer.HealthComponent.SetHealth(splitHealth);
 
-            Debug.Log($"Justice activated: {attachedPlayerHealth} | {enemyHealth} | {splitHealth}");
+            Debug.Log($"Justice activated: {attachedPlayer.name}:{attachedPlayerHealth} | {enemyPlayer.name}:{enemyHealth} | Split Health Rounded Up:{splitHealth}");
             hasBeenApplied = true;
         }
     }

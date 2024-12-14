@@ -4,26 +4,30 @@ using System.Linq;
 using GameCore;
 using GameCore.LoadoutSelection;
 using PlayerCore;
+using PlayerCore.Upgrades.AbilityInputData;
 using PlayerCore.Upgrades.Base;
 using PlayerCore.Upgrades.UpgradeFactory;
 using UnityEngine;
+using UserInterface.AbilityInput;
 using UserInterface.Cards.LoadoutCard;
 
 namespace UserInterface.Gameplay.GameLoadout
 {
     public class GameLoadoutController : MonoBehaviour
     {
+        
         [Header("PlayerUpgrades Parent")] 
         [SerializeField] private GameObject playerUpgradesParent;
-
         [SerializeField] private GameObject aiPlayerUpgradesParent;
 
-        List<LoadoutCardUI> playerUpgrades;
-        List<LoadoutCardUI> aiPlayerUpgrades;
+        List<LoadoutCardGameplayUI> playerUpgrades;
+        List<LoadoutCardGameplayUI> aiPlayerUpgrades;
 
         private Player Player => GameManager.Instance.player;
         private Player AIPlayer => GameManager.Instance.aiPlayer;
 
+        private AbilityInputManager abilityInputManager;
+        
         private void OnEnable()
         {
             LoadAndBindCardOnClick();
@@ -34,7 +38,14 @@ namespace UserInterface.Gameplay.GameLoadout
             UnbindCardOnClick();
             UnbindPlayerLoadoutComponent();
         }
-        
+
+        private void Awake()
+        {
+            abilityInputManager = GetComponent<AbilityInputManager>();
+            
+            if(abilityInputManager == null) Debug.LogError("AbilityInputManager is missing");
+        }
+
         private void Start()
         {
             BindPlayersLoadoutComponent();
@@ -71,16 +82,14 @@ namespace UserInterface.Gameplay.GameLoadout
             }
         }
 
-        private void HandleActivateSkill(FLoadoutCardObj info)
+        private void HandleAbilityConfirmation(FLoadoutCardObj cardObjInfo)
         {
-            Debug.Log("Card Clicked, Prompt player confirmation to activate skill");
-
-            GameManager.Instance.player.ActiveLoadoutComponent.HandleActivateSkill(info.upgradeSO);
+            abilityInputManager.PromptForConfirmation(cardObjInfo, Player.ActiveLoadoutComponent.HandleActivateSkill);
         }
 
         private void ResetPlayerLoadoutUI()
         {
-            foreach (LoadoutCardUI loadoutCard in playerUpgrades)
+            foreach (LoadoutCardGameplayUI loadoutCard in playerUpgrades)
             {
                 loadoutCard.gameObject.SetActive(false);
             }
@@ -88,7 +97,7 @@ namespace UserInterface.Gameplay.GameLoadout
 
         private void ResetAIPlayerLoadout()
         {
-            foreach (LoadoutCardUI loadoutCard in aiPlayerUpgrades)
+            foreach (LoadoutCardGameplayUI loadoutCard in aiPlayerUpgrades)
             {
                 loadoutCard.gameObject.SetActive(false);
             }
@@ -129,14 +138,14 @@ namespace UserInterface.Gameplay.GameLoadout
         {
             if (playerUpgradesParent == null || aiPlayerUpgradesParent == null) Debug.LogError("Player/EnemyUpgradeParent is missing");
                 
-            playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
+            playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardGameplayUI>(includeInactive: true)
                 .ToList();
-            aiPlayerUpgrades = aiPlayerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
+            aiPlayerUpgrades = aiPlayerUpgradesParent.GetComponentsInChildren<LoadoutCardGameplayUI>(includeInactive: true)
                 .ToList();
 
-            foreach (LoadoutCardUI loadoutCard in playerUpgrades)
+            foreach (LoadoutCardGameplayUI loadoutCard in playerUpgrades)
             {
-                loadoutCard.OnCardClicked += HandleActivateSkill;
+                loadoutCard.OnCardClicked += HandleAbilityConfirmation;
             }
         }
         
@@ -144,14 +153,14 @@ namespace UserInterface.Gameplay.GameLoadout
         {
             if (playerUpgradesParent != null)
             {
-                playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true)
+                playerUpgrades = playerUpgradesParent.GetComponentsInChildren<LoadoutCardGameplayUI>(includeInactive: true)
                     .ToList();
 
-                foreach (LoadoutCardUI loadoutCard in playerUpgrades)
+                foreach (LoadoutCardGameplayUI loadoutCard in playerUpgrades)
                 {
                     if (loadoutCard != null)
                     {
-                        loadoutCard.OnCardClicked -= HandleActivateSkill;
+                        loadoutCard.OnCardClicked -= HandleAbilityConfirmation;
                     }
                 }
             }

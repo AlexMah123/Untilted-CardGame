@@ -1,6 +1,7 @@
 ﻿using PlayerCore.PlayerComponents;
 using UnityEngine;
 using UnityEngine.UI;
+using UserInterface.Cards.Base;
 
 namespace UserInterface.Cards.ChoiceCard
 {
@@ -26,7 +27,7 @@ namespace UserInterface.Cards.ChoiceCard
         public GameObject CreateCard(FChoiceCardCreation creation)
         {
             GameObject cardUIObj = Instantiate(choiceCardUIPrefab, creation.parent);
-            Image imageComponent = cardUIObj.GetComponent<Image>();
+            Image imageComponent = cardUIObj.GetComponent<CardUI>().cardImage;
 
             switch (creation.gameChoice)
             {

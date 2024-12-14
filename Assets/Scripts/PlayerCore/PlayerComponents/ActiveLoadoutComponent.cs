@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameCore;
-using GameCore.LoadoutSelection;
+using PlayerCore.Upgrades.AbilityInputData;
 using PlayerCore.Upgrades.Base;
 using PlayerCore.Upgrades.UpgradeFactory;
 using UnityEngine;
@@ -53,11 +53,14 @@ namespace PlayerCore.PlayerComponents
             return alteredResult;
         }
 
-        public void HandleActivateSkill(UpgradeDefinitionSO info)
+        /// <summary>
+        /// defaulted inputData is null, pass any inputData that has the IAbilityInputData interface.
+        /// </summary>
+        public void HandleActivateSkill(UpgradeDefinitionSO upgrade, IAbilityInputData inputData = null)
         {
-            if (cardUpgradeList.Contains(info))
+            if (cardUpgradeList.Contains(upgrade) && upgrade.isActivatable)
             {
-                info.ApplyActivatableEffect(attachedPlayer, enemyPlayer);
+                upgrade.ApplyActivatableEffect(attachedPlayer, enemyPlayer, inputData);
             }
         }
         
@@ -82,6 +85,9 @@ namespace PlayerCore.PlayerComponents
             return cardStats;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [ContextMenu("ActiveLoadout/Apply Passive Effect")]
         public void ApplyPassiveEffects(int currentTurnCount)
         {
@@ -91,6 +97,9 @@ namespace PlayerCore.PlayerComponents
             }
         }
 
+        /// <summary>
+        /// used in contextmenu as well
+        /// </summary>
         [ContextMenu("ActiveLoadout/Apply OnWin Effect")]
         public void ApplyOnWinEffects()
         {
@@ -100,7 +109,9 @@ namespace PlayerCore.PlayerComponents
             }
         }
 
-
+        /// <summary>
+        /// used in contextmenu as well
+        /// </summary>
         [ContextMenu("ActiveLoadout/Apply OnLose Effect")]
         public void ApplyOnLoseEffect()
         {
@@ -110,6 +121,9 @@ namespace PlayerCore.PlayerComponents
             }
         }
 
+        /// <summary>
+        /// used in contextmenu as well.
+        /// </summary>
         [ContextMenu("ActiveLoadout/Apply OnDraw Effect")]
         public void ApplyOnDrawEffect()
         {
@@ -119,12 +133,18 @@ namespace PlayerCore.PlayerComponents
             }
         }
 
+        /// <summary>
+        /// overloaded method for adding to loadout and requires an instance/reference to add.
+        /// </summary>
         public void AddUpgradeToLoadout(UpgradeDefinitionSO upgrade)
         {
             cardUpgradeList.Add(upgrade);
             OnLoadoutChanged?.Invoke(cardUpgradeList);
         }
 
+        /// <summary>
+        /// overloaded method for adding to loadout and does not require an instance/reference to add, just the type.
+        /// </summary>
         public void AddUpgradeToLoadout(UpgradeType upgradeType)
         {
             var createdUpgrade = UpgradeSOFactory.CreateUpgradeDefinitionSO(upgradeType);
@@ -139,22 +159,29 @@ namespace PlayerCore.PlayerComponents
             OnLoadoutChanged?.Invoke(cardUpgradeList);
         }
         
-        
-
         #region Debug
 
+        ///<summary>
+        /// Used for Context Menu
+        ///</summary>
         [ContextMenu("Debug/Debug Attached Player")]
         public void DebugAttachedPlayer()
         {
             Debug.Log($"{attachedPlayer.GetType()}");
         }
-
+        
+        ///<summary>
+        /// Used for Context Menu
+        ///</summary>
         [ContextMenu("Debug/Add DevilUpgrade to Player")]
         public void AddUpgradeToPlayer()
         {
             AddUpgradeToLoadout(UpgradeType.TheFool);
         }
 
+        ///<summary>
+        /// Used for Context Menu
+        ///</summary>
         [ContextMenu("Debug/Remove DevilUpgrade to Player")]
         public void RemoveUpgradeFromPlayer()
         {

@@ -17,7 +17,7 @@ namespace GameCore.RewardSystem
     public class RewardSystemController : MonoBehaviour, ISavableData
     {
         [Header("RewardUI Config")] 
-        [SerializeField] LoadoutCardUI rewardPrefab;
+        [SerializeField] LoadoutCardDisplayUI rewardPrefab;
 
         [Header("Reward Display Ref")] 
         [SerializeField] private RectTransform rewardContainer;
@@ -38,7 +38,7 @@ namespace GameCore.RewardSystem
         [SerializeField] PlayerStats playerRewardStats;
 
         //cached
-        List<LoadoutCardUI> rewardUIList;
+        List<LoadoutCardDisplayUI> rewardUIList;
 
         //ISavableData
         public event Action OnSaveDataLoaded;
@@ -73,7 +73,7 @@ namespace GameCore.RewardSystem
         private void InitializeRewardContainer()
         {
             //initialize the preset amount of rewardUI
-            rewardUIList = content.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true).ToList();
+            rewardUIList = content.GetComponentsInChildren<LoadoutCardDisplayUI>(includeInactive: true).ToList();
 
             foreach (var rewardUI in rewardUIList)
             {
@@ -86,7 +86,7 @@ namespace GameCore.RewardSystem
             yield return new WaitForSeconds(0.1f);
 
             // Reset all rewardUI
-            foreach (LoadoutCardUI reward in rewardUIList)
+            foreach (LoadoutCardDisplayUI reward in rewardUIList)
             {
                 reward.gameObject.SetActive(false);
             }
@@ -94,17 +94,17 @@ namespace GameCore.RewardSystem
             // Based on rewardList, display the rewards sequentially with a delay
             foreach (var upgrade in upgradeRewardList)
             {
-                LoadoutCardUI rewardUI = GetAvailableRewardUI();
+                LoadoutCardDisplayUI rewardDisplayUI = GetAvailableRewardUI();
 
-                if (rewardUI)
+                if (rewardDisplayUI)
                 {
                     // Populate the data
-                    rewardUI.InitializeCard(new FLoadoutCardObj(upgrade));
-                    rewardUI.gameObject.SetActive(true);
-                    rewardUI.gameObject.transform.localScale = new Vector3(popupScale, popupScale, 1);
+                    rewardDisplayUI.InitializeCard(new FLoadoutCardObj(upgrade));
+                    rewardDisplayUI.gameObject.SetActive(true);
+                    rewardDisplayUI.gameObject.transform.localScale = new Vector3(popupScale, popupScale, 1);
 
                     yield return new WaitForSeconds(rewardDisplayDelay); // Delay before showing the next reward
-                    rewardUI.gameObject.transform.localScale = Vector3.one;
+                    rewardDisplayUI.gameObject.transform.localScale = Vector3.one;
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace GameCore.RewardSystem
         private void UpdateRewardDisplay()
         {
             //reset all rewardUI
-            foreach (LoadoutCardUI reward in rewardUIList)
+            foreach (LoadoutCardDisplayUI reward in rewardUIList)
             {
                 reward.gameObject.SetActive(false);
             }
@@ -127,13 +127,13 @@ namespace GameCore.RewardSystem
             //based on rewardList, display that many reward UI
             foreach (var upgrade in upgradeRewardList)
             {
-                LoadoutCardUI rewardUI = GetAvailableRewardUI();
+                LoadoutCardDisplayUI rewardDisplayUI = GetAvailableRewardUI();
 
-                if (rewardUI)
+                if (rewardDisplayUI)
                 {
                     //populate the data 
-                    rewardUI.InitializeCard(new FLoadoutCardObj(upgrade));
-                    rewardUI.gameObject.SetActive(true);
+                    rewardDisplayUI.InitializeCard(new FLoadoutCardObj(upgrade));
+                    rewardDisplayUI.gameObject.SetActive(true);
                 }
                 else
                 {
@@ -145,18 +145,18 @@ namespace GameCore.RewardSystem
             AdjustRewardContainerSize(upgradeRewardList.Count);
         }
 
-        private LoadoutCardUI GetAvailableRewardUI()
+        private LoadoutCardDisplayUI GetAvailableRewardUI()
         {
-            LoadoutCardUI availableRewardUI = rewardUIList.FirstOrDefault(x => x.gameObject.activeInHierarchy == false);
-            bool failedToGetExistingReward = availableRewardUI == null;
+            LoadoutCardDisplayUI availableRewardDisplayUI = rewardUIList.FirstOrDefault(x => x.gameObject.activeInHierarchy == false);
+            bool failedToGetExistingReward = availableRewardDisplayUI == null;
 
             if (failedToGetExistingReward)
             {
-                availableRewardUI = Instantiate(rewardPrefab, content);
-                rewardUIList.Add(availableRewardUI);
+                availableRewardDisplayUI = Instantiate(rewardPrefab, content);
+                rewardUIList.Add(availableRewardDisplayUI);
             }
 
-            return availableRewardUI;
+            return availableRewardDisplayUI;
         }
 
         private void AdjustRewardContainerSize(int rewardCount)

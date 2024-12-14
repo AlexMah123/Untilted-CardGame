@@ -147,7 +147,7 @@ namespace GameCore
             return (player.GetChoice(), aiPlayer.GetChoice());
         }
 
-        public bool EvaluateResults(ref GameResult initialResult)
+        public (bool didPlayerChange, bool didEnemyChange) EvaluateResults(ref GameResult initialResult)
         {
             //convert relative playerResult to the enemy. (if player win, aiPlayer loses, etc)
             GameResult aiPlayerInitialResult = GameUtilsLibrary.ConvertToEnemyResult(initialResult);
@@ -173,7 +173,7 @@ namespace GameCore
             }
             
             //default return false, the results is the same
-            return alteredPlayerResult != initialResult || alteredAIPlayerResult != aiPlayerInitialResult;
+            return (alteredPlayerResult != initialResult, alteredAIPlayerResult != aiPlayerInitialResult);
         }
 
         public void ApplyRoundEffects(GameResult cachedResult)

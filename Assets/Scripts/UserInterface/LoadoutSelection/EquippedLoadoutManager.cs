@@ -19,10 +19,10 @@ namespace UserInterface.LoadoutSelection
 
         private void OnEnable()
         {
-            LoadoutCardUI[] loadoutCards =
-                equippedLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
+            LoadoutCardDisplayUI[] loadoutCards =
+                equippedLoadoutParent.GetComponentsInChildren<LoadoutCardDisplayUI>(includeInactive: true);
 
-            foreach (LoadoutCardUI loadoutCard in loadoutCards)
+            foreach (LoadoutCardDisplayUI loadoutCard in loadoutCards)
             {
                 loadoutCard.OnCardClicked += HandleCardRemoved;
             }
@@ -32,10 +32,10 @@ namespace UserInterface.LoadoutSelection
         {
             if (equippedLoadoutParent != null)
             {
-                LoadoutCardUI[] loadoutCards =
-                    equippedLoadoutParent.GetComponentsInChildren<LoadoutCardUI>(includeInactive: true);
+                LoadoutCardDisplayUI[] loadoutCards =
+                    equippedLoadoutParent.GetComponentsInChildren<LoadoutCardDisplayUI>(includeInactive: true);
 
-                foreach (LoadoutCardUI loadoutCard in loadoutCards)
+                foreach (LoadoutCardDisplayUI loadoutCard in loadoutCards)
                 {
                     if (loadoutCard != null)
                     {
@@ -61,11 +61,11 @@ namespace UserInterface.LoadoutSelection
             GameObject loadoutCardObj = GetFirstInactiveLoadout();
             if (!loadoutCardObj) return false;
 
-            LoadoutCardUI loadoutCardUI = loadoutCardObj.GetComponent<LoadoutCardUI>();
-            if (loadoutCardUI)
+            LoadoutCardDisplayUI loadoutCardDisplayUI = loadoutCardObj.GetComponent<LoadoutCardDisplayUI>();
+            if (loadoutCardDisplayUI)
             {
                 //setup card data
-                loadoutCardUI.InitializeCard(new FLoadoutCardObj(selectedUpgrade));
+                loadoutCardDisplayUI.InitializeCard(new FLoadoutCardObj(selectedUpgrade));
                 loadoutCardObj.SetActive(true);
                 return true;
             }

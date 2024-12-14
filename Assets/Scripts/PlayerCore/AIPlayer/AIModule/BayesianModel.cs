@@ -35,7 +35,7 @@ namespace PlayerCore.AIPlayer.AIModule
             float paperProbability = (float)opponentMoveCount[GameChoice.Paper] / totalMoves;
             float scissorsProbability = (float)opponentMoveCount[GameChoice.Scissor] / totalMoves;
 
-            //defaulted
+            //declare defaulted value that will be updated
             GameChoice predictedMoveByOpponent = GameChoice.Rock;
 
             if (rockProbability >= paperProbability && rockProbability >= scissorsProbability)
@@ -51,15 +51,9 @@ namespace PlayerCore.AIPlayer.AIModule
                 predictedMoveByOpponent = GameChoice.Scissor;
             }
 
+            //get the counter choice and return it if its possible.
             aiDecision = PlayerDecisionLibrary.GetCounterChoice(predictedMoveByOpponent);
-            if (choiceComponent.IsChoiceAvailable(aiDecision))
-            {
-                return aiDecision;
-            }
-            else
-            {
-                return GetNextBestChoice();
-            }
+            return choiceComponent.IsChoiceAvailable(aiDecision) ? aiDecision : GetNextBestChoice();
         }
 
         public override void ResetAIConfig()

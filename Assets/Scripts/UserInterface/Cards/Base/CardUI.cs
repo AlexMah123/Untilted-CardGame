@@ -13,15 +13,19 @@ namespace UserInterface.Cards.Base
         public float hoveredEnlargedScale = 1.5f;
         public bool shouldEnlargeOnHover = true;
         public bool shouldReorderToTop = true;
-
+        public bool shouldDisplayOutline = true;
+        
         //cached variables
         protected Vector2 originalCardScale;
         protected int originalSiblingIndex;
         protected Transform originalParent;
 
         //Components
+        public Image cardImage;
         [SerializeField] protected RectTransform rectTransform;
-        [SerializeField] protected Image cardImage;
+        [SerializeField] protected Outline outlineComponent;
+
+        
         protected Canvas canvas;
 
         //events
@@ -45,6 +49,11 @@ namespace UserInterface.Cards.Base
             if (eventData.pointerDrag != null) return;
 
             SetCardHovered();
+            
+            if (shouldDisplayOutline)
+            {
+                outlineComponent.enabled = true;
+            }
         }
 
         public virtual void OnPointerExit(PointerEventData eventData)
@@ -53,6 +62,11 @@ namespace UserInterface.Cards.Base
             if (eventData.pointerDrag != null) return;
 
             ResetCardState();
+            
+            if (shouldDisplayOutline)
+            {
+                outlineComponent.enabled = false;
+            }
         }
 
         #endregion

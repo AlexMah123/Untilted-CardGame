@@ -1,4 +1,5 @@
 using System;
+using PlayerCore.Upgrades.AbilityInputData;
 using PlayerCore.Upgrades.Base;
 using UnityEngine;
 
@@ -11,6 +12,12 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
             PlayerStats enemyCardStats, int currentTurnCount)
         {
             return (playerCardStats, enemyCardStats);
+        }
+        
+        public override void ApplyActivatableEffect(Player attachedPlayer, Player enemyPlayer,
+            IAbilityInputData inputData)
+        {
+            Debug.Log($"{enemyPlayer.name}'s next choice is {enemyPlayer.GetChoice()}");
         }
     }
 }
