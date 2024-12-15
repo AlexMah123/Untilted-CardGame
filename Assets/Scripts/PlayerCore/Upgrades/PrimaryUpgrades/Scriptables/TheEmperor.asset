@@ -16,5 +16,5 @@ MonoBehaviour:
   upgradeName: The Emperor
   upgradeDescription: 
   isActivatable: 1
-  isInEffect: 0
   upgradeType: 5
+  abilityConfirmationType: 2

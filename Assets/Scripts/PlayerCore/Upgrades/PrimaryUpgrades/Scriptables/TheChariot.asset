@@ -16,5 +16,6 @@ MonoBehaviour:
   upgradeName: The Chariot
   upgradeDescription: Chariot
   isActivatable: 1
-  isInEffect: 0
   upgradeType: 3
+  abilityConfirmationType: 1
+  choiceSealDuration: 1
