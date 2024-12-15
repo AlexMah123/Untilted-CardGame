@@ -13,9 +13,8 @@ namespace UserInterface.Cards.LoadoutCard
     public class LoadoutCardGameplayUI : CardUI, IPointerClickHandler
     {
         [Header("LoadoutCard Gameplay Config")] 
-        public FLoadoutCardObj cardInfo;
-
         public bool activateAfterDisplayed = true;
+        public FLoadoutCardObj cardInfo;
 
         public event Action<FLoadoutCardObj> OnCardClicked;
 

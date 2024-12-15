@@ -91,8 +91,10 @@ namespace UserInterface.AbilityInput
 
         private string GetActivationDescription(UpgradeDefinitionSO upgrade, IAbilityInputData inputData)
         {
-            string inputDescription = inputData != null ? inputData.ToString() : "default parameters";
-            return $"You are activating {upgrade.name} with the following choice: {inputDescription}\nAre you sure?";
+            string inputDescription = inputData != null ? inputData.ToString() : string.Empty;
+            string inputChoice = inputData != null ? $"with the following choice: {inputDescription}" : string.Empty;
+
+            return $"You are activating {upgrade.upgradeName} {inputChoice}\nAre you sure?";
         }
     }
 }

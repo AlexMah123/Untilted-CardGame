@@ -170,7 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoveredOffset: {x: 0, y: 0, z: 0}
   hoveredEnlargedScale: 1.125
-  shouldEnlargeOnHover: 0
+  shouldEnlargeOnHover: 1
   shouldReorderToTop: 0
   shouldDisplayOutline: 1
   cardImage: {fileID: 1144293718521045040}
@@ -178,6 +178,7 @@ MonoBehaviour:
   outlineComponent: {fileID: 2009735599733134839}
   cardInfo:
     upgradeSO: {fileID: 0}
+  activateAfterDisplayed: 0
 --- !u!114 &6279919618868292784
 MonoBehaviour:
   m_ObjectHideFlags: 0

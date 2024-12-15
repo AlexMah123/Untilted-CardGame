@@ -94,15 +94,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoveredOffset: {x: 0, y: 0, z: 0}
   hoveredEnlargedScale: 1.125
-  shouldEnlargeOnHover: 0
+  shouldEnlargeOnHover: 1
   shouldReorderToTop: 0
   shouldDisplayOutline: 1
   cardImage: {fileID: 3156916787778190192}
   rectTransform: {fileID: 7084182591955085186}
   outlineComponent: {fileID: 8570749019239431753}
+  shouldDisableOnClick: 1
   cardInfo:
     upgradeSO: {fileID: 0}
-  shouldDisableOnClick: 1
 --- !u!114 &-6051437279966621883
 MonoBehaviour:
   m_ObjectHideFlags: 0
