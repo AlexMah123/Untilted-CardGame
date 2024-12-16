@@ -17,50 +17,55 @@ namespace UserInterface.AbilityInput
         
         private const string ACTIVATIONPROMPT = "Ability Activation";
         
-        private GameChoice cachedGameChoice;
-        private UpgradeType cachedUpgradeType;
+        //#TODO: MAKE IT SO THE EVENT SUBSCRIBES TO UPDATE THE CACHED CHOICE
+        private GameChoice cachedGameChoice = GameChoice.Rock;
+        private UpgradeType cachedUpgradeType = UpgradeType.None;
 
         private void Awake()
         {
             confirmationPanel = confirmationPanel.GetComponent<ConfirmationPanelManager>();
+            choiceSelectionPanel = choiceSelectionPanel.GetComponent<ChoiceSelectionPanel>();
+            targetUpgradePanel = targetUpgradePanel.GetComponent<TargetUpgradeSelectionPanel>();
             
             if(confirmationPanel == null) Debug.LogError("Confirmation Panel Manager is null");
+            if(choiceSelectionPanel == null) Debug.LogError("Choice Selection Panel Manager is null");
+            if(targetUpgradePanel == null) Debug.LogError("Target Upgrade Selection Panel Manager is null");
         }
         
         public void PromptForConfirmation(FLoadoutCardObj cardObjInfo, Action<UpgradeDefinitionSO, IAbilityInputData> onAbilityConfirmed)
         {
             //Handle relevant processing for which prompt to show, and call the callback
+            //Get the relevant confirmationPayload and initialize confirmationPanel.
+            FAbilityInputPanelData abilityInputPayload = GetConfirmationPayload(cardObjInfo.upgradeSO, cardObjInfo.upgradeSO.abilityConfirmationType, onAbilityConfirmed);
+
             switch (cardObjInfo.upgradeSO.abilityConfirmationType)
             {
                 case AbilityConfirmationType.ChoiceSeal:
-                    choiceSelectionPanel.confirmButton.onClick.AddListener(() =>
+                    /*choiceSelectionPanel.confirmButton.onClick.AddListener(() =>
                     { 
                         cachedGameChoice = choiceSelectionPanel.selectedGameChoice;
-                    });
-                    
+                    });*/
+                    choiceSelectionPanel.Initialize(abilityInputPayload);
                     choiceSelectionPanel.gameObject.SetActive(true);
                     break;
                 
                 case AbilityConfirmationType.TargetUpgrade:
-                    targetUpgradePanel.confirmButton.onClick.AddListener(() =>
+                    /*targetUpgradePanel.confirmButton.onClick.AddListener(() =>
                     {
                         cachedUpgradeType = targetUpgradePanel.selectedUpgrade;
-                    });
-                    
+                    });*/
+                    targetUpgradePanel.Initialize(abilityInputPayload);
                     targetUpgradePanel.gameObject.SetActive(true);
                     break;
                 
                 default:
+                    confirmationPanel.Initialize(abilityInputPayload);
                     confirmationPanel.gameObject.SetActive(true); 
                     break;
             }
-
-            //Get the relevant confirmationPayload and initialize confirmationPanel.
-            FConfirmationPanelData confirmationPayload = GetConfirmationPayload(cardObjInfo.upgradeSO, cardObjInfo.upgradeSO.abilityConfirmationType, onAbilityConfirmed);
-            confirmationPanel.Initialize(confirmationPayload);
         }
 
-        private FConfirmationPanelData GetConfirmationPayload(UpgradeDefinitionSO targetAbility, AbilityConfirmationType confirmationType, Action<UpgradeDefinitionSO, IAbilityInputData> onAbilityConfirmed)
+        private FAbilityInputPanelData GetConfirmationPayload(UpgradeDefinitionSO targetAbility, AbilityConfirmationType confirmationType, Action<UpgradeDefinitionSO, IAbilityInputData> onAbilityConfirmed)
         {
             Action onConfirmCallback;
             
@@ -82,7 +87,7 @@ namespace UserInterface.AbilityInput
                     break;
             }
 
-            return new FConfirmationPanelData(
+            return new FAbilityInputPanelData(
                 ACTIVATIONPROMPT,
                 GetActivationDescription(targetAbility, null),
                 onConfirmCallback

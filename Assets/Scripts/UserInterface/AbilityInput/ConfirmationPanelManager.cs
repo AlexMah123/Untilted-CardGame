@@ -6,13 +6,13 @@ using UnityEngine.UI;
 
 namespace UserInterface.AbilityInput
 {
-    public struct FConfirmationPanelData
+    public struct FAbilityInputPanelData
     {
         public string title;
         public string description;
         public Action onConfirmEvent;
         
-        public FConfirmationPanelData(string title, string description, Action onConfirmEvent)
+        public FAbilityInputPanelData(string title, string description, Action onConfirmEvent)
         {
             this.title = title;
             this.description = description;
@@ -29,7 +29,7 @@ namespace UserInterface.AbilityInput
         
         private UnityAction cachedPreviousEvent;
 
-        public void Initialize(FConfirmationPanelData data)
+        public void Initialize(FAbilityInputPanelData data)
         {
             confirmationTitleText.text = data.title;
             confirmationDescriptionText.text = data.description;
