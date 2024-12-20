@@ -20,6 +20,7 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
         public override void ApplyActivatableEffect(Player attachedPlayer, Player enemyPlayer,
             IAbilityInputData inputData)
         {
+
             if (inputData is ChoiceSealInputData choiceSealInputData)
             {
                 SealEnemyHandStyle(enemyPlayer, choiceSealInputData);

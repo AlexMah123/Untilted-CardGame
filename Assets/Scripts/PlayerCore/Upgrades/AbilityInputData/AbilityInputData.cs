@@ -13,7 +13,6 @@ namespace PlayerCore.Upgrades.AbilityInputData
         public ChoiceSealInputData(GameChoice choiceToSeal)
         {
             this.choiceToSeal = choiceToSeal;
-            Debug.Log(choiceToSeal);
         }
     }
 

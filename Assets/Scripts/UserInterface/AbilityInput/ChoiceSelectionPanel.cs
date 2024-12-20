@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using PlayerCore.PlayerComponents;
 using PlayerCore.Upgrades.AbilityInputData;
 using PlayerCore.Upgrades.Base;
@@ -13,11 +14,6 @@ namespace UserInterface.AbilityInput
 {
     public class ChoiceSelectionPanel : MonoBehaviour, IAbilityInputPanel
     {
-        [Header("ChoiceSelectionFactory Config")] 
-        [SerializeField] private ChoiceCardUIFactory choiceCardFactory;
-        [SerializeField] private GameObject choiceContainer;
-        [SerializeField] private Vector2 cardSize = new(225, 375);
-        
         [Header("ChoiceSelection Config")] 
         [SerializeField] private TextMeshProUGUI confirmationTitleText;
         [SerializeField] private TextMeshProUGUI confirmationDescriptionText;
@@ -77,9 +73,12 @@ namespace UserInterface.AbilityInput
             //onConfirm event is passed in type choiceSealInput.
             if (cachedInputData.onConfirmEvent != null)
             {
-                cachedPreviousEvent = () => cachedInputData.onConfirmEvent.Invoke(cachedInputData.upgrade, new ChoiceSealInputData(selectedGameChoice));
+                cachedPreviousEvent = () =>
+                {
+                    cachedInputData.onConfirmEvent.Invoke(cachedInputData.upgrade, new ChoiceSealInputData(selectedGameChoice));
+                    StartCoroutine(DeactivateAfterFrameDelay());
+                };
                 confirmButton.onClick.AddListener(cachedPreviousEvent);
-                confirmButton.onClick.AddListener(()=> gameObject.SetActive(false));
             }
             else
             {
@@ -104,6 +103,13 @@ namespace UserInterface.AbilityInput
             confirmationTitleText.text = String.Empty;
             confirmationDescriptionText.text = String.Empty;
             selectedGameChoice = GameChoice.None;
+        }
+
+        private IEnumerator DeactivateAfterFrameDelay()
+        {
+            yield return new WaitForEndOfFrame();
+
+            gameObject.SetActive(false);
         }
     }
 }

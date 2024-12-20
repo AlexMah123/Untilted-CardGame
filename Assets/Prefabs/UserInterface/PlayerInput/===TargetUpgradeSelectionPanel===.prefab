@@ -238,7 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a0d67d16a3445dc94ee9932681a7abf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upgradesToChooseFrom: {fileID: 6933662848116701717}
+  upgradesContainer: {fileID: 5829681365128958190}
   confirmationTitleText: {fileID: 8311666986139268525}
   confirmationDescriptionText: {fileID: 4599407683830967184}
   confirmButton: {fileID: 7486612305036010998}
@@ -498,7 +498,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5075722957249040789}
   m_HandleRect: {fileID: 4476866811120943786}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -679,7 +679,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -1043.2559, y: -276.45}
+  m_SizeDelta: {x: -820.6383, y: -276.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8219995745290450373
 CanvasRenderer:
@@ -1549,19 +1549,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9143973343873113027}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 765237421466025361}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &9037760188339378771
 GameObject:
   m_ObjectHideFlags: 0
