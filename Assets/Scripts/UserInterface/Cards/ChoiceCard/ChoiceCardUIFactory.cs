@@ -33,7 +33,6 @@ namespace UserInterface.Cards.ChoiceCard
             {
                 case GameChoice.Rock:
                     imageComponent.sprite = rockChoice;
-
                     break;
 
                 case GameChoice.Paper:

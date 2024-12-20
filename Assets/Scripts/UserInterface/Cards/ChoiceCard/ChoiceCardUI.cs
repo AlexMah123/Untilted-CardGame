@@ -12,8 +12,8 @@ namespace UserInterface.Cards.ChoiceCard
         public Image sealedEffectImage;
         public GameChoice gameChoice;
 
-        public Color PlayableColor;
-        public Color DisabledColor;
+        public Color playableColor;
+        public Color disabledColor;
 
         //state of card
         public bool isSealed = true;
@@ -25,9 +25,9 @@ namespace UserInterface.Cards.ChoiceCard
             set
             {
                 isSealed = value;
-                cardImage.color = IsSealed ? DisabledColor : PlayableColor;
+                cardImage.color = IsSealed ? disabledColor : playableColor;
 
-                //only change the state if its not the same as the bool
+                //only change the state if it is different from the bool
                 if (sealedEffectImage.gameObject.activeSelf != isSealed)
                     sealedEffectImage.gameObject.SetActive(isSealed);
             }

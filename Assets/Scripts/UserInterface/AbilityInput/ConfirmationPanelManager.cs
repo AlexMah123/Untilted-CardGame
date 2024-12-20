@@ -1,4 +1,6 @@
 ﻿using System;
+using PlayerCore.Upgrades.AbilityInputData;
+using PlayerCore.Upgrades.Base;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,21 +8,7 @@ using UnityEngine.UI;
 
 namespace UserInterface.AbilityInput
 {
-    public struct FAbilityInputPanelData
-    {
-        public string title;
-        public string description;
-        public Action onConfirmEvent;
-        
-        public FAbilityInputPanelData(string title, string description, Action onConfirmEvent)
-        {
-            this.title = title;
-            this.description = description;
-            this.onConfirmEvent = onConfirmEvent;
-        }
-    }
-    
-    public class ConfirmationPanelManager : MonoBehaviour
+    public class ConfirmationPanelManager : MonoBehaviour, IAbilityInputPanel
     {
         [Header("Confirmation Config")]
         [SerializeField] private TextMeshProUGUI confirmationTitleText;
@@ -29,20 +17,21 @@ namespace UserInterface.AbilityInput
         
         private UnityAction cachedPreviousEvent;
 
-        public void Initialize(FAbilityInputPanelData data)
+        public void Initialize(FAbilityInputData data)
         {
-            confirmationTitleText.text = data.title;
-            confirmationDescriptionText.text = data.description;
+            confirmationTitleText.text = data.abilityInputTitle;
+            confirmationDescriptionText.text = GetActivationDescription(data.upgrade);
 
             if (cachedPreviousEvent != null)
             {
                 confirmButton.onClick.RemoveListener(cachedPreviousEvent);
             }
             
-            //add listener if payload is not null, update cachedEvent
+            //add listener if payload is not null, update cachedEvent.
+            //onConfirm event is passed in null since it is generic
             if (data.onConfirmEvent != null)
             {
-                cachedPreviousEvent = () => data.onConfirmEvent.Invoke();
+                cachedPreviousEvent = () => data.onConfirmEvent.Invoke(data.upgrade, null);
                 confirmButton.onClick.AddListener(cachedPreviousEvent);            
             }
             else
@@ -50,6 +39,11 @@ namespace UserInterface.AbilityInput
                 //default cachedEvent to null
                 cachedPreviousEvent = null;
             }
+        }
+        
+        public string GetActivationDescription(UpgradeDefinitionSO upgrade)
+        {
+            return $"You are activating {upgrade.upgradeName}.\nAre you sure?";
         }
 
         private void OnDisable()

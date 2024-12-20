@@ -14,6 +14,7 @@ using UserInterface.Gameplay;
 
 namespace GameCore
 {
+    [Serializable]
     public enum GameResult
     {
         None,
@@ -106,7 +107,7 @@ namespace GameCore
             TurnSystemManager.Instance.HandleTurnHasCompleted();
         }
 
-        public void HandleConfirmCardChoice(ChoiceCardUI cardUI)
+        private void HandleConfirmCardChoice(ChoiceCardUI cardUI)
         {
             if (player == null)
             {

@@ -1,5 +1,6 @@
 ﻿using PlayerCore.PlayerComponents;
 using PlayerCore.Upgrades.UpgradeFactory;
+using UnityEngine;
 
 namespace PlayerCore.Upgrades.AbilityInputData
 {
@@ -12,6 +13,7 @@ namespace PlayerCore.Upgrades.AbilityInputData
         public ChoiceSealInputData(GameChoice choiceToSeal)
         {
             this.choiceToSeal = choiceToSeal;
+            Debug.Log(choiceToSeal);
         }
     }
 

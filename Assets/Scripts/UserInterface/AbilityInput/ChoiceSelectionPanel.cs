@@ -1,39 +1,85 @@
 ﻿using System;
 using PlayerCore.PlayerComponents;
+using PlayerCore.Upgrades.AbilityInputData;
+using PlayerCore.Upgrades.Base;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UserInterface.Cards.ChoiceCard;
 
 namespace UserInterface.AbilityInput
 {
-    public class ChoiceSelectionPanel : MonoBehaviour
+    public class ChoiceSelectionPanel : MonoBehaviour, IAbilityInputPanel
     {
-        [Header("ChoiceSelection Config")]
+        [Header("ChoiceSelectionFactory Config")] 
+        [SerializeField] private ChoiceCardUIFactory choiceCardFactory;
+        [SerializeField] private GameObject choiceContainer;
+        [SerializeField] private Vector2 cardSize = new(225, 375);
+        
+        [Header("ChoiceSelection Config")] 
         [SerializeField] private TextMeshProUGUI confirmationTitleText;
         [SerializeField] private TextMeshProUGUI confirmationDescriptionText;
         [SerializeField] private Button confirmButton;
         
-        [HideInInspector]
-        public GameChoice selectedGameChoice;
+        [Header("Current Selected")]
+        public GameChoice selectedGameChoice = GameChoice.None;
+        private Outline selectedCardOutline;
         
         private UnityAction cachedPreviousEvent;
+        private FAbilityInputData cachedInputData;
 
-        public void Initialize(FAbilityInputPanelData data)
+        public void Initialize(FAbilityInputData data)
         {
-            confirmationTitleText.text = data.title;
-            confirmationDescriptionText.text = data.description;
-
-            if (cachedPreviousEvent != null)
+            cachedInputData = data;
+            UpdatePanelText(cachedInputData.abilityInputTitle, GetActivationDescription(cachedInputData.upgrade));
+            
+            confirmButton.interactable = false;
+        }
+        
+        public string GetActivationDescription(UpgradeDefinitionSO upgrade)
+        {
+            return selectedGameChoice == GameChoice.None 
+                ? $"You are activating {upgrade.upgradeName}.\nChoose a hand style." 
+                : $"You are activating {upgrade.upgradeName} with the following choice: {selectedGameChoice.ToString()}.\nAre you sure?";
+        }
+        
+        public void SetSelectedGameChoice(int enumValue)
+        {
+            selectedGameChoice = (GameChoice) enumValue;
+            UpdatePanelText(cachedInputData.abilityInputTitle, GetActivationDescription(cachedInputData.upgrade));
+            
+            if (confirmButton.interactable == false && selectedGameChoice != GameChoice.None)
             {
-                confirmButton.onClick.RemoveListener(cachedPreviousEvent);
+                confirmButton.interactable = true;
             }
             
-            //add listener if payload is not null, update cachedEvent
-            if (data.onConfirmEvent != null)
+            UpdateSelectionOutline();
+            BindConfirmAbility();
+        }
+
+        private void UpdatePanelText(string title, string description)
+        {
+            confirmationTitleText.text = title;
+            confirmationDescriptionText.text = description;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(transform.GetChild(0).GetComponent<RectTransform>());
+        }
+
+        private void BindConfirmAbility()
+        {
+            if (cachedPreviousEvent != null)
             {
-                cachedPreviousEvent = () => data.onConfirmEvent.Invoke();
-                confirmButton.onClick.AddListener(cachedPreviousEvent);            
+                confirmButton.onClick.RemoveAllListeners();
+            }
+
+            //add listener if payload is not null, update cachedEvent
+            //onConfirm event is passed in type choiceSealInput.
+            if (cachedInputData.onConfirmEvent != null)
+            {
+                cachedPreviousEvent = () => cachedInputData.onConfirmEvent.Invoke(cachedInputData.upgrade, new ChoiceSealInputData(selectedGameChoice));
+                confirmButton.onClick.AddListener(cachedPreviousEvent);
+                confirmButton.onClick.AddListener(()=> gameObject.SetActive(false));
             }
             else
             {
@@ -41,18 +87,23 @@ namespace UserInterface.AbilityInput
                 cachedPreviousEvent = null;
             }
         }
-        
-        private void SetCachedGameChoice(GameChoice gameChoice)
+
+        private void UpdateSelectionOutline()
         {
-            selectedGameChoice = gameChoice;
+            //disable previously selected, assign the new selected and enable that.
+            if(selectedCardOutline != null) selectedCardOutline.enabled = false;
+            selectedCardOutline = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponent<Outline>();
+            selectedCardOutline.enabled = true;
         }
         
         private void OnDisable()
         {
+            if(selectedCardOutline != null) selectedCardOutline.enabled = false;
             confirmButton.onClick.RemoveAllListeners();
             cachedPreviousEvent = null;
             confirmationTitleText.text = String.Empty;
             confirmationDescriptionText.text = String.Empty;
+            selectedGameChoice = GameChoice.None;
         }
     }
 }

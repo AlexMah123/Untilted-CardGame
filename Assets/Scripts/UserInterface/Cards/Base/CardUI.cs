@@ -22,11 +22,11 @@ namespace UserInterface.Cards.Base
 
         //Components
         public Image cardImage;
-        [SerializeField] protected RectTransform rectTransform;
+        public RectTransform rectTransform;
         [SerializeField] protected Outline outlineComponent;
-
         
         protected Canvas canvas;
+        protected Image outlineImage;
 
         //events
         public event Action OnCardInteractEnd;
@@ -34,10 +34,12 @@ namespace UserInterface.Cards.Base
         public virtual void Awake()
         {
             canvas = transform.root.GetComponent<Canvas>();
+            outlineImage = GetComponent<Image>();
 
             //cache the scale and starting height of cards.
             originalCardScale = transform.localScale;
             originalSiblingIndex = transform.GetSiblingIndex();
+            outlineImage.raycastTarget = false;
         }
 
 

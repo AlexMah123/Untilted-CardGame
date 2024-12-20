@@ -22,12 +22,19 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
         {
             if (inputData is ChoiceSealInputData choiceSealInputData)
             {
-                enemyPlayer.ChoiceComponent.SealChoice(choiceSealInputData.choiceToSeal, choiceSealDuration);
+                SealEnemyHandStyle(enemyPlayer, choiceSealInputData);
             }
             else
             {
                 Debug.LogWarning($"Invalid input data {inputData.GetType()}  , expecting ChoiceSealInputData");
             }
         }
+        
+        #region Internal
+        private void SealEnemyHandStyle(Player enemyPlayer, ChoiceSealInputData choiceSealInputData)
+        {
+            enemyPlayer.ChoiceComponent.SealChoice(choiceSealInputData.choiceToSeal, choiceSealDuration);
+        }
+        #endregion
     }
 }

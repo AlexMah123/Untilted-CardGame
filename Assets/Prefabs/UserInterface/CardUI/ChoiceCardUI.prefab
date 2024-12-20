@@ -138,7 +138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -171,13 +171,13 @@ MonoBehaviour:
   shouldEnlargeOnHover: 1
   shouldReorderToTop: 1
   shouldDisplayOutline: 1
-  rectTransform: {fileID: 7084182591955085186}
   cardImage: {fileID: 8820285445993558639}
+  rectTransform: {fileID: 7084182591955085186}
   outlineComponent: {fileID: 5168846166010291302}
   sealedEffectImage: {fileID: 7834394703662872710}
   gameChoice: 0
-  PlayableColor: {r: 1, g: 1, b: 1, a: 1}
-  DisabledColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+  playableColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
   isSealed: 0
   isMoveable: 1
 --- !u!114 &5168846166010291302

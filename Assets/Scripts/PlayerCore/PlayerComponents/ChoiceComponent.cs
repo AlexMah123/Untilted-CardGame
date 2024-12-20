@@ -5,8 +5,10 @@ using UnityEngine;
 
 namespace PlayerCore.PlayerComponents
 {
+    [Serializable]
     public enum GameChoice
     {
+        None = -1,
         Rock,
         Paper,
         Scissor

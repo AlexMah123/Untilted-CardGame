@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameCore;
 using GameCore.LoadoutSelection;
 using PlayerCore;
-using PlayerCore.Upgrades.AbilityInputData;
 using PlayerCore.Upgrades.Base;
 using PlayerCore.Upgrades.UpgradeFactory;
 using UnityEngine;
@@ -15,7 +13,6 @@ namespace UserInterface.Gameplay.GameLoadout
 {
     public class GameLoadoutController : MonoBehaviour
     {
-        
         [Header("PlayerUpgrades Parent")] 
         [SerializeField] private GameObject playerUpgradesParent;
         [SerializeField] private GameObject aiPlayerUpgradesParent;

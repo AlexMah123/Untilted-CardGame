@@ -146,7 +146,7 @@ namespace UserInterface.Cards
                 GameObject cardUIGO = choiceCardFactory.CreateCard(creation);
                 ChoiceCardUI cardUI = cardUIGO.GetComponent<ChoiceCardUI>();
 
-                //Initiailise the UI's values
+                //Initialise the UI's values
                 if (player.GetComponent<AIPlayer>())
                 {
                     cardUI.InitialiseCard(choice.Key, choice.Value, isInteractable: false);
@@ -156,7 +156,7 @@ namespace UserInterface.Cards
                     cardUI.InitialiseCard(choice.Key, choice.Value, isInteractable: true);
                 }
 
-                //add to list, set to inactive and wait for adjusthand
+                //add to list, set to inactive and wait for AdjustHand
                 cardUIContainer.Add(cardUI);
                 cardUIGO.SetActive(false);
             }

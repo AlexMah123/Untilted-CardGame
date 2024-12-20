@@ -8,24 +8,45 @@ using UnityEngine;
 
 namespace UserInterface.AbilityInput
 {
+    public interface IAbilityInputPanel
+    {
+        void Initialize(FAbilityInputData data);
+        string GetActivationDescription(UpgradeDefinitionSO upgrade);
+
+    }
+    
+    public struct FAbilityInputData
+    {
+        public string abilityInputTitle;
+        public UpgradeDefinitionSO upgrade;
+        public Action<UpgradeDefinitionSO, IAbilityInputData> onConfirmEvent;
+        
+        public FAbilityInputData( string abilityInputTitle, UpgradeDefinitionSO upgrade, Action<UpgradeDefinitionSO, IAbilityInputData> onConfirmEvent)
+        {
+            this.abilityInputTitle = abilityInputTitle;
+            this.upgrade = upgrade;
+            this.onConfirmEvent = onConfirmEvent;
+        }
+    }
+    
     public class AbilityInputManager : MonoBehaviour
     {
         [Header("UI Panels")]
-        [SerializeField] private ConfirmationPanelManager confirmationPanel;
-        [SerializeField] private ChoiceSelectionPanel choiceSelectionPanel;
-        [SerializeField] private TargetUpgradeSelectionPanel targetUpgradePanel;
+        [SerializeField] private GameObject confirmationPanel;
+        [SerializeField] private GameObject choiceSelectionPanel;
+        [SerializeField] private GameObject targetUpgradePanel;
+        
+        private IAbilityInputPanel confirmationInputPanel;
+        private IAbilityInputPanel choiceSelectionInputPanel;
+        private IAbilityInputPanel targetUpgradeInputPanel;
         
         private const string ACTIVATIONPROMPT = "Ability Activation";
-        
-        //#TODO: MAKE IT SO THE EVENT SUBSCRIBES TO UPDATE THE CACHED CHOICE
-        private GameChoice cachedGameChoice = GameChoice.Rock;
-        private UpgradeType cachedUpgradeType = UpgradeType.None;
 
         private void Awake()
         {
-            confirmationPanel = confirmationPanel.GetComponent<ConfirmationPanelManager>();
-            choiceSelectionPanel = choiceSelectionPanel.GetComponent<ChoiceSelectionPanel>();
-            targetUpgradePanel = targetUpgradePanel.GetComponent<TargetUpgradeSelectionPanel>();
+            confirmationInputPanel = confirmationPanel.GetComponent<ConfirmationPanelManager>();
+            choiceSelectionInputPanel = choiceSelectionPanel.GetComponent<ChoiceSelectionPanel>();
+            targetUpgradeInputPanel = targetUpgradePanel.GetComponent<TargetUpgradeSelectionPanel>();
             
             if(confirmationPanel == null) Debug.LogError("Confirmation Panel Manager is null");
             if(choiceSelectionPanel == null) Debug.LogError("Choice Selection Panel Manager is null");
@@ -36,70 +57,27 @@ namespace UserInterface.AbilityInput
         {
             //Handle relevant processing for which prompt to show, and call the callback
             //Get the relevant confirmationPayload and initialize confirmationPanel.
-            FAbilityInputPanelData abilityInputPayload = GetConfirmationPayload(cardObjInfo.upgradeSO, cardObjInfo.upgradeSO.abilityConfirmationType, onAbilityConfirmed);
+            FAbilityInputData abilityInputPayload = new FAbilityInputData(ACTIVATIONPROMPT, cardObjInfo.upgradeSO, onAbilityConfirmed);
 
             switch (cardObjInfo.upgradeSO.abilityConfirmationType)
             {
                 case AbilityConfirmationType.ChoiceSeal:
-                    /*choiceSelectionPanel.confirmButton.onClick.AddListener(() =>
-                    { 
-                        cachedGameChoice = choiceSelectionPanel.selectedGameChoice;
-                    });*/
-                    choiceSelectionPanel.Initialize(abilityInputPayload);
-                    choiceSelectionPanel.gameObject.SetActive(true);
+
+                    choiceSelectionInputPanel.Initialize(abilityInputPayload);
+                    choiceSelectionPanel.SetActive(true);
                     break;
                 
                 case AbilityConfirmationType.TargetUpgrade:
-                    /*targetUpgradePanel.confirmButton.onClick.AddListener(() =>
-                    {
-                        cachedUpgradeType = targetUpgradePanel.selectedUpgrade;
-                    });*/
-                    targetUpgradePanel.Initialize(abilityInputPayload);
-                    targetUpgradePanel.gameObject.SetActive(true);
+
+                    targetUpgradeInputPanel.Initialize(abilityInputPayload);
+                    targetUpgradePanel.SetActive(true);
                     break;
                 
                 default:
-                    confirmationPanel.Initialize(abilityInputPayload);
-                    confirmationPanel.gameObject.SetActive(true); 
+                    confirmationInputPanel.Initialize(abilityInputPayload);
+                    confirmationPanel.SetActive(true); 
                     break;
             }
-        }
-
-        private FAbilityInputPanelData GetConfirmationPayload(UpgradeDefinitionSO targetAbility, AbilityConfirmationType confirmationType, Action<UpgradeDefinitionSO, IAbilityInputData> onAbilityConfirmed)
-        {
-            Action onConfirmCallback;
-            
-            switch (confirmationType)
-            {
-                case AbilityConfirmationType.ChoiceSeal:
-                    onConfirmCallback = () =>
-                        onAbilityConfirmed?.Invoke(targetAbility, new ChoiceSealInputData(cachedGameChoice));
-                    break;
-
-                case AbilityConfirmationType.TargetUpgrade:
-                    onConfirmCallback = () =>
-                        onAbilityConfirmed?.Invoke(targetAbility, new TargetUpgradeInputData(cachedUpgradeType));
-                    break;
-
-                default:
-                    onConfirmCallback = () =>
-                        onAbilityConfirmed?.Invoke(targetAbility, null);
-                    break;
-            }
-
-            return new FAbilityInputPanelData(
-                ACTIVATIONPROMPT,
-                GetActivationDescription(targetAbility, null),
-                onConfirmCallback
-            );
-        }
-
-        private string GetActivationDescription(UpgradeDefinitionSO upgrade, IAbilityInputData inputData)
-        {
-            string inputDescription = inputData != null ? inputData.ToString() : string.Empty;
-            string inputChoice = inputData != null ? $"with the following choice: {inputDescription}" : string.Empty;
-
-            return $"You are activating {upgrade.upgradeName} {inputChoice}\nAre you sure?";
         }
     }
 }

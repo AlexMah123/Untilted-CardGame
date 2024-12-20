@@ -25,21 +25,21 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
 
                 if (chance < winThreshold)
                 {
-                    Debug.Log("Changed to Win");
+                    Debug.Log("Wheel of Fortune changed the result to Win");
                     return GameResult.Win;
                 }
 
                 if (chance < drawThreshold)
                 {
-                    Debug.Log("Changed to Draw");
+                    Debug.Log("Wheel of Fortune changed the result to Draw");
                     return GameResult.Draw;
                 }
                 
-                Debug.Log("No Change");
+                Debug.Log("Wheel of Fortune failed to change the result");
                 return GameResult.Lose;
             }
             
-            Debug.Log("Didnt Lose");
+            Debug.Log($"{attachedPlayer.name} didnt Lose");
 
             //no change
             return initialResult;

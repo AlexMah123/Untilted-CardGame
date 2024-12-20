@@ -176,9 +176,9 @@ MonoBehaviour:
   cardImage: {fileID: 1144293718521045040}
   rectTransform: {fileID: 1642914753676757396}
   outlineComponent: {fileID: 2009735599733134839}
+  activateAfterDisplayed: 0
   cardInfo:
     upgradeSO: {fileID: 0}
-  activateAfterDisplayed: 0
 --- !u!114 &6279919618868292784
 MonoBehaviour:
   m_ObjectHideFlags: 0
