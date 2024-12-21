@@ -18,6 +18,7 @@ namespace PlayerCore.Upgrades.PrimaryUpgrades
             IAbilityInputData inputData)
         {
             //based on input, remove target upgrade
+            
             if (inputData is TargetUpgradeInputData targetUpgradeInputData)
             {
                 enemyPlayer.ActiveLoadoutComponent.RemoveUpgradeFromLoadout(targetUpgradeInputData.targetUpgrade);

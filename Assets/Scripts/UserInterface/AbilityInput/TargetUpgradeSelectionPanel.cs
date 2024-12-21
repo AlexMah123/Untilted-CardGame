@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GameCore;
@@ -8,7 +9,9 @@ using PlayerCore.Upgrades.UpgradeFactory;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UserInterface.AbilityInput.Factory;
 using UserInterface.Cards.LoadoutCard;
 
 namespace UserInterface.AbilityInput
@@ -16,43 +19,56 @@ namespace UserInterface.AbilityInput
     public class TargetUpgradeSelectionPanel : MonoBehaviour, IAbilityInputPanel
     {
         [Header("UpgradeSelection Config")] 
-        [SerializeField] GameObject upgradesContainer;
+        [SerializeField] private AbilityInputButtonFactory abilityButtonFactory;
+        [SerializeField] private GameObject upgradePrefab;
+        [SerializeField] private GameObject upgradesContainer;
+        
         [SerializeField] private TextMeshProUGUI confirmationTitleText;
         [SerializeField] private TextMeshProUGUI confirmationDescriptionText;
         [SerializeField] private Button confirmButton;
         
         [Header("Current Selected")]
-        public UpgradeType selectedUpgrade;
+        public UpgradeType selectedUpgrade = UpgradeType.None;
         
-        private List<LoadoutCardDisplayUI> playerUpgrades;
+        private Outline selectedCardOutline;
+        private List<GameObject> upgradeObjectList = new List<GameObject>();
+        private List<UpgradeDefinitionSO> targetPlayerTotalUpgrades = new List<UpgradeDefinitionSO>();
+        
         private UnityAction cachedPreviousEvent;
+        private FAbilityInputData cachedInputData;
+        private static GameManager GameManager => GameManager.Instance;
 
-        public void Initialize(FAbilityInputData data)
+        private void Awake()
         {
-            confirmationTitleText.text = data.abilityInputTitle;
-            confirmationDescriptionText.text = GetActivationDescription(data.upgrade);
+            if(abilityButtonFactory == null) abilityButtonFactory = gameObject.AddComponent<AbilityInputButtonFactory>();
+            if(upgradePrefab == null) Debug.LogWarning("No upgrade prefab assigned!");
+            if(upgradesContainer == null) Debug.LogWarning("No upgrades container assigned!");
+        }
 
-            if (cachedPreviousEvent != null)
+        private void SetupPanel()
+        {
+            //reset and reassign the enemyPlayersData
+            targetPlayerTotalUpgrades.Clear();
+            upgradeObjectList.Clear();
+            targetPlayerTotalUpgrades = GameManager.aiPlayer.ActiveLoadoutComponent.cardUpgradeList;
+
+            foreach (UpgradeDefinitionSO upgrade in targetPlayerTotalUpgrades)
             {
-                confirmButton.onClick.RemoveListener(cachedPreviousEvent);
+                GameObject upgradeObject = 
+                    abilityButtonFactory.CreateAbilityInputButton(upgradePrefab, upgrade, upgradesContainer.transform, SetCachedGameChoice);
+                upgradeObjectList.Add(upgradeObject);
             }
-            
-            //add listener if payload is not null, update cachedEvent
-            //onConfirm event is passed in type targetUpgradeInput.
-            if (data.onConfirmEvent != null)
-            {
-                cachedPreviousEvent = () => data.onConfirmEvent.Invoke(data.upgrade, new TargetUpgradeInputData(selectedUpgrade));
-                confirmButton.onClick.AddListener(cachedPreviousEvent);            
-            }
-            else
-            {
-                //default cachedEvent to null
-                cachedPreviousEvent = null;
-            }
-            
-            confirmButton.enabled = false;
         }
         
+        public void Initialize(FAbilityInputData data)
+        {
+            cachedInputData = data;
+            UpdatePanelText(cachedInputData.abilityInputTitle, GetActivationDescription(cachedInputData.upgrade));
+            SetupPanel();
+            
+            confirmButton.interactable = false;
+        }
+
         public string GetActivationDescription(UpgradeDefinitionSO upgrade)
         {
             return selectedUpgrade == UpgradeType.None 
@@ -63,38 +79,61 @@ namespace UserInterface.AbilityInput
         private void SetCachedGameChoice(UpgradeType upgradeType)
         {
             selectedUpgrade = upgradeType;
-
+            UpdatePanelText(cachedInputData.abilityInputTitle, GetActivationDescription(cachedInputData.upgrade));
             
-            if (confirmButton.enabled == false && selectedUpgrade != UpgradeType.None)
+            if (confirmButton.interactable == false && selectedUpgrade != UpgradeType.None)
             {
-                confirmButton.enabled = true;
+                confirmButton.interactable = true;
+            }
+            
+            UpdateSelectionOutline();
+            BindConfirmAbility();
+        }
+        
+        private void UpdatePanelText(string title, string description)
+        {
+            confirmationTitleText.text = title;
+            confirmationDescriptionText.text = description;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(transform.GetChild(0).GetComponent<RectTransform>());
+        }
+
+        private void BindConfirmAbility()
+        {
+            if (cachedPreviousEvent != null)
+            {
+                confirmButton.onClick.RemoveListener(cachedPreviousEvent);
+            }
+
+            //add listener if payload is not null, update cachedEvent
+            //onConfirm event is passed in type targetUpgradeInput.
+            if (cachedInputData.onConfirmEvent != null)
+            {
+                cachedPreviousEvent = () =>
+                {
+                    cachedInputData.onConfirmEvent.Invoke(cachedInputData.upgrade, new TargetUpgradeInputData(selectedUpgrade));
+                    StartCoroutine(DeactivateAfterFrameDelay());
+                };
+                confirmButton.onClick.AddListener(cachedPreviousEvent);
+            }
+            else
+            {
+                //default cachedEvent to null
+                cachedPreviousEvent = null;
             }
         }
         
-        /*private void CreateChoiceCards()
+        private void UpdateSelectionOutline()
         {
-            if (choiceContainer.transform.childCount == 0)
-            {
-                foreach (GameChoice choice in Enum.GetValues(typeof(GameChoice)))
-                {
-                    if(choice == GameChoice.None) continue;
-                    
-                    FChoiceCardCreation creation = new(choice, choiceContainer.transform);
-                    GameObject cardUIGO = choiceCardFactory.CreateCard(creation);
-                    ChoiceCardUI cardUI = cardUIGO.GetComponent<ChoiceCardUI>();
-
-                    //Initialise the UI's values
-                    cardUI.InitialiseCard(choice, true, isInteractable: false);
-                    cardUI.shouldEnlargeOnHover = false;
-                    cardUI.shouldReorderToTop = false;
-                    cardUI.rectTransform.sizeDelta = cardSize;
-                }
-            }
-        }*/
+            //disable previously selected, assign the new selected and enable that.
+            if(selectedCardOutline != null) selectedCardOutline.enabled = false;
+            selectedCardOutline = EventSystem.current.currentSelectedGameObject.transform.parent.GetComponent<Outline>();
+            selectedCardOutline.enabled = true;
+        }
         
 
         private void OnDisable()
         {
+            if(selectedCardOutline != null) selectedCardOutline.enabled = false;
             confirmButton.onClick.RemoveAllListeners();
             cachedPreviousEvent = null;
             confirmationTitleText.text = String.Empty;
@@ -102,7 +141,12 @@ namespace UserInterface.AbilityInput
             selectedUpgrade = UpgradeType.None;
         }
         
-        
+        private IEnumerator DeactivateAfterFrameDelay()
+        {
+            yield return new WaitForEndOfFrame();
+
+            gameObject.SetActive(false);
+        }
     }
     
 }

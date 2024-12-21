@@ -152,6 +152,9 @@ namespace PlayerCore.PlayerComponents
             OnLoadoutChanged?.Invoke(cardUpgradeList);
         }
 
+        /// <summary>
+        /// overloaded method for removing to loadout and does not require an instance/reference to add, just the type.
+        /// </summary>
         public void RemoveUpgradeFromLoadout(UpgradeType upgradeType)
         {
             var removedUpgrade = cardUpgradeList.Find(upgrade => upgrade.upgradeType == upgradeType);
@@ -173,7 +176,7 @@ namespace PlayerCore.PlayerComponents
         ///<summary>
         /// Used for Context Menu
         ///</summary>
-        [ContextMenu("Debug/Add DevilUpgrade to Player")]
+        [ContextMenu("Debug/Add TheFool to Player")]
         public void AddUpgradeToPlayer()
         {
             AddUpgradeToLoadout(UpgradeType.TheFool);
@@ -182,7 +185,7 @@ namespace PlayerCore.PlayerComponents
         ///<summary>
         /// Used for Context Menu
         ///</summary>
-        [ContextMenu("Debug/Remove DevilUpgrade to Player")]
+        [ContextMenu("Debug/Remove TheFool to Player")]
         public void RemoveUpgradeFromPlayer()
         {
             RemoveUpgradeFromLoadout(UpgradeType.TheFool);

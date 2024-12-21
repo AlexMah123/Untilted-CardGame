@@ -21,8 +21,8 @@ namespace UserInterface.AbilityInput
         
         [Header("Current Selected")]
         public GameChoice selectedGameChoice = GameChoice.None;
-        private Outline selectedCardOutline;
         
+        private Outline selectedCardOutline;
         private UnityAction cachedPreviousEvent;
         private FAbilityInputData cachedInputData;
 

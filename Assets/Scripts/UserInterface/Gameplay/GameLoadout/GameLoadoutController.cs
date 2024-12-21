@@ -61,7 +61,7 @@ namespace UserInterface.Gameplay.GameLoadout
                 var createdUpgrade = UpgradeSOFactory.CreateUpgradeDefinitionSO(playerLoadoutList[i].upgradeType);
 
                 playerUpgrades[i].gameObject.SetActive(true);
-                playerUpgrades[i].InitializeCard(new(createdUpgrade));
+                playerUpgrades[i].InitializeCard(new FLoadoutCardObj(createdUpgrade));
             }
         }
 
@@ -75,7 +75,7 @@ namespace UserInterface.Gameplay.GameLoadout
                 var createdUpgrade = UpgradeSOFactory.CreateUpgradeDefinitionSO(aiPlayerLoadoutList[i].upgradeType);
 
                 aiPlayerUpgrades[i].gameObject.SetActive(true);
-                aiPlayerUpgrades[i].InitializeCard(new(createdUpgrade));
+                aiPlayerUpgrades[i].InitializeCard(new FLoadoutCardObj(createdUpgrade));
             }
         }
 
@@ -111,7 +111,7 @@ namespace UserInterface.Gameplay.GameLoadout
 
             if (AIPlayer)
             {
-                AIPlayer.ActiveLoadoutComponent.OnLoadoutChanged += HandlePlayerLoadoutUpdate;
+                AIPlayer.ActiveLoadoutComponent.OnLoadoutChanged += HandleAIPlayerLoadoutUpdate;
             }
         }
 
@@ -124,7 +124,7 @@ namespace UserInterface.Gameplay.GameLoadout
 
             if (AIPlayer)
             {
-                AIPlayer.ActiveLoadoutComponent.OnLoadoutChanged -= HandlePlayerLoadoutUpdate;
+                AIPlayer.ActiveLoadoutComponent.OnLoadoutChanged -= HandleAIPlayerLoadoutUpdate;
             }
         }
 

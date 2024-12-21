@@ -62,18 +62,18 @@ namespace UserInterface.AbilityInput
             switch (cardObjInfo.upgradeSO.abilityConfirmationType)
             {
                 case AbilityConfirmationType.ChoiceSeal:
-                    choiceSelectionInputPanel.Initialize(abilityInputPayload);
                     choiceSelectionPanel.SetActive(true);
+                    choiceSelectionInputPanel.Initialize(abilityInputPayload);
                     break;
                 
                 case AbilityConfirmationType.TargetUpgrade:
-                    targetUpgradeInputPanel.Initialize(abilityInputPayload);
                     targetUpgradePanel.SetActive(true);
+                    targetUpgradeInputPanel.Initialize(abilityInputPayload);
                     break;
                 
                 default:
-                    confirmationInputPanel.Initialize(abilityInputPayload);
                     confirmationPanel.SetActive(true); 
+                    confirmationInputPanel.Initialize(abilityInputPayload);
                     break;
             }
         }
