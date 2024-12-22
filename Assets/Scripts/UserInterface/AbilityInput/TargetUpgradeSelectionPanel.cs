@@ -48,6 +48,10 @@ namespace UserInterface.AbilityInput
         private void SetupPanel()
         {
             //reset and reassign the enemyPlayersData
+            foreach (var upgradeObj in upgradeObjectList)
+            {
+                upgradeObj.Destroy();
+            }
             targetPlayerTotalUpgrades.Clear();
             upgradeObjectList.Clear();
             targetPlayerTotalUpgrades = GameManager.aiPlayer.ActiveLoadoutComponent.cardUpgradeList;
